@@ -6,6 +6,7 @@ import { Reveal, CopyCommand } from '@/components/interactive';
 import { Kbd, CommandPalette } from '@/components/kbd';
 import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
 import { DotGridBackground } from '@/components/dot-grid';
+import { LogoLoop } from '@/components/logo-loop';
 import {
   agents,
   capabilities,
@@ -49,7 +50,7 @@ export function Section({
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={cn('border-t border-rule px-400 py-800 split:px-700 split:py-900', className)}
+      className={cn('px-400 py-800 split:px-700 split:py-900', className)}
     >
       <div className="mx-auto w-full max-w-[var(--container-page)]">{children}</div>
     </section>
@@ -144,20 +145,14 @@ export function Hero({ stars }: { stars: number }) {
   );
 }
 
-export function AgentStrip() {
+export function ToolStrip() {
   return (
-    <div className="border-t border-rule px-400 py-400 split:px-700">
-      <div className="mx-auto flex w-full max-w-[var(--container-page)] flex-wrap items-center gap-x-500 gap-y-200">
+    <div className="px-400 py-500 split:px-700">
+      <div className="mx-auto w-full max-w-[var(--container-page)]">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
           {agents.label}
         </p>
-        <ul className="flex flex-wrap items-center gap-x-400 gap-y-100">
-          {agents.items.map((a) => (
-            <li key={a} className="text-[15px] font-medium text-ink-soft">
-              {a}
-            </li>
-          ))}
-        </ul>
+        <LogoLoop className="mt-300" markHeight={22} gap={72} speed={40} />
       </div>
     </div>
   );

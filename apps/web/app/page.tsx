@@ -1,7 +1,7 @@
 import { getStars } from '@/lib/stars';
-import { IslandNav } from '@/components/interactive';
+import { CardNav } from '@/components/card-nav';
 import {
-  AgentStrip,
+  ToolStrip,
   Capabilities,
   Faq,
   FinalCta,
@@ -29,7 +29,7 @@ export default async function Page() {
         Skip to content
       </a>
 
-      <IslandNav />
+      <CardNav />
 
       {/* The sheet: paper held inside the dark shell. The frame is the
           direction's structural argument, so it is a real container rather
@@ -38,7 +38,7 @@ export default async function Page() {
         <div className="mx-auto overflow-hidden rounded-sheet bg-sheet">
           <main id="main">
             <Hero stars={stars} />
-            <AgentStrip />
+            <ToolStrip />
             <Problem />
             <Tagline />
             <Capabilities />

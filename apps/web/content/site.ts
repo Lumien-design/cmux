@@ -31,6 +31,36 @@ export const nav = [
   { label: 'Open source', href: '#open-source' },
 ] as const;
 
+/** The three groups the nav panel opens into. */
+export const navCards = [
+  {
+    label: 'What it does',
+    links: [
+      { label: 'Notification rings', href: '#attention' },
+      { label: 'Tabs and workspaces', href: '#organize' },
+      { label: 'Panes and browser', href: '#browser' },
+      { label: 'Remote workspaces', href: '#remote' },
+    ],
+  },
+  {
+    label: 'How it works',
+    links: [
+      { label: 'CLI and socket API', href: '#program' },
+      { label: 'Keyboard shortcuts', href: '#shortcuts' },
+      { label: 'Built on libghostty', href: '#foundation' },
+    ],
+  },
+  {
+    label: 'Get it',
+    links: [
+      { label: 'Download for Mac', href: site.download },
+      { label: 'Read the source', href: site.repo },
+      { label: 'Documentation', href: site.docs },
+      { label: 'Community', href: site.discord },
+    ],
+  },
+] as const;
+
 export const hero = {
   eyebrow: 'Free and open source for macOS',
   // "The {category} for {audience}" — and it is the line the app itself uses.
@@ -43,7 +73,7 @@ export const hero = {
 /** Named as text, not logos. No verified partnership exists, and a logo wall
  *  without one is exactly the "borrowed credibility" the slop rules forbid. */
 export const agents = {
-  label: 'Works with the agents you already run',
+  label: 'Runs the tools you already use',
   items: ['Claude Code', 'Codex', 'Gemini CLI', 'OpenCode', 'Amp'],
 } as const;
 
