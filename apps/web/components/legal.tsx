@@ -15,7 +15,7 @@ export function LegalPage({
 }) {
   return (
     <div className="p-200 split:p-300">
-      <div className="paper-grain mx-auto min-h-[80svh] rounded-sheet bg-sheet px-400 py-900 split:px-700">
+      <div className="mx-auto min-h-[80svh] rounded-sheet bg-sheet px-400 py-900 split:px-700">
         <main className="mx-auto w-full max-w-[var(--container-page)]">
           <Link
             href="/"

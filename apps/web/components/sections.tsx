@@ -180,7 +180,7 @@ export function Problem() {
 
 export function Tagline() {
   return (
-    <Section className="bg-sheet-raised">
+    <Section>
       <div className="grid gap-500 split:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] split:items-end">
         <ScrubbedTagline lines={tagline.lines} />
         <div>
@@ -339,7 +339,7 @@ export function Shortcuts() {
 
 export function Foundation() {
   return (
-    <Section labelledBy="foundation-h" className="relative isolate overflow-hidden bg-sheet-raised">
+    <Section labelledBy="foundation-h" className="relative isolate overflow-hidden">
       {/* A GPU drawn, cursor reactive canvas, in the section about GPU drawn
           rendering. It inherits its colour from this token, so both themes
           work without the canvas knowing a theme exists.
@@ -368,7 +368,7 @@ export function Foundation() {
           </div>
           <dl className="grid grid-cols-2 gap-px self-start overflow-hidden rounded-card border border-rule bg-rule">
             {foundation.facts.map((f) => (
-              <div key={f.k} className="bg-sheet-raised p-300">
+              <div key={f.k} className="bg-sheet p-300">
                 <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
                   {f.k}
                 </dt>
@@ -410,7 +410,7 @@ export function Platforms() {
 
 export function Install() {
   return (
-    <Section labelledBy="install-h" className="bg-sheet-raised">
+    <Section labelledBy="install-h">
       <Reveal>
         <div className="grid gap-500 split:grid-cols-2 split:gap-700">
           <div>
@@ -468,7 +468,7 @@ export function OpenSource() {
 
 export function Faq() {
   return (
-    <Section id="faq" labelledBy="faq-h" className="bg-sheet-raised">
+    <Section id="faq" labelledBy="faq-h">
       <h2 id="faq-h" className="text-3xl font-semibold leading-tight tracking-tight">
         Questions
       </h2>

@@ -4,7 +4,7 @@ import { site } from '@/content/site';
 export default function NotFound() {
   return (
     <div className="p-200 split:p-300">
-      <div className="paper-grain mx-auto min-h-[80svh] rounded-sheet bg-sheet px-400 py-900 split:px-700">
+      <div className="mx-auto min-h-[80svh] rounded-sheet bg-sheet px-400 py-900 split:px-700">
         <div className="mx-auto w-full max-w-[var(--container-page)]">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
             Error 404

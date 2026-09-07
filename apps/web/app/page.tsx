@@ -35,7 +35,7 @@ export default async function Page() {
           direction's structural argument, so it is a real container rather
           than a background colour. */}
       <div className="p-200 split:p-300">
-        <div className="paper-grain mx-auto overflow-hidden rounded-sheet bg-sheet">
+        <div className="mx-auto overflow-hidden rounded-sheet bg-sheet">
           <main id="main">
             <Hero stars={stars} />
             <AgentStrip />
