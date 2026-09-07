@@ -1,0 +1,42 @@
+name: Design review
+description: Put a screen, flow or interaction up for critique.
+labels: ["design", "review"]
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options: [macos, tui, desktop (Windows/Linux), ios, cloud, web (cmux.com), chatmux, shared]
+    validations: { required: true }
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      description: Tells reviewers how hard to push.
+      options:
+        - Exploration (direction, not details)
+        - Refinement (structure agreed, tuning it)
+        - Polish (1px pass, ship-ready)
+    validations: { required: true }
+  - type: textarea
+    id: artifact
+    attributes:
+      label: The work
+      description: Screenshots, recording, prototype link or Figma URL.
+    validations: { required: true }
+  - type: textarea
+    id: asking
+    attributes:
+      label: What do you want feedback on?
+      placeholder: "Focus on the empty state and the switcher timing. Type scale is settled - skip it."
+    validations: { required: true }
+  - type: checkboxes
+    id: covered
+    attributes:
+      label: Already handled
+      options:
+        - label: Light and dark
+        - label: Keyboard navigation and focus order
+        - label: Loading, empty and error states
+        - label: Reduced motion
+        - label: Contrast (WCAG AA)

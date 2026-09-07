@@ -1,0 +1,44 @@
+# Normalize line endings — devs span macOS, Linux and Windows.
+* text=auto eol=lf
+
+# Windows-native tooling keeps CRLF.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Shell + hooks must stay LF or they break on macOS/Linux.
+*.sh   text eol=lf
+.githooks/* text eol=lf
+
+# Binary — never diff, never merge.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.mp4  binary
+*.mov  binary
+*.webm binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.pdf  binary
+*.sketch binary
+*.fig  binary
+*.zip  binary
+
+# Xcode project files: union merge reduces (does not remove) conflict pain.
+*.pbxproj merge=union -text diff
+*.xcworkspacedata text eol=lf
+
+# Lockfiles: keep out of PR diffs, still versioned.
+package-lock.json  -diff linguist-generated
+pnpm-lock.yaml     -diff linguist-generated
+yarn.lock          -diff linguist-generated
+Cargo.lock         -diff linguist-generated
+Package.resolved   -diff linguist-generated
+
+# Image formats not covered above.
+*.avif binary

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Validates Conventional Commits with a cmux surface as the scope.
+# Bypass with: git commit --no-verify
+set -euo pipefail
+
+MSG_FILE="$1"
+# First non-comment, non-empty line.
+SUBJECT="$(grep -vE '^\s*#' "$MSG_FILE" | grep -vE '^\s*$' | head -n1 || true)"
+
+# Let git's own generated messages through untouched.
+case "$SUBJECT" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *|Applying\ *) exit 0 ;;
+esac
+
+# Spikes are explicitly exempt — prototypes should not fight the tooling.
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo '')"
+case "$BRANCH" in spike/*) exit 0 ;; esac
+
+TYPES='feat|fix|design|motion|perf|a11y|refactor|docs|test|build|ci|chore|revert'
+SURFACES='macos|tui|desktop|ios|cloud|web|chatmux|shared|repo'
+PATTERN="^(${TYPES})(\((${SURFACES})\))?!?: .+"
+
+if ! printf '%s' "$SUBJECT" | grep -qE "$PATTERN"; then
+  cat >&2 <<MSG
+
+  ✗ Commit message does not match the cmux convention.
+
+    got:      ${SUBJECT}
+    expected: <type>(<surface>): <subject>
+
+    type     ${TYPES//|/, }
+    surface  ${SURFACES//|/, }   (optional, but use it)
+
+    e.g.  feat(macos): add split-pane session switcher
+          motion(tui): ease pane transitions with 180ms cubic-bezier
+
+    See docs/GITFLOW.md §6.  Bypass with --no-verify.
+
+MSG
+  exit 1
+fi
+
+# Subject length — 72 keeps `git log --oneline` readable in a narrow TUI.
+LEN=${#SUBJECT}
+if [ "$LEN" -gt 72 ]; then
+  printf '\n  ✗ Subject is %d chars; keep it under 72.\n\n    %s\n\n' "$LEN" "$SUBJECT" >&2
+  exit 1
+fi
+
+# Imperative-mood nudge: warn, never block. Mood is a judgement call.
+if printf '%s' "$SUBJECT" | grep -qE ': (added|fixed|updated|changed|removed|refactored) '; then
+  printf '\n  ! Prefer imperative mood ("add", not "added").\n\n' >&2
+fi
+
+exit 0

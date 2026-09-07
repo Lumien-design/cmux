@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Blocks direct pushes to protected branches and rejects malformed branch names.
+# Bypass with: git push --no-verify
+set -euo pipefail
+
+PROTECTED='main develop'
+SURFACES='macos|tui|desktop|ios|cloud|web|chatmux|shared|repo'
+VALID="^(feature|fix|design)/(${SURFACES})/[a-z0-9]+(-[a-z0-9]+)*$|^spike/[a-z0-9]+(-[a-z0-9]+)*$|^(release|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$|^(main|develop)$"
+
+fail=0
+while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
+  [ -z "${REMOTE_REF:-}" ] && continue
+  # Deletions are fine.
+  [ "$LOCAL_SHA" = "0000000000000000000000000000000000000000" ] && continue
+
+  BRANCH="${REMOTE_REF#refs/heads/}"
+
+  for p in $PROTECTED; do
+    if [ "$BRANCH" = "$p" ]; then
+      cat >&2 <<MSG
+
+  ✗ Direct push to '${p}' is blocked.
+
+    '${p}' moves only through reviewed pull requests.
+    Branch, push, and open a PR:
+
+      git checkout -b feature/<surface>/<slug>
+
+    See docs/GITFLOW.md §1.  Bypass with --no-verify.
+
+MSG
+      fail=1
+    fi
+  done
+
+  if ! printf '%s' "$BRANCH" | grep -qE "$VALID"; then
+    cat >&2 <<MSG
+
+  ✗ Branch name '${BRANCH}' does not match the cmux convention.
+
+      feature|fix|design/<surface>/<slug>
+      spike/<slug>
+      release|hotfix/<major>.<minor>.<patch>
+
+    surface: ${SURFACES//|/, }
+    slug:    lowercase-hyphenated
+
+    Rename it:  git branch -m feature/<surface>/<slug>
+
+    See docs/GITFLOW.md §2.  Bypass with --no-verify.
+
+MSG
+    fail=1
+  fi
+done
+
+exit $fail

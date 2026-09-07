@@ -1,0 +1,156 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Gate 1: the gitflow conventions themselves ──────────────────────────
+  conventions:
+    name: Conventions
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.head_ref, 'spike/')"
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Branch name
+        if: github.event_name == 'pull_request'
+        run: |
+          BR="${{ github.head_ref }}"
+          SURFACES='macos|tui|desktop|ios|cloud|web|chatmux|shared|repo'
+          RE="^(feature|fix|design)/(${SURFACES})/[a-z0-9]+(-[a-z0-9]+)*$"
+          RE="${RE}|^spike/[a-z0-9]+(-[a-z0-9]+)*$"
+          RE="${RE}|^(release|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$"
+          if ! echo "$BR" | grep -qE "$RE"; then
+            echo "::error::Branch '$BR' does not match the cmux convention (docs/GITFLOW.md section 2)."
+            exit 1
+          fi
+          echo "Branch OK: $BR"
+
+      - name: PR title
+        if: github.event_name == 'pull_request'
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          T='feat|fix|design|motion|perf|a11y|refactor|docs|test|build|ci|chore|revert'
+          S='macos|tui|desktop|ios|cloud|web|chatmux|shared|repo'
+          if ! echo "$TITLE" | grep -qE "^(${T})(\((${S})\))?!?: .+"; then
+            echo "::error::PR title must be '<type>(<surface>): <subject>' - it becomes the squashed commit."
+            echo "got: $TITLE"
+            exit 1
+          fi
+          echo "Title OK: $TITLE"
+
+      - name: Commit messages
+        if: github.event_name == 'pull_request'
+        run: |
+          T='feat|fix|design|motion|perf|a11y|refactor|docs|test|build|ci|chore|revert'
+          S='macos|tui|desktop|ios|cloud|web|chatmux|shared|repo'
+          BAD=0
+          while IFS= read -r MSG; do
+            [ -z "$MSG" ] && continue
+            case "$MSG" in Merge\ *|Revert\ *|fixup!\ *|squash!\ *) continue ;; esac
+            if ! echo "$MSG" | grep -qE "^(${T})(\((${S})\))?!?: .+"; then
+              echo "::warning::Non-conforming commit: $MSG"
+              BAD=$((BAD+1))
+            fi
+          done < <(git log --format=%s "origin/${{ github.base_ref }}..HEAD")
+          echo "$BAD non-conforming commit(s). PR title is what lands, so this is a warning."
+
+      - name: Target branch
+        if: github.event_name == 'pull_request'
+        run: |
+          BASE="${{ github.base_ref }}"
+          HEAD="${{ github.head_ref }}"
+          if [ "$BASE" = "main" ]; then
+            case "$HEAD" in
+              release/*|hotfix/*) echo "OK: $HEAD -> main" ;;
+              *) echo "::error::Only release/* and hotfix/* may target main. Retarget to develop."; exit 1 ;;
+            esac
+          fi
+
+  # ── Gate 2: repo hygiene ────────────────────────────────────────────────
+  hygiene:
+    name: Hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No committed secrets
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.example$'; then
+            echo "::error::A .env file is tracked. Remove it and rotate anything it held."
+            exit 1
+          fi
+          if git ls-files | grep -E '\.(pem|p12|mobileprovision|key)$'; then
+            echo "::error::Credential file tracked."
+            exit 1
+          fi
+          echo "No tracked secrets."
+
+      - name: Oversized files
+        run: |
+          FAIL=0
+          while IFS= read -r f; do
+            [ -f "$f" ] || continue
+            SZ=$(stat -c%s "$f")
+            if [ "$SZ" -gt 10485760 ]; then
+              echo "::error::$f is $((SZ/1048576))MB - over the 10MB limit. Use Git LFS."
+              FAIL=1
+            fi
+          done < <(git ls-files)
+          exit $FAIL
+
+      - name: Shell scripts parse
+        run: |
+          for f in $(git ls-files '*.sh' '.githooks/*'); do
+            bash -n "$f" || exit 1
+          done
+          echo "Shell OK."
+
+  # ── Gate 3: per-surface builds, active once a surface has code ──────────
+  build-web:
+    name: Build (web / chatmux / tui)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: detect
+        run: |
+          if [ -f package.json ]; then echo "found=true" >> "$GITHUB_OUTPUT"
+          else echo "found=false" >> "$GITHUB_OUTPUT"; echo "No package.json yet - skipping."; fi
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.found == 'true'
+        with: { node-version: '24', cache: 'npm' }
+      - if: steps.detect.outputs.found == 'true'
+        run: |
+          npm ci
+          npm run lint --if-present
+          npm run typecheck --if-present
+          npm run build --if-present
+          npm test --if-present
+
+  build-apple:
+    name: Build (macOS / iOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: detect
+        run: |
+          if ls -d *.xcodeproj *.xcworkspace Package.swift >/dev/null 2>&1; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"; echo "No Xcode/SwiftPM project yet - skipping."
+          fi
+      - if: steps.detect.outputs.found == 'true'
+        run: |
+          if [ -f Package.swift ]; then swift build && swift test; fi

@@ -1,0 +1,28 @@
+# <type>(<surface>): <subject>            ← 72 chars max, imperative mood
+#
+# <body — what changed and WHY. Wrap at 72.>
+#
+# <footer — Refs: #123 / Closes: #123 / BREAKING CHANGE: ...>
+#
+# ── type ────────────────────────────────────────────────────────
+#   feat      new user-facing capability
+#   fix       bug fix
+#   design    visual / interaction change with no new capability
+#   motion    animation, transition or timing change
+#   perf      performance
+#   a11y      accessibility
+#   refactor  no behaviour change
+#   docs      documentation
+#   test      tests only
+#   build     build system, deps, toolchain
+#   ci        pipeline
+#   chore     housekeeping
+#   revert    reverts a previous commit
+#
+# ── surface ─────────────────────────────────────────────────────
+#   macos  tui  desktop  ios  cloud  web  chatmux  shared  repo
+#
+# ── examples ────────────────────────────────────────────────────
+#   feat(macos): add split-pane session switcher
+#   motion(tui): ease pane transitions with 180ms cubic-bezier
+#   design(web): tighten hero type scale to 1.25 ratio

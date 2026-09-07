@@ -1,0 +1,24 @@
+# Every PR needs a review. Ownership follows surface.
+# Replace the placeholders with real handles before enabling branch protection.
+
+*                       @cmux/design-engineering
+
+# ── Surfaces ───────────────────────────────────────────────────────────────
+/apps/macos/            @cmux/macos
+/apps/ios/              @cmux/ios
+/apps/tui/              @cmux/tui
+/apps/desktop/          @cmux/desktop
+/apps/cloud/            @cmux/cloud
+/apps/web/              @cmux/web
+/apps/chatmux/          @cmux/chatmux
+
+# ── Cross-cutting: a change here moves every surface at once ───────────────
+/packages/design-system/ @cmux/design-engineering
+/packages/motion/        @cmux/design-engineering
+/packages/tokens/        @cmux/design-engineering
+
+# ── Repo mechanics ─────────────────────────────────────────────────────────
+/.github/               @cmux/design-engineering
+/.githooks/             @cmux/design-engineering
+/scripts/               @cmux/design-engineering
+/docs/GITFLOW.md        @cmux/design-engineering

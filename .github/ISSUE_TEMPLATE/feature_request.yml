@@ -1,0 +1,26 @@
+name: Feature request
+description: A capability cmux should have.
+labels: ["feature", "needs-triage"]
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      multiple: true
+      options: [macos, tui, desktop (Windows/Linux), ios, cloud, web (cmux.com), chatmux, shared]
+    validations: { required: true }
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is the developer trying to do, and what stops them? Describe the job, not the solution.
+    validations: { required: true }
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: Apps that solve this well, with screenshots. References sharpen the target.

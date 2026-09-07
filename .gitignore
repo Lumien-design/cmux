@@ -1,0 +1,120 @@
+# ─── OS ────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+.directory
+
+# ─── Editors / IDE ─────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# ─── Node / web (cmux.com, chatmux, TUI) ───────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/versions
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+.vercel/
+.output/
+*.tsbuildinfo
+coverage/
+.nyc_output/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+.stylelintcache
+
+# ─── Apple / Swift (cmux macOS, cmux iOS) ──────────────────────────────────
+DerivedData/
+build/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.swiftpm/
+Packages/
+Package.resolved
+!*.xcodeproj/project.pbxproj
+!*.xcworkspace/contents.xcworkspacedata
+*.playground/playground.xcworkspace
+fastlane/report.xml
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# ─── Rust (TUI / native cores) ─────────────────────────────────────────────
+target/
+**/*.rs.bk
+*.pdb
+
+# ─── Go ────────────────────────────────────────────────────────────────────
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+vendor/
+
+# ─── Python (tooling, cloud) ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# ─── Secrets / env — NEVER commit ──────────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+*.cer
+secrets.json
+.netrc
+
+# ─── Design scratch ────────────────────────────────────────────────────────
+*.sketch.lock
+.tmp/
+scratch/
+__screenshots__/diff/
+
+# ─── Local agent skill library ─────────────────────────────────────────────
+# Vendored third-party skills, useful locally, deliberately not part of history.
+.claude/skills/
