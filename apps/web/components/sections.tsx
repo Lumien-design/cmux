@@ -2,7 +2,10 @@ import { ArrowUpRight, Camera } from '@phosphor-icons/react/dist/ssr';
 import { cn } from '@/lib/cn';
 import { shots } from '@/lib/shots';
 import { CmuxWindow, heroWindow } from '@/components/cmux-window';
-import { Reveal, CopyCommand, TaglineReveal } from '@/components/interactive';
+import { Reveal, CopyCommand } from '@/components/interactive';
+import { Kbd, CommandPalette } from '@/components/kbd';
+import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
+import { DotGridBackground } from '@/components/dot-grid';
 import {
   agents,
   capabilities,
@@ -14,9 +17,11 @@ import {
   install,
   nav,
   openSource,
+  palette,
   platforms,
   problem,
   programmable,
+  shortcuts,
   site,
   tagline,
 } from '@/content/site';
@@ -115,7 +120,7 @@ export function Hero({ stars }: { stars: number }) {
               {hero.sub}
             </p>
             <div className="mt-500 flex flex-wrap items-center gap-100">
-              <Button href={hero.primary.href}>{hero.primary.label}</Button>
+              <InteractiveCta href={hero.primary.href}>{hero.primary.label}</InteractiveCta>
               <Button href={hero.secondary.href} variant="quiet">
                 {hero.secondary.label}
                 <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
@@ -177,7 +182,7 @@ export function Tagline() {
   return (
     <Section className="bg-sheet-raised">
       <div className="grid gap-500 split:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] split:items-end">
-        <TaglineReveal lines={tagline.lines} />
+        <ScrubbedTagline lines={tagline.lines} />
         <div>
           <p className="max-w-[46ch] text-base leading-relaxed text-ink-soft">{tagline.body}</p>
           <p className="mt-200 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
@@ -273,14 +278,59 @@ export function Programmable() {
           </div>
 
           {/* Live code, not a screenshot: selectable, searchable, weightless. */}
-          <div className="overflow-hidden rounded-card border border-rule bg-sheet-sunken">
-            <div className="border-b border-rule px-300 py-200 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-              cmux.json
-            </div>
+          <div className="flex flex-col gap-300">
+            <div className="overflow-hidden rounded-card border border-rule bg-sheet-sunken">
+              <div className="border-b border-rule px-300 py-200 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                cmux.json
+              </div>
             <pre className="overflow-x-auto p-300 font-mono text-[13px]/[1.7] text-ink">
-              <code>{programmable.config}</code>
-            </pre>
+                <code>{programmable.config}</code>
+              </pre>
+            </div>
+
+            {/* The payoff for the config above: that command, in the palette. */}
+            <CommandPalette query={palette.query} rows={palette.rows} />
           </div>
+        </div>
+      </Reveal>
+    </Section>
+  );
+}
+
+export function Shortcuts() {
+  return (
+    <Section labelledBy="shortcuts-h">
+      <Reveal>
+        <div className="max-w-[var(--container-measure)]">
+          <Eyebrow>{shortcuts.eyebrow}</Eyebrow>
+          <h2
+            id="shortcuts-h"
+            className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
+          >
+            {shortcuts.heading}
+          </h2>
+          <p className="mt-300 text-base leading-relaxed text-ink-soft">{shortcuts.body}</p>
+        </div>
+
+        <div className="mt-500 grid gap-500 prose:grid-cols-3 prose:gap-400">
+          {shortcuts.groups.map((g) => (
+            <div key={g.name}>
+              <p className="border-b border-rule pb-100 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+                {g.name}
+              </p>
+              <ul className="flex flex-col">
+                {g.items.map((it) => (
+                  <li
+                    key={it.label}
+                    className="flex items-baseline justify-between gap-200 border-b border-rule py-200"
+                  >
+                    <span className="text-[15px] text-ink-soft">{it.label}</span>
+                    <Kbd keys={it.keys} className="shrink-0" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </Reveal>
     </Section>
@@ -289,7 +339,13 @@ export function Programmable() {
 
 export function Foundation() {
   return (
-    <Section labelledBy="foundation-h" className="bg-sheet-raised">
+    <Section labelledBy="foundation-h" className="relative isolate overflow-hidden bg-sheet-raised">
+      {/* A GPU drawn, cursor reactive canvas, in the section about GPU drawn
+          rendering. It inherits its colour from this token, so both themes
+          work without the canvas knowing a theme exists. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 text-rule-strong">
+        <DotGridBackground />
+      </div>
       <Reveal>
         <div className="grid gap-500 split:grid-cols-2 split:gap-700">
           <div>
@@ -441,7 +497,7 @@ export function FinalCta() {
         </h2>
         <p className="text-lg text-ink-soft">{finalCta.body}</p>
         <div className="mt-200 flex flex-wrap gap-100">
-          <Button href={hero.primary.href}>{hero.primary.label}</Button>
+          <InteractiveCta href={hero.primary.href}>{hero.primary.label}</InteractiveCta>
           <Button href={hero.secondary.href} variant="quiet">
             {hero.secondary.label}
             <ArrowUpRight size={15} weight="regular" aria-hidden="true" />

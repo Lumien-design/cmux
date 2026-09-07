@@ -26,7 +26,7 @@ type Workspace = {
 };
 
 const toneClass = {
-  dim: 'text-[#5E5E5E]',
+  dim: 'text-[#8A8A8A]',
   bright: 'text-[#F2F2F2]',
   signal: 'text-[#5AA9FF]',
 } as const;
@@ -61,12 +61,14 @@ export function CmuxWindow({
               key={w.name}
               className={cn(
                 'mx-50 flex flex-col rounded-[5px] px-75 py-50',
-                w.active ? 'bg-ring text-white' : 'text-[#6A6A6A]',
+                w.active ? 'bg-[#0A5BB5] text-white' : 'text-[#8A8A8A]',
                 w.waiting && !w.active && 'text-[#5AA9FF]',
               )}
             >
               <span className="truncate">{w.name}</span>
-              <span className={cn('truncate text-[9px]', w.active ? 'opacity-75' : 'opacity-60')}>
+              <span
+                className={cn('truncate text-[9px]', w.active ? 'text-[#D8E6FA]' : 'text-[#7E7E7E]')}
+              >
                 {w.meta}
               </span>
             </div>
@@ -75,7 +77,7 @@ export function CmuxWindow({
 
         {/* main */}
         <div className="flex min-w-0 flex-col">
-          <div className="flex items-center gap-75 border-b border-[#2A2A2A] px-100 py-75 text-[9px] text-[#6A6A6A]">
+          <div className="flex items-center gap-75 border-b border-[#2A2A2A] px-100 py-75 text-[9px] text-[#8A8A8A]">
             <span>{'>_'}</span>
             <span className="truncate">~</span>
             <span className="ms-auto tracking-widest" aria-hidden="true">

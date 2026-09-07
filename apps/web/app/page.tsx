@@ -13,6 +13,7 @@ import {
   Platforms,
   Problem,
   Programmable,
+  Shortcuts,
   Tagline,
 } from '@/components/sections';
 
@@ -42,6 +43,7 @@ export default async function Page() {
             <Tagline />
             <Capabilities />
             <Programmable />
+            <Shortcuts />
             <Foundation />
             <Platforms />
             <Install />

@@ -141,6 +141,55 @@ export const programmable = {
 }`,
 } as const;
 
+/**
+ * Real shortcuts, read off the app's own welcome screen. Not invented, and not
+ * a representative sample: this is the list cmux prints when you run it.
+ */
+export const shortcuts = {
+  eyebrow: 'Keyboard',
+  heading: 'Your hands never leave the keyboard.',
+  body: 'cmux prints these on first run. Every one of them is rebindable with cmux shortcuts.',
+  groups: [
+    {
+      name: 'Workspaces',
+      items: [
+        { keys: ['cmd', 'n'], label: 'New workspace' },
+        { keys: ['cmd', 'p'], label: 'Go to workspace' },
+        { keys: ['cmd', 'shift', 'r'], label: 'Rename workspace' },
+        { keys: ['cmd', 't'], label: 'New tab' },
+      ],
+    },
+    {
+      name: 'Panes',
+      items: [
+        { keys: ['cmd', 'd'], label: 'Split right' },
+        { keys: ['cmd', 'shift', 'd'], label: 'Split down' },
+        { keys: ['cmd', 'shift', 'l'], label: 'New browser' },
+        { keys: ['cmd', 'shift', 'p'], label: 'Command palette' },
+      ],
+    },
+    {
+      name: 'Attention',
+      items: [
+        { keys: ['cmd', 'shift', 'u'], label: 'Jump to latest unread' },
+        { keys: ['alt', 'cmd', 'u'], label: 'Toggle unread' },
+        { keys: ['cmd', 'b'], label: 'Toggle left sidebar' },
+        { keys: ['cmd', 'alt', 'b'], label: 'Toggle right sidebar' },
+      ],
+    },
+  ],
+} as const;
+
+/** The palette mock. The first row is the command defined in the cmux.json above. */
+export const palette = {
+  query: 'rev',
+  rows: [
+    { title: 'Review the diff', meta: 'cmux.json', keys: ['enter'], custom: true },
+    { title: 'Reveal working directory in Finder', meta: 'Built in' },
+    { title: 'Revert pane to last checkpoint', meta: 'Built in' },
+  ],
+} as const;
+
 export const foundation = {
   eyebrow: 'Foundation',
   heading: 'Built on libghostty, the way apps are built on WebKit.',
