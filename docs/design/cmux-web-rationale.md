@@ -244,15 +244,57 @@ the invented metrics the rules ban.
 
 ## On 21st.dev
 
-I searched it as a reference and copied nothing, which was a decision rather than
-an oversight. A typical 21st component ships Inter (banned here), Lucide icons
-(the whitelist is Phosphor, Solar or Iconamoon), a background gradient (banned)
-and a default `transition-colors` (banned). That is four of the six mandated rule
-families broken by a single paste, so every component would have been a rewrite.
-It is a good place to study a treatment and a bad place to source code for a
-system this constrained.
+Five components on this page started life in the 21st.dev catalogue or were
+handed to me as exports. None of them were pasted, and that is the interesting
+part rather than a caveat.
 
----
+A typical registry component assumes a different system to this one. Between
+the five, they arrived carrying Inter, Lucide icons, `bg-primary` and
+`bg-background`, transitions that animate every property, durations off the
+ladder, and `w-32`, which does not compile here at all because the spacing
+scale was deleted. Pasting any of them would have failed the design rules test
+on the first run. So each was taken apart and the good half kept:
+
+| Source | Kept | Replaced |
+|---|---|---|
+| `tom_ui/kbd` | The ⌘ ⌃ ⌥ ⇧ symbol map, and keycaps sized in `em` so they scale with surrounding text | `react-hotkeys-hook`, which captured real key presses; the transition |
+| `rafa-porto/command-palette` | The layout: query line, grouped rows, source on the right | 35 Lucide icons, framer-motion, command history, category filters |
+| `magic-text` | Scroll-scrubbed word opacity, which is better than what I had | `opacity-20` for dormant words, at roughly 2.2:1 |
+| Dot grid jig | All of it. DPR clamp, ResizeObserver, pointer smoothing, reduced-motion freeze | Nothing; added off-screen pausing and token-driven colour |
+| Interactive hover button | The flood mechanic | Lucide, shadcn tokens, `w-32`, 300ms, animate-everything |
+
+Two of those swaps were accessibility, not taste. The magic-text dormant word
+at 20% opacity measures about 2.2:1 and fails even the large-text floor, and a
+reader who never scrolls the section into range sees only that state; it is a
+token here, measured 5.93:1 at 60px. The hover button expanded a coloured disc,
+which on this page would have meant blue doing a second job — so the flood is
+paper instead, and blue keeps meaning that a pane needs you.
+
+Each also had to earn a place rather than be dropped somewhere. The dot grid
+sits behind the section about GPU accelerated rendering, where a cursor
+reactive canvas demonstrates the claim; anywhere else it would be the
+decorative grid the slop catalogue warns about. The palette sits directly
+beside the `cmux.json` whose command it is showing, closing a gap where the
+section described something and then showed nothing.
+
+### What the audit caught afterwards
+
+Adding them surfaced three contrast failures I had already shipped, which is
+the argument for auditing rather than looking:
+
+- The palette meta text and the terminal mock greys ran 2.5 to 3.6:1.
+- White on the bright blue selected row was 3.65:1. The fill now steps darker
+  while the notification ring keeps the product blue, since a ring is a
+  graphical object needing 3:1 and a filled row carrying text needs 4.5:1.
+
+The reason these survived the first pass is worth recording: my original audit
+selected semantic elements — `p`, `li`, `h2`, `code` — and both mocks are built
+from `div`s, so it walked straight past them and reported a clean sweep. It now
+checks every leaf node carrying text, including the ones marked `aria-hidden`,
+because a sighted reader sees those whether or not a screen reader announces
+them. 211 elements per theme, zero failures in both.
+
+A gate that only inspects the parts you remembered to name is not a gate.
 
 ## What is not finished
 
