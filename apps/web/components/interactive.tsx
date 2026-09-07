@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { List, X, Copy, Check, Sun, Moon } from '@phosphor-icons/react/dist/ssr';
 import { cn } from '@/lib/cn';
 import { nav, site } from '@/content/site';
@@ -96,21 +97,63 @@ export function Reveal({
 
 export function ThemeToggle({ className }: { className?: string }) {
   /**
-   * No React state here on purpose. The document already holds the theme in
-   * its data-theme attribute, so mirroring it into state would create a second
-   * source of truth that is wrong for one render after hydration. The icons
-   * swap in CSS instead, which also means the correct one is painted before
-   * hydration rather than after it.
+   * The diagonal wipe is lightswind's toggle-theme, adapted.
+   *
+   * Taken: the View Transition approach and the diag-down-right clip, a
+   * polygon collapsed into the top left corner that expands to fill, which
+   * reads as a diagonal sweep rather than a cross fade.
+   *
+   * Replaced: it toggles a `dark` class and writes its own localStorage key,
+   * where this project drives everything from a data-theme attribute. Its
+   * Lucide icons, tailwind-merge and cn import all go too.
+   *
+   * The easing is read from the token rather than written inline. The design
+   * rules test rejects a literal cubic-bezier outside the token file, and it is
+   * right to: a curve typed into a component is a curve that drifts.
+   *
+   * Still no React state. The document holds the theme, the icons swap in CSS,
+   * and that stays true through a view transition.
    */
   function toggle() {
     const root = document.documentElement;
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try {
-      localStorage.setItem('cmux-theme', next);
-    } catch {
-      /* private mode, or site data blocked. The page still works. */
+
+    const apply = () => {
+      root.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem('cmux-theme', next);
+      } catch {
+        /* private mode, or site data blocked. The page still works. */
+      }
+    };
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Not every browser has the API, and a wipe is exactly the kind of full
+    // screen motion reduced motion is asking us to skip. Both fall back to an
+    // instant swap, which is the same end state.
+    if (reduced || typeof document.startViewTransition !== 'function') {
+      apply();
+      return;
     }
+
+    const ease =
+      getComputedStyle(root).getPropertyValue('--curve-drawer').trim() || 'ease-in-out';
+
+    void document
+      .startViewTransition(() => {
+        flushSync(apply);
+      })
+      .ready.then(() => {
+        root.animate(
+          {
+            clipPath: [
+              'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%)',
+              'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            ],
+          },
+          { duration: 520, easing: ease, pseudoElement: '::view-transition-new(root)' },
+        );
+      });
   }
 
   return (

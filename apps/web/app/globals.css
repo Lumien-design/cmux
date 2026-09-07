@@ -135,3 +135,21 @@
     display: none;
   }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Theme view transition
+
+   The default snapshot cross-fades both roots, which fights a clip path wipe
+   and shows through as a grey wash mid sweep. Turning the built in animation
+   off leaves the clip as the only thing moving.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}

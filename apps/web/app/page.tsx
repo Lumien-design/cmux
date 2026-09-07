@@ -15,6 +15,7 @@ import {
   Problem,
   Programmable,
   Shortcuts,
+  Testimonials,
   Tagline,
 } from '@/components/sections';
 
@@ -73,6 +74,7 @@ export default async function Page() {
             <Problem />
             <Tagline />
             <Capabilities />
+            <Testimonials />
             <Programmable />
             <Shortcuts />
             <Foundation />

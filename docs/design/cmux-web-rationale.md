@@ -227,9 +227,14 @@ Nothing on this page can stay invisible because an observer did not fire.
 
 - **No logo wall.** No verified partnership exists. Five agent names set as text
   is honest specificity; borrowed logos would be borrowed credibility.
-- **No testimonials.** I have no real quote, and inventing one is disqualifying.
-  The social-proof slot is occupied by the licence and the public repository,
-  which is the actual proof for an open-source tool.
+- **Testimonials, once there were real ones.** This section originally did not
+  exist, and the reasoning was that no verified quote was available and
+  inventing one is disqualifying. Eighteen real, linked quotes later, that
+  argument no longer holds and the section is in. Every quote is verbatim and
+  every one links to its source, including the creator of the engine cmux is
+  built on. The non English quotes keep their original text above the
+  translation, because showing only the English would quietly erase that this
+  is being adopted in eight languages, which is the thing those quotes prove.
 - **No pricing table.** The product is free. A section that exists only to make
   a page feel complete is the definition of filler.
 - **No fake terminal cursor, no pulsing status dots, no decorative browser

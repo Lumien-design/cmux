@@ -150,7 +150,7 @@ export function CardNav() {
                       'flex min-w-0 flex-1 flex-col rounded-[0.55rem] px-200 py-200',
                       'transition-[translate,opacity] duration-240 ease-out motion-reduce:transition-none',
                       open ? 'translate-y-0 opacity-100' : 'translate-y-100 opacity-0',
-                      terminal ? 'bg-ink' : 'bg-sheet-sunken',
+                      terminal ? 'bg-ink' : 'bg-panel',
                     )}
                   >
                     {/* Label first, at the weight and size the original sets. */}

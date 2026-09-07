@@ -50,6 +50,12 @@
   --shell: #131209;
   --shell-ink: #ede9e0;
 
+  /* Panels are plain white on paper. Not part of the inverting ramp: white is
+     a deliberate choice for the light theme, and its dark counterpart has to
+     be a dark panel rather than the inversion of white, which would be a
+     blazing sheet of it. */
+  --panel: #ffffff;
+
   /* Accent. Blue because the product's own attention affordance is a blue
      ring — on this site it keeps that single meaning and takes no other job.
      500 is the ring itself; 700 carries text weight on paper. */
@@ -100,6 +106,8 @@
   --shell: #000000;
   --shell-ink: #e8e8e8;
 
+  --panel: #1f1f1f;
+
   /* Dark neumorphism is not the light values inverted. A bright highlight on a
      dark surface reads as a glowing rim, so the highlight drops to a few per
      cent and the cast shadow does nearly all the work. */
@@ -125,6 +133,7 @@
      utility reads bg-bg-sheet has been named twice. */
   --color-shell: var(--shell);
   --color-shell-ink: var(--shell-ink);
+  --color-panel: var(--panel);
   --color-sheet: var(--n-050);
   --color-sheet-raised: var(--n-000);
   --color-sheet-sunken: var(--n-100);
