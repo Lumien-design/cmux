@@ -77,3 +77,61 @@
     text-wrap: pretty;
   }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Custom cursor
+
+   Difference blending rather than a colour, because this page puts warm paper
+   and near black terminal windows on the same screen. An ink ring would be
+   invisible over the mocks and a white one invisible over the paper; a
+   difference blend inverts against whatever is beneath it, so neither case
+   needs special handling.
+
+   The system cursor is only hidden while the component is mounted, which it
+   is not under reduced motion or on a coarse pointer.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform, opacity;
+  /* Invisible until the loop drives it. Nothing shows if it never runs. */
+  opacity: 0;
+}
+
+.cursor-dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.cursor-ring {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+/* Belt and braces: if the component somehow mounted, the cursor still returns
+   the moment the reader asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: auto;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
