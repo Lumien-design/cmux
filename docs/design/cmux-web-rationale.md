@@ -183,6 +183,15 @@ moving lightness, not hue. The ring itself stays `#0A84FF`, because it only ever
 appears inside the terminal window, which is dark in both themes and measures
 5.05:1 there.
 
+**The shell had to leave the ramp.** The neutral ramp inverts by name between
+themes, which is what lets every semantic token be written once. That works for
+every surface except the frame: inverting `--n-950` made the shell white in dark
+mode, so the page gained a white border and the nav overlay put dark text on it.
+The shell is not a step on a ramp, it is "the darkest thing on screen" in both
+themes, so it and its text sit outside the inversion as their own primitives. I
+found this by auditing contrast in both themes rather than by looking at it,
+which is the argument for auditing.
+
 **Light is the default, and that is a deliberate call.** Paper is the whole
 argument, and most developers run a dark system, so honouring
 `prefers-color-scheme` here would mean almost nobody ever sees the design. A

@@ -27,7 +27,7 @@
 :root {
   color-scheme: light;
 
-  /* Warm paper ramp. 000 is the lightest sheet, 950 the shell it sits in.
+  /* Warm paper ramp. 000 is the lightest sheet, 950 the deepest ink.
      --n-950 is #131209, one of the six sanctioned dark backgrounds and the
      only warm one — which is precisely why this direction can use it. */
   --n-000: #f7f4ee;
@@ -42,6 +42,13 @@
   --n-800: #35322e;
   --n-900: #1f1d1b;
   --n-950: #131209;
+
+  /* The shell sits outside the inverting ramp on purpose.
+     Everything else flips between themes, but the frame is "the darkest thing
+     on screen" in both — inverting it would put a white border around a dark
+     page. Its text pairs with it and therefore stays light in both themes too. */
+  --shell: #131209;
+  --shell-ink: #ede9e0;
 
   /* Accent. Blue because the product's own attention affordance is a blue
      ring — on this site it keeps that single meaning and takes no other job.
@@ -77,6 +84,10 @@
   --n-900: #e8e8e8;
   --n-950: #ffffff;
 
+  /* Darkest thing on screen, in this theme too. */
+  --shell: #000000;
+  --shell-ink: #e8e8e8;
+
   --azure-600: #0a84ff;
   --azure-700: #8fb8ff;
   --azure-200: #0b325e;
@@ -93,7 +104,8 @@
      Names are chosen so the utilities read as English at the call site:
      bg-sheet, bg-shell, text-ink, text-ink-muted, border-rule. A token whose
      utility reads bg-bg-sheet has been named twice. */
-  --color-shell: var(--n-950);
+  --color-shell: var(--shell);
+  --color-shell-ink: var(--shell-ink);
   --color-sheet: var(--n-050);
   --color-sheet-raised: var(--n-000);
   --color-sheet-sunken: var(--n-100);

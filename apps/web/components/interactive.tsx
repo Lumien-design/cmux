@@ -244,7 +244,7 @@ export function IslandNav() {
               <a
                 href={n.href}
                 onClick={() => setOpen(false)}
-                className="text-3xl font-semibold tracking-tight text-sheet"
+                className="text-3xl font-semibold tracking-tight text-shell-ink"
               >
                 {n.label}
               </a>
@@ -253,7 +253,7 @@ export function IslandNav() {
           <li className="mt-300">
             <a
               href={site.repo}
-              className="font-mono text-sm uppercase tracking-[0.12em] text-sheet/70"
+              className="font-mono text-sm uppercase tracking-[0.12em] text-shell-ink/70"
             >
               View source
             </a>
