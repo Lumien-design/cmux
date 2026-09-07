@@ -152,7 +152,7 @@ export function ToolStrip() {
         <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
           {agents.label}
         </p>
-        <LogoLoop className="mt-300" markHeight={22} gap={72} speed={40} />
+        <LogoLoop className="mt-300" markHeight={1.62} gap={72} speed={40} />
       </div>
     </div>
   );

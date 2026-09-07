@@ -32,7 +32,8 @@ const COPY_HEADROOM = 2;
 export function LogoLoop({
   speed = 44,
   gap = 64,
-  markHeight = 22,
+  /** In rem, so the marks scale with the page like everything else. */
+  markHeight = 1.62,
   className,
   ariaLabel = 'Tools that run in cmux',
 }: {
@@ -190,7 +191,7 @@ export function LogoLoop({
         '[mask-image:linear-gradient(90deg,transparent,black_9%,black_91%,transparent)]',
         className,
       )}
-      style={{ ['--mark-h' as string]: `${markHeight}px` }}
+      style={{ ['--mark-h' as string]: `${markHeight}rem` }}
     >
       <div
         ref={trackRef}
