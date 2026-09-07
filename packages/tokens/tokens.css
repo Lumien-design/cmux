@@ -186,3 +186,26 @@
   --breakpoint-split: 64rem;
   --breakpoint-wide: 90rem;
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   MOTION — the notification ring
+   The one looping animation on the page, and it earns the exception because
+   the loop IS the product behaviour. Gated behind motion-safe at every call
+   site, so reduced motion gets a static ring that still reads as a state.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --animate-ring: ring 2600ms var(--curve-out) infinite;
+}
+
+@keyframes ring {
+  0%,
+  100% {
+    opacity: 0.4;
+    box-shadow: 0 0 0 0 rgb(10 132 255 / 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 18px 1px rgb(10 132 255 / 0.28);
+  }
+}

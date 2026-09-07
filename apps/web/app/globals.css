@@ -1,17 +1,46 @@
 @import 'tailwindcss';
 @import '@cmux/tokens/tokens.css';
 
+/* Theme is carried by a data-theme attribute, not by prefers-color-scheme, so
+   the dark: variant has to follow the attribute. One mechanism, no drift. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-padding-block-start: 96px;
   }
+
   body {
+    /* The shell. Paper sits on top of it, framed. */
     background: var(--color-shell);
     color: var(--color-ink);
+    font-family: var(--font-sans);
   }
+
   :focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@utility paper-grain {
+  /* Low contrast diagonal texture, so large paper regions read as material
+     rather than as flat fill. Deliberately near the threshold of visible. */
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-ink) 2%, transparent) 0 1px,
+    transparent 1px 7px
+  );
 }
