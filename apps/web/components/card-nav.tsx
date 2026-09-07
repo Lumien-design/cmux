@@ -7,27 +7,33 @@ import { ThemeToggle } from '@/components/interactive';
 import { navCards, site } from '@/content/site';
 
 /**
- * CardNav — from reactbits, rebuilt without its animation dependency.
+ * CardNav — reactbits, implemented to its actual spec.
  *
- * The original needs GSAP and react-icons. Neither ships here, and the reason
- * is worth stating rather than quietly working around: choosing Motion over
- * GSAP is the single largest architectural decision in this project, made
- * against three skills that mandate GSAP, and documented as such. Pulling GSAP
- * in for one navigation bar would undo it.
+ * My first pass drifted a long way from the original, so this one follows
+ * CardNav.css rather than my memory of it:
  *
- * It turns out no animation library was needed at all. GSAP is doing two jobs
- * here, a height tween on the shell and a staggered rise on the cards, and CSS
- * does both. So this component ships zero animation runtime and the behaviour
- * is the same.
+ *   container   90% wide, capped at 800px, centred, floating from the top
+ *   shell       one rounded rectangle at 0.75rem that grows in height, with
+ *               overflow hidden, so the panel is revealed rather than dropped
+ *   top bar     fixed height row: trigger left, wordmark absolutely centred,
+ *               call to action right
+ *   trigger     two 30px lines that translate 4px and rotate into a cross
+ *   panel       cards side by side, each flex 1, label at the top and links
+ *               pushed to the bottom with margin-top auto
+ *   narrow      wordmark moves leading, trigger moves trailing, CTA drops,
+ *               cards stack
  *
- * The design is faithful: a pill that expands into a panel of grouped cards,
- * a two line trigger that crosses into an X, a CTA that stays reachable while
- * the panel is open.
+ * Two deliberate departures, both behavioural rather than visual:
  *
- * Accessibility the original left out: the panel is labelled and linked to its
- * trigger, Escape closes and returns focus, the rest of the page is inert while
- * it is open, and the whole thing collapses to an instant state change under
- * reduced motion.
+ * - Fixed rather than absolute. The original sits at the top of a demo page
+ *   and scrolls away; on a page this long that is a regression.
+ * - The height is a grid-template-rows collapse, not an animated height.
+ *   Motion's height:'auto' measured this panel at zero while it held 243px of
+ *   content, which announced the menu as open while showing nothing.
+ *
+ * Colour follows the page rather than the original's per-card palette. The last
+ * card is ink, which does the job those contrasting card colours were doing:
+ * giving the panel a terminus instead of three equal blocks.
  */
 
 export function CardNav() {
@@ -44,7 +50,6 @@ export function CardNav() {
     };
     document.addEventListener('keydown', onKey);
 
-    // The page behind the panel is not reachable while it is open.
     const main = document.getElementById('main');
     const footer = document.querySelector('footer');
     main?.setAttribute('inert', '');
@@ -58,17 +63,17 @@ export function CardNav() {
   }, [open]);
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center p-300">
+    <header className="pointer-events-none fixed inset-x-0 top-400 z-50 flex justify-center px-300">
+      {/* 90% wide, capped at 800px — a compact floating bar, not a full width rail. */}
       <div
         className={cn(
-          'pointer-events-auto w-full max-w-[var(--container-page)] overflow-hidden',
-          'border border-rule bg-sheet-raised/85 backdrop-blur-xl',
-          open ? 'rounded-card' : 'rounded-pill',
-          'transition-[border-radius] duration-240 ease-out',
+          'pointer-events-auto w-[90%] max-w-[50rem] overflow-hidden',
+          'rounded-[0.75rem] border border-rule bg-sheet-raised/90 backdrop-blur-xl',
+          'shadow-[0_4px_18px_-6px_rgb(0_0_0/0.18)]',
         )}
       >
-        {/* top bar */}
-        <div className="flex h-[44px] items-center gap-300 px-300">
+        {/* ── top bar ─────────────────────────────────────────────────────── */}
+        <div className="relative flex h-[3.4rem] items-center justify-between ps-300 pe-75">
           <button
             ref={triggerRef}
             type="button"
@@ -76,36 +81,43 @@ export function CardNav() {
             aria-controls={panelId}
             aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-400 shrink-0 place-items-center rounded-pill text-ink"
+            className="order-2 flex h-full cursor-pointer flex-col items-center justify-center gap-[6px] px-50 prose:order-none"
           >
-            <span className="relative block h-[10px] w-[18px]" aria-hidden="true">
-              <span
-                className={cn(
-                  'absolute inset-x-0 top-0 h-[1.5px] origin-center rounded-pill bg-ink',
-                  'transition-[transform] duration-240 ease-out',
-                  open && 'translate-y-[4.25px] rotate-45',
-                )}
-              />
-              <span
-                className={cn(
-                  'absolute inset-x-0 bottom-0 h-[1.5px] origin-center rounded-pill bg-ink',
-                  'transition-[transform] duration-240 ease-out',
-                  open && '-translate-y-[4.25px] -rotate-45',
-                )}
-              />
-            </span>
+            <span
+              aria-hidden="true"
+              className={cn(
+                'block h-[2px] w-[1.6rem] origin-center rounded-pill bg-ink',
+                'transition-[transform] duration-240 ease-out motion-reduce:transition-none',
+                open && 'translate-y-[4px] rotate-45',
+              )}
+            />
+            <span
+              aria-hidden="true"
+              className={cn(
+                'block h-[2px] w-[1.6rem] origin-center rounded-pill bg-ink',
+                'transition-[transform] duration-240 ease-out motion-reduce:transition-none',
+                open && '-translate-y-[4px] -rotate-45',
+              )}
+            />
           </button>
 
-          <a href="#top" className="font-mono text-sm font-medium tracking-tight text-ink">
+          {/* Centred on wide screens, leading on narrow ones — as the original. */}
+          <a
+            href="#top"
+            className={cn(
+              'order-1 font-mono text-lg font-medium tracking-tight text-ink prose:order-none',
+              'prose:absolute prose:left-1/2 prose:top-1/2 prose:-translate-x-1/2 prose:-translate-y-1/2',
+            )}
+          >
             cmux
           </a>
 
-          <div className="ms-auto flex items-center gap-100">
+          <div className="order-3 flex items-center gap-75 prose:order-none">
             <ThemeToggle />
             <a
               href={site.download}
               className={cn(
-                'rounded-pill bg-ink px-100 py-75 text-sm font-semibold text-ink-inverse',
+                'hidden h-[2.4rem] items-center rounded-[0.4rem] bg-ink px-200 text-base font-medium text-ink-inverse prose:inline-flex',
                 'transition-[translate] duration-120 ease-out active:translate-y-25',
               )}
             >
@@ -114,15 +126,7 @@ export function CardNav() {
           </div>
         </div>
 
-        {/* panel
-
-            Collapsed with grid-template-rows 0fr to 1fr rather than an
-            animated height. Motion's height:'auto' left the panel measured at
-            zero here while its content was 243px tall, which meant the menu
-            reported itself open to assistive technology while showing nothing.
-            The grid technique needs no measurement, so there is nothing to get
-            wrong: the row resolves to the content's natural height and the
-            transition is pure CSS. */}
+        {/* ── panel ───────────────────────────────────────────────────────── */}
         <div
           id={panelId}
           role="group"
@@ -135,48 +139,53 @@ export function CardNav() {
           )}
         >
           <div className="min-h-0 overflow-hidden">
-            <div className="grid gap-100 border-t border-rule p-100 prose:grid-cols-3">
-              {navCards.map((card, i) => (
-                <div
-                  key={card.label}
-                  style={{ transitionDelay: open ? `${60 + i * 60}ms` : '0ms' }}
-                  className={cn(
-                    'rounded-control bg-sheet p-300',
-                    'transition-[translate,opacity] duration-240 ease-out motion-reduce:transition-none',
-                    open ? 'translate-y-0 opacity-100' : 'translate-y-100 opacity-0',
-                  )}
-                >
-                  {/* ink-soft rather than ink-muted: these labels sit on a
-                      translucent panel that composites darker than plain paper,
-                      which put muted at 4.33:1 against a 4.5 floor. */}
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft">
-                    {card.label}
-                  </p>
-                  <ul className="mt-200 flex flex-col gap-100">
-                    {card.links.map((l) => (
-                      <li key={l.label}>
-                        <a
-                          href={l.href}
-                          tabIndex={open ? undefined : -1}
-                          onClick={() => setOpen(false)}
-                          className={cn(
-                            'group inline-flex items-center gap-50 text-base text-ink-soft',
-                            'transition-[color] duration-180 ease-out hover:text-ink',
-                          )}
-                        >
-                          <ArrowUpRight
-                            size={14}
-                            weight="regular"
-                            aria-hidden="true"
-                            className="text-ink-muted transition-[translate] duration-180 ease-out group-hover:translate-x-25"
-                          />
-                          {l.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="flex flex-col items-stretch gap-75 p-75 prose:flex-row">
+              {navCards.map((card, i) => {
+                const terminal = i === navCards.length - 1;
+                return (
+                  <div
+                    key={card.label}
+                    style={{ transitionDelay: open ? `${60 + i * 60}ms` : '0ms' }}
+                    className={cn(
+                      'flex min-w-0 flex-1 flex-col rounded-[0.55rem] px-200 py-200',
+                      'transition-[translate,opacity] duration-240 ease-out motion-reduce:transition-none',
+                      open ? 'translate-y-0 opacity-100' : 'translate-y-100 opacity-0',
+                      terminal ? 'bg-ink' : 'bg-sheet-sunken',
+                    )}
+                  >
+                    {/* Label first, at the weight and size the original sets. */}
+                    <p
+                      className={cn(
+                        'text-xl font-normal tracking-[-0.5px]',
+                        terminal ? 'text-ink-inverse' : 'text-ink',
+                      )}
+                    >
+                      {card.label}
+                    </p>
+
+                    {/* margin-top auto: links sit against the bottom edge. */}
+                    <ul className="mt-auto flex flex-col gap-25 pt-300">
+                      {card.links.map((l) => (
+                        <li key={l.label}>
+                          <a
+                            href={l.href}
+                            tabIndex={open ? undefined : -1}
+                            onClick={() => setOpen(false)}
+                            className={cn(
+                              'inline-flex items-center gap-50 text-base',
+                              'transition-[opacity] duration-240 ease-out hover:opacity-75',
+                              terminal ? 'text-ink-inverse' : 'text-ink-soft',
+                            )}
+                          >
+                            <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
+                            {l.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
