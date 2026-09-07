@@ -118,3 +118,7 @@ __screenshots__/diff/
 # ─── Local agent skill library ─────────────────────────────────────────────
 # Vendored third-party skills, useful locally, deliberately not part of history.
 .claude/skills/
+
+# ─── Local MCP server wiring ───────────────────────────────────────────────
+# Editor tooling, not part of the project. Kept local like the skill library.
+.mcp.json

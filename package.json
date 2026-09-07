@@ -3,9 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "cmux — multi-surface monorepo",
-  "workspaces": ["apps/*", "packages/*"],
-  "engines": { "node": ">=24" },
+  "description": "cmux \u2014 multi-surface monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "npm run dev -w apps/web",
     "lint": "npm run lint --workspaces --if-present",
