@@ -64,7 +64,7 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 .swiftpm/
-Packages/
+.build/
 Package.resolved
 !*.xcodeproj/project.pbxproj
 !*.xcworkspace/contents.xcworkspacedata
