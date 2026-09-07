@@ -1,0 +1,188 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   cmux design tokens
+   ───────────────────────────────────────────────────────────────────────────
+   Two tiers, and the separation is the whole point:
+
+     Tier 1  primitives  plain custom properties in :root. They generate no
+                         utilities, so nothing can reach them by accident.
+     Tier 2  semantics   @theme inline. These generate utilities AND resolve
+                         through the runtime primitive, which is how one
+                         declaration themes both modes.
+
+   Components reference Tier 2 only. If a component names a primitive, that is
+   a bug — it has borrowed a value instead of a meaning.
+
+   Notation is hex throughout. oklch is the better default for a new system,
+   but the mandated dark background palette is specified in hex and is not
+   negotiable, and a consistent hex system beats hex with oklch scattered
+   through it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   TIER 1 — PRIMITIVES
+   The neutral ramp inverts by name between themes, so every semantic token
+   below is written exactly once.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  /* Warm paper ramp. 000 is the lightest sheet, 950 the shell it sits in.
+     --n-950 is #131209, one of the six sanctioned dark backgrounds and the
+     only warm one — which is precisely why this direction can use it. */
+  --n-000: #f7f4ee;
+  --n-050: #ede9e0;
+  --n-100: #e3ded3;
+  --n-200: #d7d1c4;
+  --n-300: #cfc8ba;
+  --n-400: #7d766b;
+  --n-500: #8e877c;
+  --n-600: #635d54;
+  --n-700: #4b463f;
+  --n-800: #35322e;
+  --n-900: #1f1d1b;
+  --n-950: #131209;
+
+  /* Accent. Blue because the product's own attention affordance is a blue
+     ring — on this site it keeps that single meaning and takes no other job.
+     500 is the ring itself; 700 carries text weight on paper. */
+  --azure-200: #cfe2ff;
+  --azure-300: #8fb8ff;
+  --azure-500: #0a84ff;
+  --azure-600: #0a74e0;
+  --azure-700: #0a5bb5;
+  --azure-900: #0b325e;
+
+  /* The only three sanctioned curves. Nothing else ships. */
+  --curve-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --curve-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --curve-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Inverted, and every background value here is from the sanctioned set:
+     #000000 #181818 #1F1F1F #272727 #313131 #131209 */
+  --n-000: #131209;
+  --n-050: #181818;
+  --n-100: #1f1f1f;
+  --n-200: #272727;
+  --n-300: #313131;
+  --n-400: #767676;
+  --n-500: #6b6b6b;
+  --n-600: #8a8a8a;
+  --n-700: #9b9b9b;
+  --n-800: #c6c6c6;
+  --n-900: #e8e8e8;
+  --n-950: #ffffff;
+
+  --azure-600: #0a84ff;
+  --azure-700: #8fb8ff;
+  --azure-200: #0b325e;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   TIER 2 — SEMANTICS
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  /* Surfaces. "shell" is the dark frame; "sheet" is the paper held inside it.
+     That inversion is the direction's entire structural argument.
+
+     Names are chosen so the utilities read as English at the call site:
+     bg-sheet, bg-shell, text-ink, text-ink-muted, border-rule. A token whose
+     utility reads bg-bg-sheet has been named twice. */
+  --color-shell: var(--n-950);
+  --color-sheet: var(--n-050);
+  --color-sheet-raised: var(--n-000);
+  --color-sheet-sunken: var(--n-100);
+  --color-hover: var(--n-200);
+
+  /* Text. "ink" on "sheet" — the vocabulary the direction is built from. */
+  --color-ink: var(--n-900);
+  --color-ink-soft: var(--n-700);
+  --color-ink-muted: var(--n-600);
+  --color-ink-inverse: var(--n-050);
+
+  /* Lines. Deliberately two weights: hairline for structure, strong for
+     anything a control depends on. */
+  --color-rule: var(--n-300);
+  --color-rule-strong: var(--n-400);
+
+  /* Accent, split by the ground it lands on — because the same blue cannot
+     clear every threshold on both paper and dark.
+
+       ring       the notification ring itself, #0A84FF in both themes. It only
+                  ever appears inside the terminal window, which stays dark in
+                  both themes, where it measures 4.5:1 and up.
+       signal-ui  accent as a non-text UI mark on the page ground. Needs 3:1,
+                  so on paper it steps one notch darker. Same hue, less
+                  lightness — contrast is fixed by moving lightness, not hue.
+       signal-text  accent carrying text weight. Needs 4.5:1. */
+  --color-ring: var(--azure-500);
+  --color-signal-ui: var(--azure-600);
+  --color-signal-text: var(--azure-700);
+  --color-signal-quiet: var(--azure-200);
+  --color-focus: var(--azure-700);
+
+  /* Type */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion. Overriding --ease-out is the highest-leverage line in this file:
+     Tailwind's built-in ease-out is cubic-bezier(0, 0, 0.2, 1), which is too
+     weak. Redefining it here means every `ease-out` anyone writes is the
+     correct curve, and the wrong one becomes unreachable rather than merely
+     discouraged. */
+  --ease-out: var(--curve-out);
+  --ease-in-out: var(--curve-in-out);
+  --ease-drawer: var(--curve-drawer);
+
+  /* Radius, named by role rather than size */
+  --radius-control: var(--radius-lg);
+  --radius-card: var(--radius-2xl);
+  --radius-sheet: var(--radius-3xl);
+  --radius-pill: calc(infinity * 1px);
+
+  /* Measures. 680px is the mandated hero cap; the tagline reuses it so the
+     two large-type moments share an edge. */
+  --container-measure: 42.5rem;
+  --container-prose: 65ch;
+  --container-page: 75rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   SPACING — the ladder, structurally enforced
+   `--spacing: initial` deletes Tailwind's dynamic scale, so p-5, gap-9, w-11
+   and friends stop compiling entirely. Off-ladder spacing becomes impossible
+   rather than merely linted. Names are lifted from the spec so the CSS and
+   the rule read identically.
+
+   Consequence worth knowing: w-*, h-*, size-*, inset-* and translate-* all
+   derive from this scale in Tailwind v4, so they take ladder names too —
+   translate-y-700 is 64px.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --spacing: initial;
+  --spacing-0: 0px;
+  --spacing-25: 2px;
+  --spacing-50: 4px;
+  --spacing-75: 8px;
+  --spacing-100: 12px;
+  --spacing-200: 16px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+  --spacing-700: 64px;
+  --spacing-800: 80px;
+  --spacing-900: 96px;
+
+  /* Named for what breaks, not for a device. Added alongside Tailwind's
+     defaults rather than replacing them, so nothing familiar disappears. */
+  --breakpoint-prose: 46rem;
+  --breakpoint-split: 64rem;
+  --breakpoint-wide: 90rem;
+}

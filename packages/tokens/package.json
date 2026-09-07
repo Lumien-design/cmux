@@ -1,0 +1,8 @@
+{
+  "name": "@cmux/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design tokens shared across cmux surfaces",
+  "exports": { "./tokens.css": "./tokens.css" },
+  "files": ["tokens.css"]
+}
