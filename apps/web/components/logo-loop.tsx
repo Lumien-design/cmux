@@ -48,7 +48,19 @@ export function LogoLoop({
 
   const [seqWidth, setSeqWidth] = useState(0);
   const [copyCount, setCopyCount] = useState(MIN_COPIES);
-  const [hovered, setHovered] = useState(false);
+
+  /**
+   * Hover lives in a ref, not in state, and deliberately.
+   *
+   * With `hovered` as an effect dependency the whole loop was torn down and
+   * rebuilt on every enter and leave, which reset the offset to zero. The row
+   * snapped back to its start instead of easing to a stop, so the deceleration
+   * that is already in the maths never got a chance to show. Offset and
+   * velocity persist across renders for the same reason.
+   */
+  const hoveredRef = useRef(false);
+  const offsetRef = useRef(0);
+  const velocityRef = useRef(0);
 
   // Motion's hook rather than a matchMedia read mirrored into state: it is a
   // real subscription, so a reader who flips the system setting mid visit gets
@@ -82,8 +94,6 @@ export function LogoLoop({
     if (!track || !container) return;
 
     let raf = 0;
-    let offset = 0;
-    let velocity = 0;
     let last: number | null = null;
     let visible = true;
 
@@ -92,15 +102,15 @@ export function LogoLoop({
       const dt = Math.max(0, now - last) / 1000;
       last = now;
 
-      const target = hovered ? 0 : speed;
-      // Exponential approach, so hovering eases the row to a stop rather than
-      // snapping it. Same technique as the original.
+      // Exponential approach: the row coasts to a stop on hover and picks the
+      // speed back up on leave, rather than switching between on and off.
+      const target = hoveredRef.current ? 0 : speed;
       const ease = 1 - Math.exp(-dt / SMOOTH_TAU);
-      velocity += (target - velocity) * ease;
+      velocityRef.current += (target - velocityRef.current) * ease;
 
-      offset += velocity * dt;
-      offset = ((offset % seqWidth) + seqWidth) % seqWidth;
-      track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+      const next = offsetRef.current + velocityRef.current * dt;
+      offsetRef.current = ((next % seqWidth) + seqWidth) % seqWidth;
+      track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
 
       if (visible) raf = requestAnimationFrame(frame);
     };
@@ -117,13 +127,28 @@ export function LogoLoop({
       { rootMargin: '120px' },
     );
     vis.observe(container);
+
+    // Native listeners rather than React's onPointerEnter. The frame loop reads
+    // this ref directly, so routing it through React's synthetic delegation
+    // adds a layer for no benefit and makes the behaviour harder to verify.
+    const enter = () => {
+      hoveredRef.current = true;
+    };
+    const leave = () => {
+      hoveredRef.current = false;
+    };
+    container.addEventListener('pointerenter', enter);
+    container.addEventListener('pointerleave', leave);
+
     raf = requestAnimationFrame(frame);
 
     return () => {
       cancelAnimationFrame(raf);
       vis.disconnect();
+      container.removeEventListener('pointerenter', enter);
+      container.removeEventListener('pointerleave', leave);
     };
-  }, [reduced, seqWidth, speed, hovered]);
+  }, [reduced, seqWidth, speed]);
 
   // A function, not a shared element: only the first copy carries the measuring
   // ref, and every copy after it is hidden from assistive technology so the
@@ -136,8 +161,18 @@ export function LogoLoop({
       style={{ gap: `${gap}px`, paddingInlineEnd: `${gap}px` }}
     >
       {toolMarks.map(({ key, label, Mark }) => (
-        <li key={key} className="flex shrink-0 items-center">
-          <Mark className="w-auto text-ink-muted" />
+        <li key={key} className="group/mark flex shrink-0 items-center">
+          <Mark
+            className={cn(
+              'w-auto text-ink-muted',
+              // Colour and a 2px lift rather than a scale: the marks sit on a
+              // baseline with each other, and scaling breaks that line.
+              'transition-[color,translate] duration-180 ease-out',
+              'motion-reduce:transition-none',
+              '[@media(hover:hover)and(pointer:fine)]:group-hover/mark:-translate-y-25',
+              '[@media(hover:hover)and(pointer:fine)]:group-hover/mark:text-ink',
+            )}
+          />
           <span className="sr-only">{label}</span>
         </li>
       ))}
@@ -149,8 +184,6 @@ export function LogoLoop({
       ref={containerRef}
       role="region"
       aria-label={ariaLabel}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       className={cn(
         'relative overflow-hidden',
         // Edge fade, so marks arrive and leave rather than being cut off.

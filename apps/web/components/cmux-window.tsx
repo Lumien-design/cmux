@@ -47,7 +47,7 @@ export function CmuxWindow({
       <div
         role="img"
         aria-label={label}
-        className="grid grid-cols-[104px_1fr] overflow-hidden rounded-card border border-[#2A2A2A] bg-[#141414] font-mono text-[10px]/[1.8] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.45)] prose:grid-cols-[136px_1fr] prose:text-[11px]"
+        className="grid grid-cols-[104px_1fr] overflow-hidden rounded-card border border-[#2A2A2A] bg-[#141414] font-mono text-[0.56rem]/[1.8] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.45)] prose:grid-cols-[136px_1fr] prose:text-xs"
       >
         {/* sidebar */}
         <div className="flex flex-col gap-25 border-r border-[#2A2A2A] bg-[#0E0E0E] py-75">
@@ -67,7 +67,7 @@ export function CmuxWindow({
             >
               <span className="truncate">{w.name}</span>
               <span
-                className={cn('truncate text-[9px]', w.active ? 'text-[#D8E6FA]' : 'text-[#7E7E7E]')}
+                className={cn('truncate text-[0.5rem]', w.active ? 'text-[#D8E6FA]' : 'text-[#7E7E7E]')}
               >
                 {w.meta}
               </span>
@@ -77,7 +77,7 @@ export function CmuxWindow({
 
         {/* main */}
         <div className="flex min-w-0 flex-col">
-          <div className="flex items-center gap-75 border-b border-[#2A2A2A] px-100 py-75 text-[9px] text-[#8A8A8A]">
+          <div className="flex items-center gap-75 border-b border-[#2A2A2A] px-100 py-75 text-[0.5rem] text-[#8A8A8A]">
             <span>{'>_'}</span>
             <span className="truncate">~</span>
             <span className="ms-auto tracking-widest" aria-hidden="true">
@@ -112,7 +112,7 @@ export function CmuxWindow({
           </div>
         </div>
       </div>
-      <figcaption className="mt-75 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+      <figcaption className="mt-75 font-mono text-[0.56rem] uppercase tracking-[0.12em] text-ink-muted">
         Interface mock, not a screenshot
       </figcaption>
     </figure>

@@ -121,7 +121,7 @@ export function InteractiveCta({
       href={href}
       className={cn(
         'group relative isolate inline-flex items-center justify-center overflow-hidden',
-        'rounded-control px-100 py-75 text-[15px] font-semibold',
+        'rounded-control px-100 py-75 text-base font-semibold',
         'bg-ink text-ink-inverse',
         'transition-[translate] duration-240 ease-out active:translate-y-25',
         className,

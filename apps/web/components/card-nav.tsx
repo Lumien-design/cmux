@@ -149,7 +149,7 @@ export function CardNav() {
                   {/* ink-soft rather than ink-muted: these labels sit on a
                       translucent panel that composites darker than plain paper,
                       which put muted at 4.33:1 against a 4.5 floor. */}
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
+                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft">
                     {card.label}
                   </p>
                   <ul className="mt-200 flex flex-col gap-100">
@@ -160,7 +160,7 @@ export function CardNav() {
                           tabIndex={open ? undefined : -1}
                           onClick={() => setOpen(false)}
                           className={cn(
-                            'group inline-flex items-center gap-50 text-[15px] text-ink-soft',
+                            'group inline-flex items-center gap-50 text-base text-ink-soft',
                             'transition-[color] duration-180 ease-out hover:text-ink',
                           )}
                         >

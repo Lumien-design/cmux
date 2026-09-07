@@ -139,8 +139,8 @@
   --color-focus: var(--azure-700);
 
   /* Type */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Google Sans Code', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Motion. Overriding --ease-out is the highest-leverage line in this file:
      Tailwind's built-in ease-out is cubic-bezier(0, 0, 0.2, 1), which is too
@@ -161,7 +161,7 @@
      two large-type moments share an edge. */
   --container-measure: 42.5rem;
   --container-prose: 65ch;
-  --container-page: 75rem;
+  --container-page: 78rem;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -177,20 +177,24 @@
    ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
+  /* The ladder is in rem, not px, so the page has a single scale knob: change
+     the root font size and type, spacing and containers move together. At a
+     16px root these resolve to exactly the mandated 0 2 4 8 12 16 24 32 40 48
+     64 80 96, so the ladder is preserved, not replaced. */
   --spacing: initial;
-  --spacing-0: 0px;
-  --spacing-25: 2px;
-  --spacing-50: 4px;
-  --spacing-75: 8px;
-  --spacing-100: 12px;
-  --spacing-200: 16px;
-  --spacing-300: 24px;
-  --spacing-400: 32px;
-  --spacing-500: 40px;
-  --spacing-600: 48px;
-  --spacing-700: 64px;
-  --spacing-800: 80px;
-  --spacing-900: 96px;
+  --spacing-0: 0rem;
+  --spacing-25: 0.125rem;
+  --spacing-50: 0.25rem;
+  --spacing-75: 0.5rem;
+  --spacing-100: 0.75rem;
+  --spacing-200: 1rem;
+  --spacing-300: 1.5rem;
+  --spacing-400: 2rem;
+  --spacing-500: 2.5rem;
+  --spacing-600: 3rem;
+  --spacing-700: 4rem;
+  --spacing-800: 5rem;
+  --spacing-900: 6rem;
 
   /* Named for what breaks, not for a device. Added alongside Tailwind's
      defaults rather than replacing them, so nothing familiar disappears. */

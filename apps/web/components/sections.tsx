@@ -31,7 +31,7 @@ import {
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">{children}</p>
+    <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">{children}</p>
   );
 }
 
@@ -71,7 +71,7 @@ function Button({
       href={href}
       className={cn(
         // 8px vertical, 12px horizontal — the mandated control padding.
-        'inline-flex items-center gap-50 rounded-control px-100 py-75 text-[15px] font-semibold',
+        'inline-flex items-center gap-50 rounded-control px-100 py-75 text-base font-semibold',
         'transition-[transform,background-color,border-color,color] duration-180 ease-out',
         'active:scale-[0.98]',
         variant === 'solid'
@@ -95,7 +95,7 @@ function ShotFrame({ id }: { id: string }) {
     >
       <div className="flex h-full flex-col items-start justify-end gap-75 p-300">
         <Camera size={18} weight="regular" className="text-ink-muted" aria-hidden="true" />
-        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+        <p className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
           {shot.id}
         </p>
         <p className="max-w-[42ch] text-sm text-ink-soft">{shot.brief}</p>
@@ -127,7 +127,7 @@ export function Hero({ stars }: { stars: number }) {
                 <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
               </Button>
             </div>
-            <p className="mt-400 border-t border-rule pt-200 font-mono text-[12px] tabular-nums text-ink-muted">
+            <p className="mt-400 border-t border-rule pt-200 font-mono text-xs tabular-nums text-ink-muted">
               <span className="text-ink-soft">{stars.toLocaleString('en-US')}</span> stars on GitHub
               &nbsp;·&nbsp; <span className="text-ink-soft">GPL 3.0</span> &nbsp;·&nbsp; Swift and
               AppKit
@@ -149,7 +149,7 @@ export function ToolStrip() {
   return (
     <div className="px-400 py-500 split:px-700">
       <div className="mx-auto w-full max-w-[var(--container-page)]">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
           {agents.label}
         </p>
         <LogoLoop className="mt-300" markHeight={22} gap={72} speed={40} />
@@ -180,7 +180,7 @@ export function Tagline() {
         <ScrubbedTagline lines={tagline.lines} />
         <div>
           <p className="max-w-[46ch] text-base leading-relaxed text-ink-soft">{tagline.body}</p>
-          <p className="mt-200 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+          <p className="mt-200 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
             {tagline.attribution}
           </p>
         </div>
@@ -214,7 +214,7 @@ export function Capabilities() {
                 </p>
                 <ul className="mt-400 flex flex-col gap-200 border-t border-rule pt-300">
                   {c.points.map((p) => (
-                    <li key={p} className="flex gap-200 text-[15px] text-ink-soft">
+                    <li key={p} className="flex gap-200 text-base text-ink-soft">
                       <span
                         aria-hidden="true"
                         className="mt-[9px] size-[5px] shrink-0 rounded-pill bg-signal-ui"
@@ -264,7 +264,7 @@ export function Programmable() {
               {programmable.cli.map((c) => (
                 <div key={c.cmd} className="flex flex-col gap-25">
                   <dt>
-                    <code className="font-mono text-[13px] text-ink">{c.cmd}</code>
+                    <code className="font-mono text-sm text-ink">{c.cmd}</code>
                   </dt>
                   <dd className="text-sm text-ink-muted">{c.note}</dd>
                 </div>
@@ -275,10 +275,10 @@ export function Programmable() {
           {/* Live code, not a screenshot: selectable, searchable, weightless. */}
           <div className="flex flex-col gap-300">
             <div className="overflow-hidden rounded-card border border-rule bg-sheet-sunken">
-              <div className="border-b border-rule px-300 py-200 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+              <div className="border-b border-rule px-300 py-200 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
                 cmux.json
               </div>
-            <pre className="overflow-x-auto p-300 font-mono text-[13px]/[1.7] text-ink">
+            <pre className="overflow-x-auto p-300 font-mono text-sm/[1.7] text-ink">
                 <code>{programmable.config}</code>
               </pre>
             </div>
@@ -310,7 +310,7 @@ export function Shortcuts() {
         <div className="mt-500 grid gap-500 prose:grid-cols-3 prose:gap-400">
           {shortcuts.groups.map((g) => (
             <div key={g.name}>
-              <p className="border-b border-rule pb-100 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+              <p className="border-b border-rule pb-100 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
                 {g.name}
               </p>
               <ul className="flex flex-col">
@@ -319,7 +319,7 @@ export function Shortcuts() {
                     key={it.label}
                     className="flex items-baseline justify-between gap-200 border-b border-rule py-200"
                   >
-                    <span className="text-[15px] text-ink-soft">{it.label}</span>
+                    <span className="text-base text-ink-soft">{it.label}</span>
                     <Kbd keys={it.keys} className="shrink-0" />
                   </li>
                 ))}
@@ -364,10 +364,10 @@ export function Foundation() {
           <dl className="grid grid-cols-2 gap-px self-start overflow-hidden rounded-card border border-rule bg-rule">
             {foundation.facts.map((f) => (
               <div key={f.k} className="bg-sheet p-300">
-                <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                <dt className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
                   {f.k}
                 </dt>
-                <dd className="mt-75 text-[15px] font-medium text-ink">{f.v}</dd>
+                <dd className="mt-75 text-base font-medium text-ink">{f.v}</dd>
               </div>
             ))}
           </dl>
@@ -390,8 +390,8 @@ export function Platforms() {
               key={r.name}
               className="flex flex-wrap items-baseline gap-x-300 gap-y-75 border-t border-rule py-300"
             >
-              <span className="min-w-[10rem] text-[15px] font-medium text-ink">{r.name}</span>
-              <span className="rounded-pill border border-rule-strong px-75 py-0 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-soft">
+              <span className="min-w-[10rem] text-base font-medium text-ink">{r.name}</span>
+              <span className="rounded-pill border border-rule-strong px-75 py-0 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft">
                 {r.state}
               </span>
               <span className="text-sm text-ink-muted">{r.note}</span>
@@ -424,7 +424,7 @@ export function Install() {
             </div>
           </div>
           <div className="self-center">
-            <p className="mb-200 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+            <p className="mb-200 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
               Or with Homebrew
             </p>
             <CopyCommand command={install.brew} />
@@ -470,7 +470,7 @@ export function Faq() {
       <div className="mt-400">
         {faq.map((f) => (
           <details key={f.q} className="group border-t border-rule">
-            <summary className="flex cursor-pointer list-none items-baseline gap-200 py-300 text-[17px] font-medium text-ink [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-baseline gap-200 py-300 text-lg font-medium text-ink [&::-webkit-details-marker]:hidden">
               <span
                 aria-hidden="true"
                 className="mt-[2px] font-mono text-ink-muted transition-transform duration-180 ease-out group-open:rotate-45"
@@ -546,7 +546,7 @@ export function Footer() {
         </div>
 
         {/* Honest about what this is, quietly. */}
-        <p className="border-t border-rule pt-300 font-mono text-[11px] leading-relaxed text-ink-muted">
+        <p className="border-t border-rule pt-300 font-mono text-xs leading-relaxed text-ink-muted">
           {credit.text}{' '}
           <a href={credit.href} className="text-ink-soft underline underline-offset-2">
             {credit.author}

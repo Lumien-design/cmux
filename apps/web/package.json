@@ -15,7 +15,6 @@
     "@cmux/tokens": "*",
     "@phosphor-icons/react": "2.1.10",
     "clsx": "2.1.1",
-    "geist": "1.7.2",
     "motion": "13.2.0",
     "next": "16.3.4",
     "react": "19.2.8",

@@ -100,10 +100,10 @@ export function CommandPalette({
         className="overflow-hidden rounded-card border border-[#2A2A2A] bg-[#141414] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.45)]"
       >
         <div className="flex items-center gap-100 border-b border-[#2A2A2A] px-200 py-100">
-          <span className="font-mono text-[13px] text-[#8A8A8A]" aria-hidden="true">
+          <span className="font-mono text-sm text-[#8A8A8A]" aria-hidden="true">
             ⌘⇧P
           </span>
-          <span className="font-mono text-[13px] text-[#F2F2F2]">{query}</span>
+          <span className="font-mono text-sm text-[#F2F2F2]">{query}</span>
           <span className="h-[1.1em] w-px bg-ring" aria-hidden="true" />
         </div>
 
@@ -123,15 +123,15 @@ export function CommandPalette({
                   r.custom ? 'bg-ring' : 'bg-[#3A3A3A]',
                 )}
               />
-              <span className="min-w-0 flex-1 truncate text-[13px] text-[#E4E4E4]">{r.title}</span>
-              <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.1em] text-[#8A8A8A]">
+              <span className="min-w-0 flex-1 truncate text-sm text-[#E4E4E4]">{r.title}</span>
+              <span className="shrink-0 font-mono text-xs uppercase tracking-[0.1em] text-[#8A8A8A]">
                 {r.meta}
               </span>
             </li>
           ))}
         </ul>
       </div>
-      <figcaption className="mt-75 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+      <figcaption className="mt-75 font-mono text-[0.56rem] uppercase tracking-[0.12em] text-ink-muted">
         Interface mock, not a screenshot
       </figcaption>
     </figure>

@@ -283,7 +283,7 @@ export function CopyCommand({ command }: { command: string }) {
 
   return (
     <div className="flex items-center gap-100 rounded-control border border-rule bg-sheet-sunken px-100 py-75">
-      <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[13px] text-ink">
+      <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-sm text-ink">
         {command}
       </code>
       <button

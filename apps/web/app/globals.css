@@ -7,6 +7,9 @@
 
 @layer base {
   html {
+    /* The scale knob. Everything downstream is in rem, so this lifts type,
+       spacing and container widths together rather than only the text. */
+    font-size: 118.75%; /* 19px */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-padding-block-start: 96px;
@@ -44,6 +47,9 @@
 
 @layer base {
   html {
+    /* The scale knob. Everything downstream is in rem, so this lifts type,
+       spacing and container widths together rather than only the text. */
+    font-size: 118.75%; /* 19px */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-padding-block-start: 96px;

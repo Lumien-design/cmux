@@ -19,7 +19,7 @@ export function LegalPage({
         <main className="mx-auto w-full max-w-[var(--container-page)]">
           <Link
             href="/"
-            className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted hover:text-ink"
+            className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted hover:text-ink"
           >
             cmux
           </Link>
@@ -28,13 +28,13 @@ export function LegalPage({
           <p className="mt-400">
             <a
               href={realHref}
-              className="inline-flex items-center gap-50 text-[15px] font-medium text-signal-text underline underline-offset-4"
+              className="inline-flex items-center gap-50 text-base font-medium text-signal-text underline underline-offset-4"
             >
               {realLabel}
               <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
             </a>
           </p>
-          <p className="mt-600 border-t border-rule pt-300 font-mono text-[11px] leading-relaxed text-ink-muted">
+          <p className="mt-600 border-t border-rule pt-300 font-mono text-xs leading-relaxed text-ink-muted">
             {credit.text}{' '}
             <a href={credit.href} className="text-ink-soft underline underline-offset-2">
               {credit.author}
