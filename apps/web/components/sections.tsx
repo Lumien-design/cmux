@@ -91,7 +91,7 @@ function ShotFrame({ id }: { id: string }) {
   if (!shot) return null;
   return (
     <div
-      className="overflow-hidden rounded-card bg-panel shadow-(--shadow-pressed)"
+      className="overflow-hidden rounded-card bg-panel"
       style={{ aspectRatio: `${shot.w} / ${shot.h}` }}
     >
       <div className="flex h-full flex-col items-start justify-end gap-75 p-300">
@@ -255,7 +255,11 @@ export function Testimonials() {
         </h2>
         <p className="mt-200 text-base text-ink-muted">{testimonialSection.note}</p>
       </div>
-      <TestimonialWall className="mt-500" />
+      {/* Fixed height, as the component expects: the wall is a window onto a
+          plane, not a block that grows with its content. */}
+      <div className="mt-500 h-[600px]">
+        <TestimonialWall />
+      </div>
     </Section>
   );
 }
@@ -290,7 +294,7 @@ export function Programmable() {
 
           {/* Live code, not a screenshot: selectable, searchable, weightless. */}
           <div className="flex flex-col gap-300">
-            <div className="overflow-hidden rounded-card bg-panel shadow-(--shadow-pressed)">
+            <div className="overflow-hidden rounded-card bg-panel">
               <div className="px-300 pb-100 pt-300 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
                 cmux.json
               </div>
@@ -325,7 +329,7 @@ export function Shortcuts() {
 
         <div className="mt-500 grid gap-500 prose:grid-cols-3 prose:gap-400">
           {shortcuts.groups.map((g) => (
-            <div key={g.name} className="rounded-card bg-panel p-300 shadow-(--shadow-raised-sm)">
+            <div key={g.name} className="rounded-card bg-panel p-300">
               <p className="border-b border-rule pb-100 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
                 {g.name}
               </p>
@@ -369,7 +373,7 @@ export function Foundation() {
             {foundation.facts.map((f) => (
               <div
                 key={f.k}
-                className="rounded-card bg-panel p-300 shadow-(--shadow-raised-sm)"
+                className="rounded-card bg-panel p-300"
               >
                 <dt className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
                   {f.k}
@@ -395,7 +399,7 @@ export function Platforms() {
           {platforms.rows.map((r) => (
             <li
               key={r.name}
-              className="flex flex-wrap items-baseline gap-x-300 gap-y-75 rounded-card bg-panel px-300 py-300 shadow-(--shadow-raised-sm)"
+              className="flex flex-wrap items-baseline gap-x-300 gap-y-75 rounded-card bg-panel px-300 py-300"
             >
               <span className="min-w-[10rem] text-base font-medium text-ink">{r.name}</span>
               <span className="rounded-pill border border-rule-strong px-75 py-0 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft">

@@ -153,3 +153,124 @@
 ::view-transition-new(root) {
   z-index: 1;
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   DriftWall
+
+   Structure from the component's own stylesheet: a perspective container, one
+   plane rotated on three axes, columns of tracks that translate vertically,
+   and tiles that lift toward the viewer on hover.
+
+   Colour comes from the page tokens instead of the original's near black, so
+   the wall belongs to this design rather than sitting on top of it.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.drift-wall {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  perspective: var(--dw-perspective, 900px);
+  perspective-origin: 50% 50%;
+  -webkit-mask-image:
+    radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  mask-composite: intersect;
+}
+
+.drift-wall__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: row;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.drift-wall__col {
+  position: relative;
+  width: calc(var(--dw-tile-w) + var(--dw-gap));
+  transform-style: preserve-3d;
+}
+
+.drift-wall__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.drift-wall__tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(var(--dw-tile-h) + var(--dw-gap));
+  flex: 0 0 auto;
+  outline: none;
+  transform-style: preserve-3d;
+  text-decoration: none;
+}
+
+.drift-wall__inner {
+  position: absolute;
+  inset: calc(var(--dw-gap) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--dw-radius);
+  overflow: hidden;
+  background: var(--color-panel);
+  color: var(--color-ink);
+  opacity: var(--dw-dim);
+  transform: translateZ(0);
+  transition:
+    transform 420ms var(--curve-out),
+    box-shadow 420ms var(--curve-out);
+}
+
+.drift-wall__tile:hover .drift-wall__inner,
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  transform: translateZ(var(--dw-lift));
+  box-shadow: 0 1.5rem 2.5rem -1rem rgb(0 0 0 / 0.3);
+}
+
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.drift-wall__quote {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  /* Tiles are a fixed 280x160; a long quote is clipped here and reachable in
+     full at its source, which every tile links to. */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+.drift-wall__by {
+  margin-top: auto;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+}
+
+.drift-wall__role {
+  font-weight: 400;
+  color: var(--color-ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift-wall__inner {
+    transition: none;
+  }
+}
