@@ -14,7 +14,7 @@ Three directions were built as rendered comparisons first, and only the chosen o
 |--------|-------|
 | The current cmux.com (light, conventional SaaS structure) | This branch, running locally |
 
-Direction study (all three options, side by side): see `docs/design/cmux-web-rationale.md`
+Direction study, all three rendered side by side: [`docs/design/direction-study.html`](docs/design/direction-study.html) — open it in a browser. The reasoning behind the choice is in [`docs/design/cmux-web-rationale.md`](docs/design/cmux-web-rationale.md).
 
 ## Design notes
 

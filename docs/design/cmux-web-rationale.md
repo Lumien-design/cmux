@@ -47,7 +47,8 @@ meaning, and a component that wants "a nice blue" has nowhere to reach.
 ## Three directions, and why C
 
 I built all three as rendered comparisons rather than descriptions, because a
-direction you cannot look at is a paragraph, not a choice.
+direction you cannot look at is a paragraph, not a choice. They are in this
+repo at [`direction-study.html`](direction-study.html); open it in a browser.
 
 | | A · Diagnostic | B · Documentary | C · Paper |
 |---|---|---|---|
