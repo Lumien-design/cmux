@@ -342,8 +342,14 @@ export function Foundation() {
     <Section labelledBy="foundation-h" className="relative isolate overflow-hidden bg-sheet-raised">
       {/* A GPU drawn, cursor reactive canvas, in the section about GPU drawn
           rendering. It inherits its colour from this token, so both themes
-          work without the canvas knowing a theme exists. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 text-rule-strong">
+          work without the canvas knowing a theme exists.
+
+          This wrapper must stay hit testable. The grid takes its stage from
+          canvas.parentElement and attaches the pointer listeners there, so
+          pointer-events-none here silently kills the cursor response and
+          leaves the dots merely breathing. The canvas sets pointerEvents none
+          on itself, which is what keeps clicks passing through. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 text-rule-strong">
         <DotGridBackground />
       </div>
       <Reveal>
