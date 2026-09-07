@@ -5,7 +5,6 @@ import { CmuxWindow, heroWindow } from '@/components/cmux-window';
 import { Reveal, CopyCommand } from '@/components/interactive';
 import { Kbd, CommandPalette } from '@/components/kbd';
 import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
-import { DotGridBackground } from '@/components/dot-grid';
 import { LogoLoop } from '@/components/logo-loop';
 import {
   agents,
@@ -334,19 +333,7 @@ export function Shortcuts() {
 
 export function Foundation() {
   return (
-    <Section labelledBy="foundation-h" className="relative isolate overflow-hidden">
-      {/* A GPU drawn, cursor reactive canvas, in the section about GPU drawn
-          rendering. It inherits its colour from this token, so both themes
-          work without the canvas knowing a theme exists.
-
-          This wrapper must stay hit testable. The grid takes its stage from
-          canvas.parentElement and attaches the pointer listeners there, so
-          pointer-events-none here silently kills the cursor response and
-          leaves the dots merely breathing. The canvas sets pointerEvents none
-          on itself, which is what keeps clicks passing through. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 text-rule-strong">
-        <DotGridBackground />
-      </div>
+    <Section labelledBy="foundation-h">
       <Reveal>
         <div className="grid gap-500 split:grid-cols-2 split:gap-700">
           <div>

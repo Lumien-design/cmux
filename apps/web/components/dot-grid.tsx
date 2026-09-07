@@ -18,9 +18,9 @@ import type { CSSProperties } from "react";
  * 2. The dot colour inherits from CSS `color`, so it is driven by a semantic
  *    token on the wrapper rather than a hardcoded grey, and both themes work.
  *
- * It lives in the section about GPU accelerated rendering. A grid drawn purely
- * for texture would be decoration; one that demonstrates the thing the section
- * is describing is the argument.
+ * It runs behind the whole sheet as a sticky, viewport tall layer rather than
+ * a full page canvas, so the cost is one screen of pixels no matter how long
+ * the page gets. See the mount in app/page.tsx for why sticky and not fixed.
  */
 
 const OPTIONS = {
