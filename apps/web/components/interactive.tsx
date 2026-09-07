@@ -184,7 +184,7 @@ export function IslandNav() {
         <div className="ms-auto flex items-center gap-100">
           <ThemeToggle />
           <a
-            href="/download"
+            href={site.download}
             className={cn(
               'hidden rounded-pill bg-ink px-100 py-75 text-sm font-semibold text-ink-inverse split:inline-block',
               'transition-transform duration-120 ease-out active:scale-[0.98]',

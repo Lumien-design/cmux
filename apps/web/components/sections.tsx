@@ -363,7 +363,7 @@ export function Install() {
               {install.dmg}
             </p>
             <div className="mt-400">
-              <Button href="/download">Download for Mac</Button>
+              <Button href={site.download}>Download for Mac</Button>
             </div>
           </div>
           <div className="self-center">

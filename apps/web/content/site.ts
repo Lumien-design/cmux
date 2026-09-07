@@ -13,6 +13,7 @@ export const site = {
   url: 'https://cmux.com',
   repo: 'https://github.com/manaflow-ai/cmux',
   docs: 'https://cmux.com/docs',
+  download: 'https://github.com/manaflow-ai/cmux/releases/latest',
   discord: 'https://discord.gg/xsgFEVrWCZ',
   email: 'founders@manaflow.com',
 } as const;
@@ -35,7 +36,7 @@ export const hero = {
   // "The {category} for {audience}" — and it is the line the app itself uses.
   headline: 'The open source terminal built for coding agents.',
   sub: 'Run several at once and always know which one is waiting on you. Tabs carry the branch, the directory and the port. Native Swift, no Electron.',
-  primary: { label: 'Download for Mac', href: '/download' },
+  primary: { label: 'Download for Mac', href: site.download },
   secondary: { label: 'View source', href: site.repo },
 } as const;
 
