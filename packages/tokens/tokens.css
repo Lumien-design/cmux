@@ -60,6 +60,18 @@
   --azure-700: #0a5bb5;
   --azure-900: #0b325e;
 
+  /* Neumorphic depth. Two shadows from one light source at the top left: a
+     highlight on the near edge and a cast shadow on the far one. Paper is a
+     mid tone, which is the ground this technique actually needs — on white or
+     black there is nowhere for the highlight or the shadow to go.
+
+     The warm grey in the cast shadow is deliberate. A neutral or blue grey
+     reads as plastic against this paper; the shadow has to carry the same
+     temperature as the surface throwing it. */
+  --emboss-light: rgb(255 255 255 / 0.8);
+  --emboss-dark: rgb(124 113 96 / 0.22);
+  --emboss-dark-soft: rgb(124 113 96 / 0.16);
+
   /* The only three sanctioned curves. Nothing else ships. */
   --curve-out: cubic-bezier(0.23, 1, 0.32, 1);
   --curve-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -87,6 +99,13 @@
   /* Darkest thing on screen, in this theme too. */
   --shell: #000000;
   --shell-ink: #e8e8e8;
+
+  /* Dark neumorphism is not the light values inverted. A bright highlight on a
+     dark surface reads as a glowing rim, so the highlight drops to a few per
+     cent and the cast shadow does nearly all the work. */
+  --emboss-light: rgb(255 255 255 / 0.045);
+  --emboss-dark: rgb(0 0 0 / 0.55);
+  --emboss-dark-soft: rgb(0 0 0 / 0.4);
 
   --azure-600: #0a84ff;
   --azure-700: #8fb8ff;
@@ -150,6 +169,18 @@
   --ease-out: var(--curve-out);
   --ease-in-out: var(--curve-in-out);
   --ease-drawer: var(--curve-drawer);
+
+  /* Depth, named by what the surface is doing: raised sits on the sheet,
+     pressed is cut into it. Both are one light source, never mixed. */
+  --shadow-raised:
+    -0.35rem -0.35rem 0.75rem var(--emboss-light),
+    0.35rem 0.35rem 0.75rem var(--emboss-dark);
+  --shadow-raised-sm:
+    -0.2rem -0.2rem 0.45rem var(--emboss-light),
+    0.2rem 0.2rem 0.45rem var(--emboss-dark-soft);
+  --shadow-pressed:
+    inset -0.25rem -0.25rem 0.55rem var(--emboss-light),
+    inset 0.25rem 0.25rem 0.55rem var(--emboss-dark);
 
   /* Radius, named by role rather than size */
   --radius-control: var(--radius-lg);
