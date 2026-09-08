@@ -1,9 +1,9 @@
-import { ArrowUpRight, Camera } from '@phosphor-icons/react/dist/ssr';
+import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
 import { cn } from '@/lib/cn';
-import { shots } from '@/lib/shots';
-import { CmuxWindow, heroWindow } from '@/components/cmux-window';
+import { AppShell } from '@/components/app-shell';
+import { PanelCarousel } from '@/components/panel-carousel';
 import { Reveal, CopyCommand } from '@/components/interactive';
-import { Kbd, CommandPalette } from '@/components/kbd';
+import { Kbd } from '@/components/kbd';
 import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
 import { LogoLoop } from '@/components/logo-loop';
 import { TestimonialWall } from '@/components/testimonial-wall';
@@ -18,7 +18,7 @@ import {
   install,
   nav,
   openSource,
-  palette,
+  panels,
   platforms,
   problem,
   programmable,
@@ -26,6 +26,7 @@ import {
   site,
   tagline,
 } from '@/content/site';
+import { heroShell, panelShells } from '@/content/shell';
 import { testimonialSection } from '@/content/testimonials';
 
 /* ── primitives ─────────────────────────────────────────────────────────── */
@@ -85,25 +86,6 @@ function Button({
   );
 }
 
-/** The image slot. Owns the aspect ratio so a real capture drops in unchanged. */
-function ShotFrame({ id }: { id: string }) {
-  const shot = shots[id];
-  if (!shot) return null;
-  return (
-    <div
-      className="overflow-hidden rounded-card bg-panel"
-      style={{ aspectRatio: `${shot.w} / ${shot.h}` }}
-    >
-      <div className="flex h-full flex-col items-start justify-end gap-75 p-300">
-        <Camera size={18} weight="regular" className="text-ink-muted" aria-hidden="true" />
-        <p className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
-          {shot.id}
-        </p>
-        <p className="max-w-[42ch] text-sm text-ink-soft">{shot.brief}</p>
-      </div>
-    </div>
-  );
-}
 
 /* ── sections ───────────────────────────────────────────────────────────── */
 
@@ -135,11 +117,7 @@ export function Hero({ stars }: { stars: number }) {
             </p>
           </div>
 
-          <CmuxWindow
-            label={heroWindow.label}
-            workspaces={heroWindow.workspaces}
-            panes={heroWindow.panes}
-          />
+          <AppShell state={heroShell} className="text-ink-muted" />
         </div>
       </div>
     </section>
@@ -190,55 +168,109 @@ export function Tagline() {
   );
 }
 
-export function Capabilities() {
-  return (
-    <>
-      {capabilities.map((c) => (
-        <Section key={c.id} id={c.id} labelledBy={`${c.id}-h`}>
-          <Reveal>
-            <div
-              className={cn(
-                'grid items-center gap-500 split:grid-cols-2 split:gap-700',
-                c.reverse && 'split:[&>*:first-child]:order-2',
-              )}
-            >
-              <div>
-                <Eyebrow>{c.eyebrow}</Eyebrow>
-                <h2
-                  id={`${c.id}-h`}
-                  className="mt-200 max-w-[18ch] text-3xl font-semibold leading-tight tracking-tight"
-                >
-                  {c.heading}
-                </h2>
-                <ul className="mt-400 flex flex-col gap-200 pt-300">
-                  {c.points.map((p) => (
-                    <li key={p} className="flex gap-200 text-base text-ink-soft">
-                      <span
-                        aria-hidden="true"
-                        className="mt-[9px] size-[5px] shrink-0 rounded-pill bg-signal-ui"
-                      />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
 
-              {/* The ring section shows the live mock, because a still image
-                  cannot show a ring breathing. The rest take real captures. */}
-              {c.id === 'attention' ? (
-                <CmuxWindow
-                  label={heroWindow.label}
-                  workspaces={heroWindow.workspaces}
-                  panes={heroWindow.panes}
-                />
-              ) : (
-                <ShotFrame id={c.shot} />
-              )}
-            </div>
-          </Reveal>
-        </Section>
-      ))}
-    </>
+/**
+ * One panel: the claim on the left, the window in that state on the right.
+ *
+ * Dark in both themes, and a step lighter than the window it holds, so the
+ * stack reads sheet, then stage, then terminal. The heading is an h3 under the
+ * section's h2, which keeps the outline honest now that five sections have
+ * become five panels.
+ */
+function Panel({
+  id,
+  eyebrow,
+  heading,
+  points,
+}: {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  points: readonly string[];
+}) {
+  const state = panelShells[id];
+  if (!state) return null;
+  return (
+    <div className="flex h-full flex-col gap-300 rounded-card border border-stage-rule bg-stage p-300 split:grid split:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] split:items-center split:gap-600 split:p-600">
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-stage-ink-muted">
+          {eyebrow}
+        </p>
+        <h3 className="mt-100 max-w-[18ch] text-xl font-semibold leading-tight tracking-tight text-stage-ink prose:mt-200 prose:text-2xl split:text-3xl">
+          {heading}
+        </h3>
+        <ul className="mt-200 flex flex-col gap-100 border-t border-stage-rule pt-200 prose:mt-300 prose:gap-200 prose:pt-300">
+          {points.map((pt) => (
+            <li key={pt} className="flex gap-100 text-sm text-stage-ink-soft prose:gap-200 prose:text-base">
+              <span
+                aria-hidden="true"
+                className="mt-[8px] size-[5px] shrink-0 rounded-pill bg-ring prose:mt-[9px]"
+              />
+              {pt}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* The caption is suppressed per panel and stated once under the whole
+          carousel instead. Five copies of the same disclaimer is noise; one is
+          the disclosure. */}
+      <AppShell state={{ ...state, caption: false }} />
+    </div>
+  );
+}
+
+/**
+ * Five feature sections, collapsed into one band.
+ *
+ * They used to be five full height stacked sections, three of which rendered
+ * an empty placeholder and one of which repeated the hero's window verbatim.
+ * Sideways, they cost one screen instead of five, every one of them shows real
+ * interface, and the features that were previously only named in a bullet have
+ * somewhere to actually appear.
+ */
+export function Panels() {
+  const items = [
+    ...capabilities.map((c) => ({
+      id: c.id,
+      heading: c.heading,
+      content: <Panel id={c.id} eyebrow={c.eyebrow} heading={c.heading} points={c.points} />,
+    })),
+    {
+      id: 'program',
+      heading: programmable.heading,
+      content: (
+        <Panel
+          id="program"
+          eyebrow={programmable.eyebrow}
+          heading={programmable.heading}
+          points={programmable.points}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <Section labelledBy="panels-h">
+      <Reveal>
+        <div className="max-w-[var(--container-measure)]">
+          <Eyebrow>{panels.eyebrow}</Eyebrow>
+          <h2
+            id="panels-h"
+            className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
+          >
+            {panels.heading}
+          </h2>
+          <p className="mt-200 text-base text-ink-muted">{panels.body}</p>
+        </div>
+      </Reveal>
+
+      <PanelCarousel items={items} label={panels.label} />
+
+      <p className="mt-200 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
+        Interface mocks, not screenshots
+      </p>
+    </Section>
   );
 }
 
@@ -264,57 +296,10 @@ export function Testimonials() {
   );
 }
 
-export function Programmable() {
-  return (
-    <Section id="program" labelledBy="program-h">
-      <Reveal>
-        <div className="grid gap-500 split:grid-cols-2 split:gap-700">
-          <div>
-            <Eyebrow>{programmable.eyebrow}</Eyebrow>
-            <h2
-              id="program-h"
-              className="mt-200 max-w-[18ch] text-3xl font-semibold leading-tight tracking-tight"
-            >
-              {programmable.heading}
-            </h2>
-            <p className="mt-300 max-w-[52ch] text-base leading-relaxed text-ink-soft">
-              {programmable.body}
-            </p>
-            <dl className="mt-400 flex flex-col gap-200 border-t border-rule pt-300">
-              {programmable.cli.map((c) => (
-                <div key={c.cmd} className="flex flex-col gap-25">
-                  <dt>
-                    <code className="font-mono text-sm text-ink">{c.cmd}</code>
-                  </dt>
-                  <dd className="text-sm text-ink-muted">{c.note}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          {/* Live code, not a screenshot: selectable, searchable, weightless. */}
-          <div className="flex flex-col gap-300">
-            <div className="overflow-hidden rounded-card bg-panel">
-              <div className="px-300 pb-100 pt-300 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
-                cmux.json
-              </div>
-            <pre className="overflow-x-auto p-300 font-mono text-sm/[1.7] text-ink">
-                <code>{programmable.config}</code>
-              </pre>
-            </div>
-
-            {/* The payoff for the config above: that command, in the palette. */}
-            <CommandPalette query={palette.query} rows={palette.rows} />
-          </div>
-        </div>
-      </Reveal>
-    </Section>
-  );
-}
 
 export function Shortcuts() {
   return (
-    <Section labelledBy="shortcuts-h">
+    <Section id="shortcuts" labelledBy="shortcuts-h">
       <Reveal>
         <div className="max-w-[var(--container-measure)]">
           <Eyebrow>{shortcuts.eyebrow}</Eyebrow>
@@ -354,7 +339,7 @@ export function Shortcuts() {
 
 export function Foundation() {
   return (
-    <Section labelledBy="foundation-h">
+    <Section id="foundation" labelledBy="foundation-h">
       <Reveal>
         <div className="grid gap-500 split:grid-cols-2 split:gap-700">
           <div>

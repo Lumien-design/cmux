@@ -3,7 +3,6 @@ import { CardNav } from '@/components/card-nav';
 import { DotGridBackground } from '@/components/dot-grid';
 import {
   ToolStrip,
-  Capabilities,
   Faq,
   FinalCta,
   Footer,
@@ -11,9 +10,9 @@ import {
   Hero,
   Install,
   OpenSource,
+  Panels,
   Platforms,
   Problem,
-  Programmable,
   Shortcuts,
   Testimonials,
   Tagline,
@@ -73,9 +72,8 @@ export default async function Page() {
             <ToolStrip />
             <Problem />
             <Tagline />
-            <Capabilities />
+            <Panels />
             <Testimonials />
-            <Programmable />
             <Shortcuts />
             <Foundation />
             <Platforms />

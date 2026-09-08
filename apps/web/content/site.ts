@@ -152,10 +152,32 @@ export const capabilities: readonly Capability[] = [
   },
 ] as const;
 
+/**
+ * The carousel that replaces five stacked feature sections.
+ *
+ * Order is the order you meet the app in: something needs you, you find it,
+ * you split a browser beside it, you do the same on another machine, then you
+ * automate the whole thing.
+ */
+export const panels = {
+  eyebrow: 'The app',
+  heading: 'One window, five things it does.',
+  body: 'The same window in five states. Scroll sideways, or use the arrows.',
+  /* Names the scroller for a screen reader. No full stop: the component
+     appends the keyboard hint to it. */
+  label: 'Five states of the cmux window',
+  order: ['attention', 'organize', 'browser', 'remote', 'program'],
+} as const;
+
 export const programmable = {
   eyebrow: 'Programmability',
   heading: 'Everything the app can do, a socket can do too.',
   body: 'The CLI and the Unix socket API cover workspaces, panes, keystrokes, browser automation, notifications and sessions. Project specific actions go in a cmux.json and appear in the command palette.',
+  points: [
+    'Unix socket API covers everything the app can do',
+    'Custom commands from a cmux.json land in the palette',
+    'Ring yourself from a script when a long job finishes',
+  ],
   cli: [
     { cmd: 'cmux split --direction right', note: 'open a pane' },
     { cmd: 'cmux send --pane 2 "npm test"', note: 'type into it' },

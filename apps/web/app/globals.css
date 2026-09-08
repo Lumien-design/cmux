@@ -38,46 +38,6 @@
   }
 }
 
-@import 'tailwindcss';
-@import '@cmux/tokens/tokens.css';
-
-/* Theme is carried by a data-theme attribute, not by prefers-color-scheme, so
-   the dark: variant has to follow the attribute. One mechanism, no drift. */
-@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
-
-@layer base {
-  html {
-    /* The scale knob. Everything downstream is in rem, so this lifts type,
-       spacing and container widths together rather than only the text. */
-    font-size: 118.75%; /* 19px */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    scroll-padding-block-start: 96px;
-  }
-
-  body {
-    /* The shell. Paper sits on top of it, framed. */
-    background: var(--color-shell);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
-  }
-
-  h1,
-  h2,
-  h3 {
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-}
-
 /* ───────────────────────────────────────────────────────────────────────────
    Custom cursor
 
@@ -273,4 +233,21 @@
   .drift-wall__inner {
     transition: none;
   }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Panel carousel
+
+   The scrollbar is hidden because the dots and arrows already carry the
+   affordance, and a horizontal bar under a dark panel reads as a seam in the
+   card rather than as a control. The region stays keyboard focusable, so the
+   scrollbar is not the only way in.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.panel-track {
+  scrollbar-width: none;
+}
+
+.panel-track::-webkit-scrollbar {
+  display: none;
 }
