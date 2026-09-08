@@ -50,6 +50,18 @@
   --shell: #131209;
   --shell-ink: #ede9e0;
 
+  /* The stage: the dark card the app mock sits on inside the carousel.
+     Outside the inverting ramp for the same reason the shell is, but a
+     distinctly lighter dark than either the shell or the terminal, so the
+     stack reads page, then card, then window. The window stays the darkest
+     object on the page in both themes, which is the whole argument of this
+     direction. */
+  --stage: #35322e;
+  --stage-ink: #ede9e0;
+  --stage-ink-soft: #c2bdb2;
+  --stage-ink-muted: #a6a094;
+  --stage-rule: #4a463f;
+
   /* Panels are plain white on paper. Not part of the inverting ramp: white is
      a deliberate choice for the light theme, and its dark counterpart has to
      be a dark panel rather than the inversion of white, which would be a
@@ -66,6 +78,40 @@
   --azure-700: #0a5bb5;
   --azure-900: #0b325e;
 
+
+
+  /* ─── Terminal chrome ─────────────────────────────────────────────────────
+     The app mock's own palette. Defined once, in :root only, and deliberately
+     NOT redefined for the dark theme: the product window is dark on paper and
+     dark on dark, so inverting it would turn the terminal white.
+
+     Named "term" rather than "shell" because --shell already means the page's
+     dark frame in this file, which is confusingly not a Unix shell.
+
+     The text ramp bottoms out at --t-600, which measures 4.74:1 on --t-050.
+     There is no lighter text value on purpose: nothing inside the window can
+     then fall under the floor, even though the mock is role="img" and the
+     rule arguably would not bind.
+
+     Two hues live inside the window and only two. Blue means a pane needs you,
+     which is the product's own meaning and the one this whole page reserves it
+     for. Green means git or process health: checks passed, port listening.
+     Anything else that wants a colour gets a glyph instead. */
+  --t-000: #0e0e0e;
+  --t-050: #141414;
+  --t-100: #1a1a1a;
+  --t-200: #222222;
+  --t-300: #2a2a2a;
+  --t-400: #3a3a3a;
+  --t-600: #909090;
+  --t-700: #a6a6a6;
+  --t-800: #c4c4c4;
+  --t-900: #f2f2f2;
+  --t-selected: #0a5bb5;
+  --t-selected-ink: #d8e6fa;
+  --t-signal: #5aa9ff;
+  --t-good: #4ec9a0;
+  --t-on-signal: #ffffff;
 
   /* The only three sanctioned curves. Nothing else ships. */
   --curve-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -95,6 +141,14 @@
   --shell: #000000;
   --shell-ink: #e8e8e8;
 
+  /* Neutral rather than warm here: the dark theme has no paper to be warm
+     against. Still lighter than the terminal it holds. */
+  --stage: #2b2b2b;
+  --stage-ink: #e8e8e8;
+  --stage-ink-soft: #bdbdbd;
+  --stage-ink-muted: #9a9a9a;
+  --stage-rule: #3d3d3d;
+
   --panel: #1f1f1f;
 
 
@@ -116,6 +170,11 @@
      utility reads bg-bg-sheet has been named twice. */
   --color-shell: var(--shell);
   --color-shell-ink: var(--shell-ink);
+  --color-stage: var(--stage);
+  --color-stage-ink: var(--stage-ink);
+  --color-stage-ink-soft: var(--stage-ink-soft);
+  --color-stage-ink-muted: var(--stage-ink-muted);
+  --color-stage-rule: var(--stage-rule);
   --color-panel: var(--panel);
   --color-sheet: var(--n-050);
   --color-sheet-raised: var(--n-000);
@@ -148,6 +207,24 @@
   --color-signal-text: var(--azure-700);
   --color-signal-quiet: var(--azure-200);
   --color-focus: var(--azure-700);
+
+
+  /* Terminal chrome. Same value in both themes, by design. */
+  --color-term: var(--t-050);
+  --color-term-rail: var(--t-000);
+  --color-term-raised: var(--t-100);
+  --color-term-sunken: var(--t-200);
+  --color-term-rule: var(--t-300);
+  --color-term-rule-strong: var(--t-400);
+  --color-term-ink: var(--t-800);
+  --color-term-ink-bright: var(--t-900);
+  --color-term-ink-soft: var(--t-700);
+  --color-term-ink-muted: var(--t-600);
+  --color-term-selected: var(--t-selected);
+  --color-term-selected-ink: var(--t-selected-ink);
+  --color-term-signal: var(--t-signal);
+  --color-term-good: var(--t-good);
+  --color-term-on-signal: var(--t-on-signal);
 
   /* Type */
   --font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, sans-serif;

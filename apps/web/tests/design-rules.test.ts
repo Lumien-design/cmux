@@ -89,9 +89,11 @@ describe('surfaces', () => {
 
   it('references semantic tokens, never raw primitives', () => {
     // A component naming --n-500 has borrowed a value instead of a meaning.
-    expect(offenders(/var\(--n-\d{3}\)|var\(--azure-\d{3}\)/, (f) => f.includes('/tokens'))).toEqual(
-      [],
-    );
+    // --t-* is the terminal chrome ramp, added with the app shell; it needs the
+    // same guard or it would have shipped reachable from anywhere.
+    expect(
+      offenders(/var\(--(?:n|azure|t)-[\w-]+\)/, (f) => f.includes('/tokens')),
+    ).toEqual([]);
   });
 });
 
