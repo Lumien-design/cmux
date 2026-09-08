@@ -14,12 +14,12 @@ Shot from two local builds running side by side — the previous revision and th
 
 | | Before | After |
 |---|---|---|
-| Desktop, 1440 by 900 | [10,695px · 11.88 viewports](shots/desktop-light-before.jpg) | [7,818px · 8.69 viewports](shots/desktop-light-after.jpg) |
+| Desktop, 1440 by 900 | [10,695px · 11.88 viewports](shots/desktop-light-before.jpg) | [8,579px · 9.53 viewports](shots/desktop-light-after.jpg) |
 | Desktop, dark | [before](shots/desktop-dark-before.jpg) | [after](shots/desktop-dark-after.jpg) |
-| Mobile, 390 by 844 | [16,218px · 19.22 viewports](shots/mobile-light-before.jpg) | [10,982px · 13.01 viewports](shots/mobile-light-after.jpg) |
+| Mobile, 390 by 844 | [16,218px · 19.22 viewports](shots/mobile-light-before.jpg) | [10,933px · 12.95 viewports](shots/mobile-light-after.jpg) |
 | Mobile, dark | [before](shots/mobile-dark-before.jpg) | [after](shots/mobile-dark-after.jpg) |
 
-**A quarter shorter on desktop, a third shorter on a phone**, with more of the product shown rather than less.
+**A fifth shorter on desktop, a third shorter on a phone**, with more of the product shown rather than less. The carousel took off more than that; centring the hero put some of it back, since the window moved below the copy instead of beside it.
 
 Details, at full resolution:
 
@@ -28,9 +28,11 @@ Details, at full resolution:
 | Hero | [light](shots/hero-light.png) · [dark](shots/hero-dark.png) |
 | The carousel in place | [light](shots/carousel-light.png) · [dark](shots/carousel-dark.png) |
 | Panel: attention | [light](shots/panel-attention-light.png) · [dark](shots/panel-attention-dark.png) |
+| Panel: panes | [light](shots/panel-browser-light.png) |
 | Panel: programmability | [light](shots/panel-program-light.png) |
 | Panel: foundation | [light](shots/panel-foundation-light.png) |
 | Questions, two columns | [light](shots/questions-light.png) |
+| Install, centred | [light](shots/install-light.png) |
 
 Direction study, all three rendered side by side: [`docs/design/direction-study.html`](direction-study.html) — open it in a browser. The reasoning behind the choice is in [`docs/design/cmux-web-rationale.md`](cmux-web-rationale.md).
 
@@ -55,7 +57,7 @@ Two decisions worth reviewing:
 - [x] Keyboard path works; focus is visible and ordered
 - [x] Light and dark both checked
 - [x] Respects `prefers-reduced-motion`
-- [x] Contrast meets WCAG AA — audited at 1440, 760 and 390 in both themes; 514, 503 and 465 text carrying elements, 0 failures
+- [x] Contrast meets WCAG AA — audited at 1440, 760 and 390 in both themes; 523, 512 and 470 text carrying elements, 0 failures
 - [x] No secrets, tokens or `.env` values in the diff
 
 ## Verification
