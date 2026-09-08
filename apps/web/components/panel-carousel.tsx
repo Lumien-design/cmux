@@ -98,8 +98,8 @@ export function PanelCarousel({
       track.scrollTo({ left: target * (first.getBoundingClientRect().width + gap), behavior });
     };
 
-    jumpToHash('auto');
-    const onHash = () => jumpToHash(prefersStillness() ? 'auto' : 'smooth');
+    jumpToHash('instant');
+    const onHash = () => jumpToHash(prefersStillness() ? 'instant' : 'smooth');
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
@@ -115,7 +115,7 @@ export function PanelCarousel({
     const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
     const step = first.getBoundingClientRect().width + gap;
 
-    track.scrollTo({ left: clamped * step, behavior: prefersStillness() ? 'auto' : 'smooth' });
+    track.scrollTo({ left: clamped * step, behavior: prefersStillness() ? 'instant' : 'smooth' });
   }
 
   function onKeyDown(e: React.KeyboardEvent) {

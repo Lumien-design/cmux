@@ -20,7 +20,8 @@ Direction study, all three rendered side by side: [`docs/design/direction-study.
 
 - **Tokens touched:** a new two tier layer in `packages/tokens`. Primitives generate no utilities; semantics live in `@theme inline` and resolve through the runtime primitive, so one declaration themes both modes.
 - **Motion:** three sanctioned curves only. Interaction motion 120 to 240ms on `ease-out`; explanatory motion 700 to 900ms on `ease-drawer`. No GSAP, no smooth scroll, no scroll listeners.
-- **States covered:** default, hover, focus visible, active, and both themes.
+- **States covered:** default, hover, focus visible, active, disabled, and both themes.
+- **The five feature sections are now one horizontal band.** Native scroll snap, no slider library and no scroll listener; the active dot is an IntersectionObserver rooted on the track. The page went from 10,681 to 8,555 pixels at 1440 by 900, a fifth shorter.
 
 Two decisions worth reviewing:
 
@@ -35,7 +36,7 @@ Two decisions worth reviewing:
 - [x] Keyboard path works; focus is visible and ordered
 - [x] Light and dark both checked
 - [x] Respects `prefers-reduced-motion`
-- [x] Contrast meets WCAG AA — 125 elements audited per theme, 0 failures
+- [x] Contrast meets WCAG AA — 368 text carrying elements audited per theme, 0 failures
 - [x] No secrets, tokens or `.env` values in the diff
 
 ## Verification
@@ -44,6 +45,6 @@ Two decisions worth reviewing:
 
 ## Known gaps
 
-Nine image slots are declared at final dimensions with a shot list and composed empty states. Two are filled by a CSS mock of the cmux window, captioned as a mock, because a still image cannot show a notification ring breathing.
+Every product surface is a CSS mock, captioned as one, because a still image cannot show a notification ring breathing. The shot list in `lib/shots.ts` remains as the brief for the real captures that would replace them.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

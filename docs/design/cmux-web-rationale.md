@@ -223,6 +223,70 @@ Nothing on this page can stay invisible because an observer did not fire.
 
 ---
 
+## Five sections, sideways
+
+The page was too long to read in a minute, and the five feature sections were
+the reason. Each took a full screen, and together they were about a third of
+the scroll.
+
+Worse, three of the five showed nothing. Only Attention rendered product UI,
+and it rendered the same window the hero already used, so the identical mock
+appeared twice. The other three rendered a composed empty frame naming a
+screenshot that does not exist. Meanwhile most of what cmux actually does was
+buried in one line bullets: the notification panel, the scriptable browser API,
+pull request status in the sidebar, listening ports, Claude Code Teams, browser
+import, the socket API, session restore. Each named once. Shown nowhere.
+
+Collapsing them into one horizontally scrolled band fixes all three at once,
+and the saving is measurable: at 1440 by 900 the page went from 10,681 to
+8,555 pixels. That is 2,125 pixels, 2.36 viewports, a fifth of the page. Less
+than the four viewports I estimated before building it, and worth stating
+plainly rather than rounding in my own favour, because the remaining length now
+sits in the FAQ and the testimonial wall rather than in the features.
+
+**One window, five states.** The band is a single app mock rendered five times
+from five data fixtures, not five pictures. An icon rail, a filterable
+workspace list carrying branch, pull request status and ports, a detail area
+holding terminals, a browser or code, and a prompt bar along the bottom. Every
+rail icon maps to a shortcut cmux documents, because cmux has no icon rail and
+inventing one would be putting a feature on the page that does not exist. The
+five states are a tour of one application rather than a gallery.
+
+**No slider library, and no scroll listener.** Native overflow with CSS scroll
+snap, so trackpad, shift wheel, touch, keyboard and fragment links all work
+without being reimplemented, and with JavaScript off it degrades to a plain
+scroller with every panel still reachable. The active dot is tracked with an
+IntersectionObserver rooted on the track itself: with a sliver of the next
+panel showing, exactly one panel can pass the threshold at rest, so exactly one
+dot lights, and mid drag neither qualifies and the dot waits. A dot should
+report where you landed, not chase your finger.
+
+Movement is the browser's own smooth scrolling, which is the reason no duration
+appears anywhere in the component. Under `prefers-reduced-motion` the jump is
+instant — and that took a correction, because `behavior: 'auto'` defers to the
+element's `scroll-behavior`, which is smooth here. The value that actually
+overrides is `behavior: 'instant'`.
+
+**Nothing inside a panel is focusable.** The mock is `role="img"` and its
+prompt bar is a plain element rather than an input. That is what removes the
+classic snap carousel bug where focus lands on something scrolled out of view,
+and it is why the whole band has exactly eight tab stops: the track, five dots
+and two arrows.
+
+**The panels are dark in both themes.** A dark card on paper is a foreign
+object unless the page has already made the argument that the product is the
+dark thing inset into the light one, which this direction has been making since
+the shell. The card is a step lighter than the window it holds, so the stack
+reads sheet, then stage, then terminal, and the terminal stays the darkest
+object on the page — the claim the whole direction rests on.
+
+Four of the site's navigation links point at a panel by fragment. The browser
+scrolls the page down to the band and leaves the track where it stood, so a
+link promising Remote workspaces delivered Attention. The component syncs the
+track to the hash on load and on `hashchange`.
+
+---
+
 ## What is deliberately absent
 
 - **No logo wall.** No verified partnership exists. Five agent names set as text
@@ -298,22 +362,21 @@ selected semantic elements — `p`, `li`, `h2`, `code` — and both mocks are bu
 from `div`s, so it walked straight past them and reported a clean sweep. It now
 checks every leaf node carrying text, including the ones marked `aria-hidden`,
 because a sighted reader sees those whether or not a screen reader announces
-them. 211 elements per theme, zero failures in both.
+them. 368 text carrying elements per theme, zero failures in both.
 
 A gate that only inspects the parts you remembered to name is not a gate.
 
 ## What is not finished
 
-**The screenshots.** Nine image slots are declared at final dimensions with a
-shot list, and the frame owns the aspect ratio, so real captures drop in without
-touching layout. Until they exist, each slot renders a composed empty state
-naming what belongs there — never a grey box, never stock imagery.
-
-Two slots are filled today by a **CSS mock of the cmux window**, captioned as a
-mock on the page. That is not a placeholder standing in for a screenshot: a
+**The screenshots.** Every product surface on this page is a CSS mock,
+captioned as one. That is a deliberate position rather than a placeholder: a
 still image cannot show a notification ring breathing, which is the one
-behaviour the product is named for. The most valuable capture would be a real
-ring firing while an agent waits.
+behaviour the product is named for, and a mock is selectable, searchable,
+themeable and weightless in a way a PNG is not.
+
+It is still not a photograph of the real thing. The shot list in `lib/shots.ts`
+survives as the brief for the captures that would replace it, and the most
+valuable of them is a real ring firing while an agent waits.
 
 **The design-rules test suite is the part I would keep.** Sixteen checks turn
 the parts of the guide that are mechanically verifiable into failing builds:
