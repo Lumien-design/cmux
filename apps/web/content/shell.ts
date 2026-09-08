@@ -97,10 +97,14 @@ export const panelShells: Record<string, ShellState> = {
           kind: 'terminal',
           title: 'claude',
           lines: [
+            { text: '$ git switch feat/rings', tone: 'dim' },
             { text: '$ claude', tone: 'dim' },
             { text: '› reading tokens.css' },
+            { text: '› reading app-shell.tsx' },
             { text: '› 41 files changed' },
             { text: '› running tests', tone: 'dim' },
+            { text: '✓ 16 passed', tone: 'good' },
+            { text: '› waiting on the second agent', tone: 'dim' },
           ],
         },
         {
@@ -109,7 +113,9 @@ export const panelShells: Record<string, ShellState> = {
           waiting: true,
           lines: [
             { text: '$ codex', tone: 'dim' },
+            { text: '› reading schema.sql' },
             { text: '› migration written' },
+            { text: '  add ring_state to panes', tone: 'dim' },
             { text: 'Apply to database? (y/n)', tone: 'bright' },
             { text: '● waiting for you', tone: 'signal' },
           ],
@@ -167,6 +173,10 @@ export const panelShells: Record<string, ShellState> = {
       kind: 'terminal',
       title: 'feat/rings',
       lines: [
+        { text: '$ git switch feat/rings', tone: 'dim' },
+        { text: 'Switched to branch feat/rings' },
+        { text: '$ gh pr status', tone: 'dim' },
+        { text: '#412 ring state on panes', tone: 'bright' },
         { text: '$ git status', tone: 'dim' },
         { text: 'On branch feat/rings' },
         { text: '✓ checks passed · #412', tone: 'good' },
@@ -209,8 +219,11 @@ export const panelShells: Record<string, ShellState> = {
           blocks: [
             { kind: 'bar', w: 62 },
             { kind: 'bar', w: 38 },
-            { kind: 'field', value: 'colley@lumien.design' },
+            { kind: 'field', value: 'you@example.com' },
+            { kind: 'field', value: '••••••••••••' },
             { kind: 'box', h: 1.1 },
+            { kind: 'bar', w: 44 },
+            { kind: 'box', h: 0.7 },
             { kind: 'cursor', label: 'agent' },
           ],
         },
@@ -258,12 +271,60 @@ export const panelShells: Record<string, ShellState> = {
           chip: 'via gpu-01',
           blocks: [
             { kind: 'bar', w: 48 },
-            { kind: 'box', h: 0.9 },
+            { kind: 'box', h: 0.62 },
+            { kind: 'box', h: 0.62 },
+            { kind: 'box', h: 0.62 },
+            { kind: 'box', h: 0.62 },
+            { kind: 'bar', w: 26 },
           ],
         },
       ],
     },
     prompt: { agent: 'codex', value: 'tail the eval logs and ring me when it finishes' },
+  },
+
+  foundation: {
+    label:
+      'A cmux window with the Ghostty config file open on the left and a terminal on the right reporting that the renderer is libghostty on Metal.',
+    rail: rail('sidebar'),
+    list: {
+      workspaces: [
+        { name: 'main', path: '~/cmux', branch: 'main', ports: [':3000'], active: true },
+        { name: 'feat/rings', path: '~/web', branch: 'feat/rings' },
+        { name: 'docs', path: '~/docs', branch: 'docs/api' },
+      ],
+    },
+    detail: {
+      kind: 'split',
+      direction: 'row',
+      panes: [
+        {
+          kind: 'code',
+          file: '~/.config/ghostty/config',
+          lines: [
+            { text: 'font-family = Berkeley Mono' },
+            { text: 'font-size = 13' },
+            { text: 'theme = ashes' },
+            { text: 'window-padding-x = 8' },
+            { text: 'cursor-style = block' },
+            { text: 'macos-option-as-alt = true' },
+          ],
+        },
+        {
+          kind: 'terminal',
+          title: 'main',
+          lines: [
+            { text: '$ cmux --version', tone: 'dim' },
+            { text: 'cmux · libghostty', tone: 'bright' },
+            { text: '› renderer: Metal', tone: 'good' },
+            { text: '› Swift and AppKit, no web view', tone: 'good' },
+            { text: '$ cmux config path', tone: 'dim' },
+            { text: '~/.config/ghostty/config' },
+          ],
+        },
+      ],
+    },
+    prompt: { agent: 'main', value: 'cmux config path' },
   },
 
   program: {

@@ -208,15 +208,19 @@ function DetailPane({ d }: { d: Detail }) {
   }
 
   return (
-    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col px-100 py-75">
+    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
       {d.waiting && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-25 rounded-[0.3rem] border-[1.5px] border-ring motion-safe:animate-ring"
+          className="pointer-events-none absolute inset-0 z-10 rounded-[0.3rem] border-[1.5px] border-ring motion-safe:animate-ring"
         />
       )}
-      <div className="mb-25 text-term-ink-muted">{d.title}</div>
-      <Lines lines={d.lines} />
+      <div className="border-b border-term-rule bg-term-raised px-100 py-50 text-term-ink-muted">
+        {d.title}
+      </div>
+      <div className="mt-auto min-h-0 px-100 py-75">
+        <Lines lines={d.lines} />
+      </div>
     </div>
   );
 }
@@ -248,9 +252,9 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
     <figure className={cn('m-0', className)}>
       <div
         role="img"
-        aria-label={state.label}
+        aria-label={`Interface mock. ${state.label}`}
         className={cn(
-          'flex aspect-[4/3] flex-col overflow-hidden rounded-card prose:aspect-[16/10]',
+          'flex aspect-[4/3] flex-col overflow-hidden rounded-card prose:aspect-[16/10] split:aspect-[16/7.5]',
           'border border-term-rule bg-term',
           'font-mono text-[0.5rem]/[1.75] prose:text-[0.6rem]/[1.8] split:text-[0.66rem]/[1.8]',
           'shadow-[0_24px_60px_-20px_rgb(0_0_0/0.55)]',
@@ -303,7 +307,7 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
         >
           {/* icon rail */}
           {showRail && (
-            <div className="hidden flex-col items-center gap-100 border-e border-term-rule bg-term-rail py-100 prose:flex">
+            <div className="hidden min-h-0 flex-col items-center gap-100 overflow-hidden border-e border-term-rule bg-term-rail py-100 prose:flex">
               {state.rail!.map((r) => {
                 const Icon = railIcons[r.icon];
                 return (
@@ -328,7 +332,7 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
           )}
 
           {/* filterable workspace list */}
-          <div className="flex min-w-0 flex-col gap-25 border-e border-term-rule bg-term-rail py-75">
+          <div className="flex min-h-0 min-w-0 flex-col gap-25 overflow-hidden border-e border-term-rule bg-term-rail py-75">
             {state.list?.filter !== undefined && (
               <div className="mx-50 mb-25 flex items-center gap-50 rounded-[0.25rem] bg-term-sunken px-75 py-25 text-term-ink-muted">
                 <MagnifyingGlass size={8} weight="regular" aria-hidden="true" />
@@ -395,8 +399,8 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
 
             {state.overlay && (
               <>
-                <span aria-hidden="true" className="absolute inset-0 bg-term/70" />
-                <div className="absolute inset-x-200 top-200 overflow-hidden rounded-[0.35rem] border border-term-rule-strong bg-term-raised shadow-[0_12px_32px_-8px_rgb(0_0_0/0.6)]">
+                <span aria-hidden="true" className="absolute inset-0 bg-term/30" />
+                <div className="absolute inset-x-200 top-200 overflow-hidden rounded-[0.35rem] border border-term-rule-strong bg-term-raised shadow-[0_12px_32px_-8px_rgb(0_0_0/0.7)] prose:inset-x-auto prose:end-200 prose:w-[58%]">
                   <div className="flex items-center gap-75 border-b border-term-rule px-100 py-75">
                     <span className="text-term-ink-muted" aria-hidden="true">
                       ⌘⇧P
@@ -438,7 +442,7 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
 
           {/* notification panel */}
           {showAside && (
-            <div className="hidden min-w-0 flex-col border-s border-term-rule bg-term-rail split:flex">
+            <div className="hidden min-h-0 min-w-0 flex-col overflow-hidden border-s border-term-rule bg-term-rail split:flex">
               <p className="border-b border-term-rule px-100 py-75 uppercase tracking-[0.12em] text-term-ink-muted">
                 {state.aside!.title}
               </p>

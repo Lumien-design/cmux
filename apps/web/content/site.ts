@@ -62,7 +62,6 @@ export const navCards = [
 ] as const;
 
 export const hero = {
-  eyebrow: 'Free and open source for macOS',
   // "The {category} for {audience}" — and it is the line the app itself uses.
   headline: 'The open source terminal built for coding agents.',
   sub: 'Run several at once and always know which one is waiting on you. Tabs carry the branch, the directory and the port. Native Swift, no Electron.',
@@ -85,7 +84,6 @@ export const problem = {
 /** The mandated tagline reveal. Their own words, from the Zen of cmux. */
 export const tagline = {
   lines: ['cmux is a primitive,', 'not a solution.'],
-  attribution: 'The Zen of cmux',
   body: 'It is not prescriptive about how you hold your tools. It gives you rings, panes and a socket, then gets out of the way.',
 } as const;
 
@@ -160,7 +158,6 @@ export const capabilities: readonly Capability[] = [
  * automate the whole thing.
  */
 export const panels = {
-  eyebrow: 'The app',
   heading: 'One window, five things it does.',
   body: 'The same window in five states. Scroll sideways, or use the arrows.',
   /* Names the scroller for a screen reader. No full stop: the component
@@ -198,7 +195,6 @@ export const programmable = {
  * a representative sample: this is the list cmux prints when you run it.
  */
 export const shortcuts = {
-  eyebrow: 'Keyboard',
   heading: 'Your hands never leave the keyboard.',
   body: 'cmux prints these on first run. Every one of them is rebindable with cmux shortcuts.',
   groups: [
@@ -264,14 +260,12 @@ export const platforms = {
 } as const;
 
 export const install = {
-  eyebrow: 'Install',
   heading: 'Two ways in.',
   brew: 'brew tap manaflow-ai/cmux && brew install --cask cmux',
   dmg: 'Download the disk image and drag it to Applications. It updates itself from there.',
 } as const;
 
 export const openSource = {
-  eyebrow: 'Open source',
   heading: 'Free, and you can read all of it.',
   body: 'cmux is GPL 3.0 or later, with commercial terms for organisations that cannot comply. The client is public and the issue tracker is where the roadmap actually happens.',
 } as const;

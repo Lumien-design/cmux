@@ -6,7 +6,6 @@ import {
   Faq,
   FinalCta,
   Footer,
-  Foundation,
   Hero,
   Install,
   OpenSource,
@@ -75,7 +74,6 @@ export default async function Page() {
             <Panels />
             <Testimonials />
             <Shortcuts />
-            <Foundation />
             <Platforms />
             <Install />
             <OpenSource />

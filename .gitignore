@@ -122,3 +122,6 @@ __screenshots__/diff/
 # ─── Local MCP server wiring ───────────────────────────────────────────────
 # Editor tooling, not part of the project. Kept local like the skill library.
 .mcp.json
+
+# Throwaway worktree used to build the previous revision for comparison.
+.baseline/

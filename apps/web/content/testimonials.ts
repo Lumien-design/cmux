@@ -156,7 +156,6 @@ export const testimonials: readonly Testimonial[] = [
 ] as const;
 
 export const testimonialSection = {
-  eyebrow: 'What people say',
   heading: 'Adopted by the people who build the tools.',
   note: 'Every quote links to its source.',
 } as const;

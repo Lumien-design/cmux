@@ -31,12 +31,6 @@ import { testimonialSection } from '@/content/testimonials';
 
 /* ── primitives ─────────────────────────────────────────────────────────── */
 
-export function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">{children}</p>
-  );
-}
-
 export function Section({
   id,
   children,
@@ -95,7 +89,6 @@ export function Hero({ stars }: { stars: number }) {
       <div className="mx-auto w-full max-w-[var(--container-page)]">
         <div className="grid items-center gap-600 split:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] split:gap-700">
           <div>
-            <Eyebrow>{hero.eyebrow}</Eyebrow>
             {/* 680px measure cap on the heading and its subheading. */}
             <h1 className="mt-200 max-w-[var(--container-measure)] text-4xl font-semibold leading-[1.05] tracking-tight split:text-6xl">
               {hero.headline}
@@ -127,11 +120,12 @@ export function Hero({ stars }: { stars: number }) {
 export function ToolStrip() {
   return (
     <div className="px-400 py-500 split:px-700">
-      <div className="mx-auto w-full max-w-[var(--container-page)]">
-        <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
-          {agents.label}
-        </p>
-        <LogoLoop className="mt-300" markHeight={1.62} gap={72} speed={40} />
+      <div
+        className="mx-auto w-full max-w-[var(--container-page)]"
+        role="group"
+        aria-label={agents.label}
+      >
+        <LogoLoop markHeight={1.62} gap={72} speed={40} />
       </div>
     </div>
   );
@@ -159,9 +153,6 @@ export function Tagline() {
         <ScrubbedTagline lines={tagline.lines} />
         <div>
           <p className="max-w-[46ch] text-base leading-relaxed text-ink-soft">{tagline.body}</p>
-          <p className="mt-200 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
-            {tagline.attribution}
-          </p>
         </div>
       </div>
     </Section>
@@ -191,15 +182,15 @@ function Panel({
   const state = panelShells[id];
   if (!state) return null;
   return (
-    <div className="flex h-full flex-col gap-300 rounded-card border border-stage-rule bg-stage p-300 split:grid split:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] split:items-center split:gap-600 split:p-600">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.14em] text-stage-ink-muted">
+    <div className="flex h-full flex-col gap-300 rounded-card border border-stage-rule bg-stage p-300 prose:gap-400 prose:p-500 split:gap-500 split:p-600">
+      <div className="split:grid split:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] split:items-end split:gap-600">
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-stage-ink-muted split:col-span-2">
           {eyebrow}
         </p>
         <h3 className="mt-100 max-w-[18ch] text-xl font-semibold leading-tight tracking-tight text-stage-ink prose:mt-200 prose:text-2xl split:text-3xl">
           {heading}
         </h3>
-        <ul className="mt-200 flex flex-col gap-100 border-t border-stage-rule pt-200 prose:mt-300 prose:gap-200 prose:pt-300">
+        <ul className="mt-200 flex flex-col gap-100 border-t border-stage-rule pt-200 prose:mt-300 prose:gap-200 prose:pt-300 split:mt-0 split:border-0 split:pt-0">
           {points.map((pt) => (
             <li key={pt} className="flex gap-100 text-sm text-stage-ink-soft prose:gap-200 prose:text-base">
               <span
@@ -248,13 +239,24 @@ export function Panels() {
         />
       ),
     },
+    {
+      id: 'foundation',
+      heading: foundation.heading,
+      content: (
+        <Panel
+          id="foundation"
+          eyebrow={foundation.eyebrow}
+          heading={foundation.heading}
+          points={foundation.facts.map((f) => f.v)}
+        />
+      ),
+    },
   ];
 
   return (
     <Section labelledBy="panels-h">
       <Reveal>
         <div className="max-w-[var(--container-measure)]">
-          <Eyebrow>{panels.eyebrow}</Eyebrow>
           <h2
             id="panels-h"
             className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
@@ -266,10 +268,6 @@ export function Panels() {
       </Reveal>
 
       <PanelCarousel items={items} label={panels.label} />
-
-      <p className="mt-200 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
-        Interface mocks, not screenshots
-      </p>
     </Section>
   );
 }
@@ -278,7 +276,6 @@ export function Testimonials() {
   return (
     <Section labelledBy="testimonials-h">
       <div className="max-w-[var(--container-measure)]">
-        <Eyebrow>{testimonialSection.eyebrow}</Eyebrow>
         <h2
           id="testimonials-h"
           className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
@@ -302,7 +299,6 @@ export function Shortcuts() {
     <Section id="shortcuts" labelledBy="shortcuts-h">
       <Reveal>
         <div className="max-w-[var(--container-measure)]">
-          <Eyebrow>{shortcuts.eyebrow}</Eyebrow>
           <h2
             id="shortcuts-h"
             className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
@@ -337,41 +333,6 @@ export function Shortcuts() {
   );
 }
 
-export function Foundation() {
-  return (
-    <Section id="foundation" labelledBy="foundation-h">
-      <Reveal>
-        <div className="grid gap-500 split:grid-cols-2 split:gap-700">
-          <div>
-            <Eyebrow>{foundation.eyebrow}</Eyebrow>
-            <h2
-              id="foundation-h"
-              className="mt-200 max-w-[20ch] text-3xl font-semibold leading-tight tracking-tight"
-            >
-              {foundation.heading}
-            </h2>
-            <p className="mt-300 max-w-[52ch] text-base leading-relaxed text-ink-soft">
-              {foundation.body}
-            </p>
-          </div>
-          <dl className="grid grid-cols-2 gap-300 self-start">
-            {foundation.facts.map((f) => (
-              <div
-                key={f.k}
-                className="rounded-card bg-panel p-300"
-              >
-                <dt className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
-                  {f.k}
-                </dt>
-                <dd className="mt-75 text-base font-medium text-ink">{f.v}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </Reveal>
-    </Section>
-  );
-}
 
 export function Platforms() {
   return (
@@ -405,7 +366,6 @@ export function Install() {
       <Reveal>
         <div className="grid gap-500 split:grid-cols-2 split:gap-700">
           <div>
-            <Eyebrow>{install.eyebrow}</Eyebrow>
             <h2
               id="install-h"
               className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
@@ -435,13 +395,12 @@ export function OpenSource() {
   return (
     <Section id="open-source" labelledBy="os-h">
       <Reveal>
-        <div className="max-w-[var(--container-measure)]">
-          <Eyebrow>{openSource.eyebrow}</Eyebrow>
-          <h2 id="os-h" className="mt-200 text-3xl font-semibold leading-tight tracking-tight">
+        <div className="mx-auto max-w-[var(--container-measure)] text-center">
+          <h2 id="os-h" className="text-3xl font-semibold leading-tight tracking-tight">
             {openSource.heading}
           </h2>
           <p className="mt-300 text-lg leading-relaxed text-ink-soft">{openSource.body}</p>
-          <div className="mt-400 flex flex-wrap gap-100">
+          <div className="mt-400 flex flex-wrap justify-center gap-100">
             <Button href={site.repo} variant="quiet">
               Read the source
               <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
@@ -463,9 +422,9 @@ export function Faq() {
       <h2 id="faq-h" className="text-3xl font-semibold leading-tight tracking-tight">
         Questions
       </h2>
-      <div className="mt-400">
+      <div className="mt-400 grid gap-x-600 prose:grid-cols-2">
         {faq.map((f) => (
-          <details key={f.q} className="group border-t border-rule">
+          <details key={f.q} className="group h-fit border-t border-rule">
             <summary className="flex cursor-pointer list-none items-baseline gap-200 py-300 text-lg font-medium text-ink [&::-webkit-details-marker]:hidden">
               <span
                 aria-hidden="true"
@@ -475,7 +434,7 @@ export function Faq() {
               </span>
               {f.q}
             </summary>
-            <p className="max-w-[62ch] pb-300 ps-[1.6rem] text-base leading-relaxed text-ink-soft">
+            <p className="pb-300 ps-[1.6rem] text-base leading-relaxed text-ink-soft">
               {f.a}
             </p>
           </details>
@@ -488,7 +447,7 @@ export function Faq() {
 export function FinalCta() {
   return (
     <Section labelledBy="cta-h">
-      <div className="flex flex-col items-start gap-300">
+      <div className="flex flex-col items-center gap-300 text-center">
         <h2 id="cta-h" className="text-4xl font-semibold leading-[1.05] tracking-tight split:text-5xl">
           {finalCta.heading}
         </h2>
