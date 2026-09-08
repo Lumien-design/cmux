@@ -253,7 +253,7 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
         role="img"
         aria-label={`Interface mock. ${state.label}`}
         className={cn(
-          'flex aspect-[4/3] flex-col overflow-hidden rounded-card prose:aspect-[16/10] split:aspect-[16/7.5]',
+          'flex aspect-[4/3] flex-col overflow-hidden rounded-card text-start prose:aspect-[16/10] split:aspect-[16/7.5]',
           'border border-term-rule bg-term',
           'font-mono text-[0.5rem]/[1.75] prose:text-[0.6rem]/[1.8] split:text-[0.66rem]/[1.8]',
           'shadow-[0_24px_60px_-20px_rgb(0_0_0/0.55)]',

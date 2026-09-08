@@ -36,10 +36,15 @@ export const heroShell: ShellState = {
         kind: 'terminal',
         title: 'claude',
         lines: [
+          { text: '$ git switch feat/rings', tone: 'dim' },
+          { text: 'Switched to branch feat/rings' },
           { text: '$ claude', tone: 'dim' },
           { text: '› reading tokens.css' },
+          { text: '› reading app-shell.tsx' },
           { text: '› 41 files changed' },
-          { text: '› running tests' },
+          { text: '› running tests', tone: 'dim' },
+          { text: '✓ 16 passed', tone: 'good' },
+          { text: '› waiting on the second agent', tone: 'dim' },
         ],
       },
       {
@@ -48,7 +53,11 @@ export const heroShell: ShellState = {
         waiting: true,
         lines: [
           { text: '$ codex', tone: 'dim' },
+          { text: '› reading schema.sql' },
+          { text: '› reading migrations/', tone: 'dim' },
           { text: '› migration written' },
+          { text: '  add ring_state to panes', tone: 'dim' },
+          { text: '  backfill from pane_events', tone: 'dim' },
           { text: 'Apply to database? (y/n)', tone: 'bright' },
           { text: '● waiting for you', tone: 'signal' },
         ],

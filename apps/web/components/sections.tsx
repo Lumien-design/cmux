@@ -87,16 +87,16 @@ export function Hero({ stars }: { stars: number }) {
   return (
     <section id="top" className="px-400 pb-800 pt-900 split:px-700">
       <div className="mx-auto w-full max-w-[var(--container-page)]">
-        <div className="grid items-center gap-600 split:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] split:gap-700">
-          <div>
+        <div className="flex flex-col items-center gap-600 text-center">
+          <div className="flex flex-col items-center">
             {/* 680px measure cap on the heading and its subheading. */}
-            <h1 className="mt-200 max-w-[var(--container-measure)] text-4xl font-semibold leading-[1.05] tracking-tight split:text-6xl">
+            <h1 className="max-w-[var(--container-measure)] text-4xl font-semibold leading-[1.05] tracking-tight split:text-6xl">
               {hero.headline}
             </h1>
             <p className="mt-300 max-w-[var(--container-measure)] text-lg leading-relaxed text-ink-soft">
               {hero.sub}
             </p>
-            <div className="mt-500 flex flex-wrap items-center gap-100">
+            <div className="mt-500 flex flex-wrap items-center justify-center gap-100">
               <InteractiveCta href={hero.primary.href}>{hero.primary.label}</InteractiveCta>
               <Button href={hero.secondary.href} variant="quiet">
                 {hero.secondary.label}
@@ -110,7 +110,7 @@ export function Hero({ stars }: { stars: number }) {
             </p>
           </div>
 
-          <AppShell state={heroShell} />
+          <AppShell state={heroShell} className="w-full" />
         </div>
       </div>
     </section>
@@ -135,7 +135,7 @@ export function Problem() {
   return (
     <Section labelledBy="problem-h">
       <Reveal>
-        <div className="max-w-[var(--container-measure)]">
+        <div className="mx-auto max-w-[var(--container-measure)] text-center">
           <h2 id="problem-h" className="text-3xl font-semibold leading-tight tracking-tight">
             {problem.heading}
           </h2>
@@ -149,11 +149,9 @@ export function Problem() {
 export function Tagline() {
   return (
     <Section>
-      <div className="grid gap-500 split:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] split:items-end">
+      <div className="flex flex-col items-center gap-400 text-center">
         <ScrubbedTagline lines={tagline.lines} />
-        <div>
-          <p className="max-w-[46ch] text-base leading-relaxed text-ink-soft">{tagline.body}</p>
-        </div>
+        <p className="max-w-[52ch] text-base leading-relaxed text-ink-soft">{tagline.body}</p>
       </div>
     </Section>
   );
@@ -183,19 +181,25 @@ function Panel({
   if (!state) return null;
   return (
     <div className="flex h-full flex-col gap-300 rounded-card border border-stage-rule bg-stage p-300 prose:gap-400 prose:p-500 split:gap-500 split:p-600">
-      <div className="split:grid split:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] split:items-end split:gap-600">
-        <p className="font-mono text-xs uppercase tracking-[0.14em] text-stage-ink-muted split:col-span-2">
+      <div className="flex flex-col items-center text-center">
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-stage-ink-muted">
           {eyebrow}
         </p>
-        <h3 className="mt-100 max-w-[18ch] text-xl font-semibold leading-tight tracking-tight text-stage-ink prose:mt-200 prose:text-2xl split:text-3xl">
+        <h3 className="mt-100 max-w-[22ch] text-xl font-semibold leading-tight tracking-tight text-stage-ink prose:mt-200 prose:text-2xl split:text-3xl">
           {heading}
         </h3>
-        <ul className="mt-200 flex flex-col gap-100 border-t border-stage-rule pt-200 prose:mt-300 prose:gap-200 prose:pt-300 split:mt-0 split:border-0 split:pt-0">
+        {/* A row rather than a stack once there is width for it. Centred
+            bullets in a column leave their markers hanging in the gutter, and
+            three short claims side by side read as one line of evidence. */}
+        <ul className="mt-300 grid w-full gap-200 border-t border-stage-rule pt-300 prose:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] prose:gap-300">
           {points.map((pt) => (
-            <li key={pt} className="flex gap-100 text-sm text-stage-ink-soft prose:gap-200 prose:text-base">
+            <li
+              key={pt}
+              className="flex items-baseline justify-center gap-100 text-sm text-stage-ink-soft prose:flex-col prose:items-center prose:gap-100 prose:text-base"
+            >
               <span
                 aria-hidden="true"
-                className="mt-[8px] size-[5px] shrink-0 rounded-pill bg-ring prose:mt-[9px]"
+                className="size-[5px] shrink-0 translate-y-[-2px] rounded-pill bg-ring prose:translate-y-0"
               />
               {pt}
             </li>
@@ -253,11 +257,8 @@ export function Panels() {
   return (
     <Section labelledBy="panels-h">
       <Reveal>
-        <div className="max-w-[var(--container-measure)]">
-          <h2
-            id="panels-h"
-            className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
-          >
+        <div className="mx-auto max-w-[var(--container-measure)] text-center">
+          <h2 id="panels-h" className="text-3xl font-semibold leading-tight tracking-tight">
             {panels.heading}
           </h2>
           <p className="mt-200 text-base text-ink-muted">{panels.body}</p>
@@ -272,11 +273,8 @@ export function Panels() {
 export function Testimonials() {
   return (
     <Section labelledBy="testimonials-h">
-      <div className="max-w-[var(--container-measure)]">
-        <h2
-          id="testimonials-h"
-          className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
-        >
+      <div className="mx-auto max-w-[var(--container-measure)] text-center">
+        <h2 id="testimonials-h" className="text-3xl font-semibold leading-tight tracking-tight">
           {testimonialSection.heading}
         </h2>
         <p className="mt-200 text-base text-ink-muted">{testimonialSection.note}</p>
@@ -295,11 +293,8 @@ export function Shortcuts() {
   return (
     <Section id="shortcuts" labelledBy="shortcuts-h">
       <Reveal>
-        <div className="max-w-[var(--container-measure)]">
-          <h2
-            id="shortcuts-h"
-            className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
-          >
+        <div className="mx-auto max-w-[var(--container-measure)] text-center">
+          <h2 id="shortcuts-h" className="text-3xl font-semibold leading-tight tracking-tight">
             {shortcuts.heading}
           </h2>
           <p className="mt-300 text-base leading-relaxed text-ink-soft">{shortcuts.body}</p>
@@ -335,7 +330,7 @@ export function Platforms() {
   return (
     <Section labelledBy="platforms-h">
       <Reveal>
-        <h2 id="platforms-h" className="text-3xl font-semibold leading-tight tracking-tight">
+        <h2 id="platforms-h" className="text-center text-3xl font-semibold leading-tight tracking-tight">
           {platforms.heading}
         </h2>
         <ul className="mt-400 flex flex-col gap-200">
@@ -361,12 +356,9 @@ export function Install() {
   return (
     <Section labelledBy="install-h">
       <Reveal>
-        <div className="grid gap-500 split:grid-cols-2 split:gap-700">
-          <div>
-            <h2
-              id="install-h"
-              className="mt-200 text-3xl font-semibold leading-tight tracking-tight"
-            >
+        <div className="flex flex-col items-center gap-400 text-center">
+          <div className="flex flex-col items-center">
+            <h2 id="install-h" className="text-3xl font-semibold leading-tight tracking-tight">
               {install.heading}
             </h2>
             <p className="mt-300 max-w-[46ch] text-base leading-relaxed text-ink-soft">
@@ -376,7 +368,7 @@ export function Install() {
               <Button href={site.download}>Download for Mac</Button>
             </div>
           </div>
-          <div className="self-center">
+          <div className="flex flex-col items-center">
             <p className="mb-200 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
               Or with Homebrew
             </p>
@@ -416,7 +408,7 @@ export function OpenSource() {
 export function Faq() {
   return (
     <Section id="faq" labelledBy="faq-h">
-      <h2 id="faq-h" className="text-3xl font-semibold leading-tight tracking-tight">
+      <h2 id="faq-h" className="text-center text-3xl font-semibold leading-tight tracking-tight">
         Questions
       </h2>
       <div className="mt-400 grid gap-x-600 prose:grid-cols-2">
