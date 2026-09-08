@@ -110,7 +110,7 @@ export function Hero({ stars }: { stars: number }) {
             </p>
           </div>
 
-          <AppShell state={heroShell} className="text-ink-muted" />
+          <AppShell state={heroShell} />
         </div>
       </div>
     </section>
@@ -203,10 +203,7 @@ function Panel({
         </ul>
       </div>
 
-      {/* The caption is suppressed per panel and stated once under the whole
-          carousel instead. Five copies of the same disclaimer is noise; one is
-          the disclosure. */}
-      <AppShell state={{ ...state, caption: false }} />
+      <AppShell state={state} />
     </div>
   );
 }

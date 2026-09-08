@@ -238,14 +238,19 @@ pull request status in the sidebar, listening ports, Claude Code Teams, browser
 import, the socket API, session restore. Each named once. Shown nowhere.
 
 Collapsing them into one horizontally scrolled band fixes all three at once,
-and the saving is measurable: at 1440 by 900 the page went from 10,681 to
-8,555 pixels. That is 2,125 pixels, 2.36 viewports, a fifth of the page. Less
-than the four viewports I estimated before building it, and worth stating
-plainly rather than rounding in my own favour, because the remaining length now
-sits in the FAQ and the testimonial wall rather than in the features.
+and the saving is measurable. With Foundation folded in as a sixth panel and
+Questions running in two columns, the page went from 10,695 to 7,818 pixels at
+1440 by 900, and from 16,218 to 10,982 on a 390 pixel phone. A quarter shorter
+on a desktop, a third shorter on a phone, showing more of the product rather
+than less.
 
-**One window, five states.** The band is a single app mock rendered five times
-from five data fixtures, not five pictures. An icon rail, a filterable
+Both numbers come from two local builds served side by side at identical
+viewports, not from an estimate. My estimate before building was four
+viewports; the carousel alone bought 2.36, and the rest came from Questions
+and Foundation.
+
+**One window, six states.** The band is a single app mock rendered five times
+from six data fixtures, not six pictures. An icon rail, a filterable
 workspace list carrying branch, pull request status and ports, a detail area
 holding terminals, a browser or code, and a prompt bar along the bottom. Every
 rail icon maps to a shortcut cmux documents, because cmux has no icon rail and
@@ -270,7 +275,7 @@ overrides is `behavior: 'instant'`.
 **Nothing inside a panel is focusable.** The mock is `role="img"` and its
 prompt bar is a plain element rather than an input. That is what removes the
 classic snap carousel bug where focus lands on something scrolled out of view,
-and it is why the whole band has exactly eight tab stops: the track, five dots
+and it is why the whole band has exactly nine tab stops: the track, six dots
 and two arrows.
 
 **The panels are dark in both themes.** A dark card on paper is a foreign
@@ -280,10 +285,31 @@ the shell. The card is a step lighter than the window it holds, so the stack
 reads sheet, then stage, then terminal, and the terminal stays the darkest
 object on the page — the claim the whole direction rests on.
 
-Four of the site's navigation links point at a panel by fragment. The browser
+Five of the site's navigation links point at a panel by fragment. The browser
 scrolls the page down to the band and leaves the track where it stood, so a
 link promising Remote workspaces delivered Attention. The component syncs the
 track to the hash on load and on `hashchange`.
+
+---
+
+## What came off in review
+
+Seven sections were announcing themselves in small monospace capitals before
+saying anything: the hero, the agent strip, the carousel, the testimonials, the
+shortcuts, install and open source. Every one came off. An eyebrow is a label
+for a section that cannot introduce itself, and a heading that needs one is
+usually the real problem.
+
+Two of those lines were doing a job, so the job moved rather than disappearing.
+The agent strip's label became the marquee's accessible name. The mock
+disclosure became each window's accessible name.
+
+That second one is a genuine loss and worth recording as such. The page used to
+say *interface mock, not a screenshot* in type under every window. It now says
+so only to a screen reader. Nothing on the page claims to be a photograph, and
+the windows are drawn in a way no screenshot looks, but a sighted reader is no
+longer told outright. It was the client's call, it is defensible, and it is not
+the same standard as before.
 
 ---
 
@@ -362,7 +388,15 @@ selected semantic elements — `p`, `li`, `h2`, `code` — and both mocks are bu
 from `div`s, so it walked straight past them and reported a clean sweep. It now
 checks every leaf node carrying text, including the ones marked `aria-hidden`,
 because a sighted reader sees those whether or not a screen reader announces
-them. 368 text carrying elements per theme, zero failures in both.
+them, at three widths rather than one. 514, 503 and 465 text carrying
+elements at 1440, 760 and 390, zero failures in either theme.
+
+The audit itself needed a correction on the way. It read `opacity` off the node
+rather than walking the ancestor chain, and the navigation panel collapses by
+fading its wrapper to zero, so five links each reported opacity 1 while being
+completely invisible. It cried wolf five times per run until that was fixed. An
+audit that reports failures nobody can see gets ignored, which is the same
+outcome as not running one.
 
 A gate that only inspects the parts you remembered to name is not a gate.
 

@@ -10,18 +10,37 @@ Three directions were built as rendered comparisons first, and only the chosen o
 
 ## Visual proof
 
-| Before | After |
-|--------|-------|
-| The current cmux.com (light, conventional SaaS structure) | This branch, running locally |
+Shot from two local builds running side by side — the previous revision and this one — at identical viewports, so the only difference is the code. Full page strips are at half raster, since what they show is length.
 
-Direction study, all three rendered side by side: [`docs/design/direction-study.html`](docs/design/direction-study.html) — open it in a browser. The reasoning behind the choice is in [`docs/design/cmux-web-rationale.md`](docs/design/cmux-web-rationale.md).
+| | Before | After |
+|---|---|---|
+| Desktop, 1440 by 900 | [10,695px · 11.88 viewports](shots/desktop-light-before.jpg) | [7,818px · 8.69 viewports](shots/desktop-light-after.jpg) |
+| Desktop, dark | [before](shots/desktop-dark-before.jpg) | [after](shots/desktop-dark-after.jpg) |
+| Mobile, 390 by 844 | [16,218px · 19.22 viewports](shots/mobile-light-before.jpg) | [10,982px · 13.01 viewports](shots/mobile-light-after.jpg) |
+| Mobile, dark | [before](shots/mobile-dark-before.jpg) | [after](shots/mobile-dark-after.jpg) |
+
+**A quarter shorter on desktop, a third shorter on a phone**, with more of the product shown rather than less.
+
+Details, at full resolution:
+
+| | |
+|---|---|
+| Hero | [light](shots/hero-light.png) · [dark](shots/hero-dark.png) |
+| The carousel in place | [light](shots/carousel-light.png) · [dark](shots/carousel-dark.png) |
+| Panel: attention | [light](shots/panel-attention-light.png) · [dark](shots/panel-attention-dark.png) |
+| Panel: programmability | [light](shots/panel-program-light.png) |
+| Panel: foundation | [light](shots/panel-foundation-light.png) |
+| Questions, two columns | [light](shots/questions-light.png) |
+
+Direction study, all three rendered side by side: [`docs/design/direction-study.html`](direction-study.html) — open it in a browser. The reasoning behind the choice is in [`docs/design/cmux-web-rationale.md`](cmux-web-rationale.md).
 
 ## Design notes
 
 - **Tokens touched:** a new two tier layer in `packages/tokens`. Primitives generate no utilities; semantics live in `@theme inline` and resolve through the runtime primitive, so one declaration themes both modes.
 - **Motion:** three sanctioned curves only. Interaction motion 120 to 240ms on `ease-out`; explanatory motion 700 to 900ms on `ease-drawer`. No GSAP, no smooth scroll, no scroll listeners.
 - **States covered:** default, hover, focus visible, active, disabled, and both themes.
-- **The five feature sections are now one horizontal band.** Native scroll snap, no slider library and no scroll listener; the active dot is an IntersectionObserver rooted on the track. The page went from 10,681 to 8,555 pixels at 1440 by 900, a fifth shorter.
+- **Six feature sections are now one horizontal band.** Native scroll snap, no slider library and no scroll listener; the active dot is an IntersectionObserver rooted on the track. One app mock renders all six states, and nothing inside a panel is focusable, so the band has exactly nine tab stops.
+- **No section eyebrows.** Seven sections were announcing themselves in small monospace capitals before saying anything. The two that were doing real work moved: the agent strip's label is now the marquee's accessible name, and the mock disclosure is now each window's accessible name.
 
 Two decisions worth reviewing:
 
@@ -36,7 +55,7 @@ Two decisions worth reviewing:
 - [x] Keyboard path works; focus is visible and ordered
 - [x] Light and dark both checked
 - [x] Respects `prefers-reduced-motion`
-- [x] Contrast meets WCAG AA — 368 text carrying elements audited per theme, 0 failures
+- [x] Contrast meets WCAG AA — audited at 1440, 760 and 390 in both themes; 514, 503 and 465 text carrying elements, 0 failures
 - [x] No secrets, tokens or `.env` values in the diff
 
 ## Verification
@@ -45,6 +64,6 @@ Two decisions worth reviewing:
 
 ## Known gaps
 
-Every product surface is a CSS mock, captioned as one, because a still image cannot show a notification ring breathing. The shot list in `lib/shots.ts` remains as the brief for the real captures that would replace them.
+Every product surface is a CSS mock. The visible caption saying so was removed at the client's request, so the disclosure now lives only in each window's accessible name. That is a real reduction in how plainly the page states it, and it should be a conscious call rather than an oversight. The shot list in `lib/shots.ts` remains as the brief for the real captures that would replace the mocks.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

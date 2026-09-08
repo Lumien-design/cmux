@@ -83,7 +83,6 @@ export type ShellState = {
   prompt?: { agent: string; value: string };
   /** compact drops the rail, prompt and aside. The hero uses it. */
   density?: 'compact' | 'full';
-  caption?: string | false;
 };
 
 const tone: Record<Tone, string> = {
@@ -249,7 +248,7 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
   const showAside = !compact && state.aside;
 
   return (
-    <figure className={cn('m-0', className)}>
+    <div className={className}>
       <div
         role="img"
         aria-label={`Interface mock. ${state.label}`}
@@ -473,12 +472,6 @@ export function AppShell({ state, className }: { state: ShellState; className?: 
           </div>
         )}
       </div>
-
-      {state.caption !== false && (
-        <figcaption className="mt-75 font-mono text-[0.56rem] uppercase tracking-[0.12em]">
-          {state.caption ?? 'Interface mock, not a screenshot'}
-        </figcaption>
-      )}
-    </figure>
+    </div>
   );
 }
