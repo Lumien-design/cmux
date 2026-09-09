@@ -197,18 +197,30 @@ export function DotGridBackground({
       { rootMargin: "200px" },
     );
     vis.observe(stage);
-    stage.addEventListener("pointermove", onPointerMove);
-    stage.addEventListener("pointerdown", onPointerMove);
-    stage.addEventListener("pointerleave", onPointerLeave);
+
+    /**
+     * The window, not the stage.
+     *
+     * The stage sits at -z-10 behind `main`, and `main` is a sibling rather
+     * than an ancestor, so a pointer over any section hit tests to that section
+     * and the event never bubbles here. Listening on the stage meant the grid
+     * only answered the cursor where nothing was drawn on top of it, which on a
+     * full page of sections is nowhere. A background that reacts to the cursor
+     * has to hear the cursor everywhere, so it listens at the window and keeps
+     * measuring against its own rect.
+     */
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerdown", onPointerMove);
+    document.documentElement.addEventListener("pointerleave", onPointerLeave);
     raf = requestAnimationFrame(frame);
 
     return () => {
       cancelAnimationFrame(raf);
       observer.disconnect();
       vis.disconnect();
-      stage.removeEventListener("pointermove", onPointerMove);
-      stage.removeEventListener("pointerdown", onPointerMove);
-      stage.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerMove);
+      document.documentElement.removeEventListener("pointerleave", onPointerLeave);
     };
   }, [color]);
 

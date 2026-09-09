@@ -108,9 +108,31 @@ function Button({
 
 export function Hero({ stars }: { stars: number }) {
   return (
-    <section id="top" className="px-400 pb-800 pt-900 split:px-700">
+    <section id="top" className="px-400 pb-800 split:px-700">
       <div className="mx-auto w-full max-w-[var(--container-page)]">
-        <div className="flex flex-col items-center gap-600 text-center">
+        {/* The first screen, and only the words.
+
+            Height is the viewport less the shell gutter above the sheet, so the
+            block ends exactly on the fold rather than a gutter past it. svh
+            rather than vh: on a phone vh is the tallest the viewport ever gets,
+            so the centre would sit low until the browser chrome collapsed.
+
+            min rather than a fixed height, so a short landscape viewport grows
+            the block instead of cropping the proof line out of it.
+
+            The top padding is the floating nav's footprint: it sits at top-400
+            and its bar is 3.4rem, and it is fixed, so it takes no space in the
+            flow and centring on the raw viewport ran the headline underneath
+            it. Padding the box means the content centres in what is actually
+            visible. On a phone, where the headline runs to four lines, this is
+            the difference between reading it and losing the first line. */}
+        <div
+          className={cn(
+            'flex min-h-[calc(100svh_-_var(--spacing-200))] flex-col items-center justify-center text-center',
+            'pt-[calc(var(--spacing-400)_+_3.4rem)]',
+            'split:min-h-[calc(100svh_-_var(--spacing-300))]',
+          )}
+        >
           <div className="flex flex-col items-center">
             {/* 680px measure cap on the heading and its subheading. */}
             <h1 className="max-w-[var(--container-measure)] text-4xl font-semibold leading-[1.05] tracking-tight split:text-6xl">
@@ -132,9 +154,11 @@ export function Hero({ stars }: { stars: number }) {
               AppKit
             </p>
           </div>
-
-          <AppShell state={heroShell} className="w-full" />
         </div>
+
+        {/* Below the fold now, so it is something you scroll to rather than
+            something competing with the headline for the first screen. */}
+        <AppShell state={heroShell} className="mt-600 w-full" />
       </div>
     </section>
   );
