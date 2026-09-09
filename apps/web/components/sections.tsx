@@ -28,7 +28,7 @@ import { Reveal, CopyCommand } from '@/components/interactive';
 import { Kbd } from '@/components/kbd';
 import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
 import { LogoLoop } from '@/components/logo-loop';
-import { StaggerTestimonials } from '@/components/stagger-testimonials';
+import { Testimonial } from '@/components/design-testimonial';
 import {
   agents,
   capabilities,
@@ -340,10 +340,10 @@ export function Testimonials() {
         </h2>
         <p className="mt-200 text-base text-ink-muted">{testimonialSection.note}</p>
       </div>
-      {/* Fixed height, as the component expects: the deck is a window onto a
-          fan of cards, not a block that grows with its content. */}
-      <div className="mt-500 h-[600px]">
-        <StaggerTestimonials />
+      {/* No fixed height any more: this treatment shows one quote and sizes to
+          it, with a floor under the quote so rotation does not shift the page. */}
+      <div className="mt-500">
+        <Testimonial />
       </div>
     </Section>
   );
