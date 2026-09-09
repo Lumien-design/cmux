@@ -1,0 +1,316 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   cmux design tokens
+   ───────────────────────────────────────────────────────────────────────────
+   Two tiers, and the separation is the whole point:
+
+     Tier 1  primitives  plain custom properties in :root. They generate no
+                         utilities, so nothing can reach them by accident.
+     Tier 2  semantics   @theme inline. These generate utilities AND resolve
+                         through the runtime primitive, which is how one
+                         declaration themes both modes.
+
+   Components reference Tier 2 only. If a component names a primitive, that is
+   a bug — it has borrowed a value instead of a meaning.
+
+   Notation is hex throughout. oklch is the better default for a new system,
+   but the mandated dark background palette is specified in hex and is not
+   negotiable, and a consistent hex system beats hex with oklch scattered
+   through it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   TIER 1 — PRIMITIVES
+   The neutral ramp inverts by name between themes, so every semantic token
+   below is written exactly once.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  /* Warm paper ramp. 000 is the lightest sheet, 950 the deepest ink.
+     --n-950 is #131209, one of the six sanctioned dark backgrounds and the
+     only warm one — which is precisely why this direction can use it. */
+  --n-000: #f7f4ee;
+  --n-050: #ede9e0;
+  --n-100: #e3ded3;
+  --n-200: #d7d1c4;
+  --n-300: #cfc8ba;
+  --n-400: #7d766b;
+  --n-500: #8e877c;
+  --n-600: #635d54;
+  --n-700: #4b463f;
+  --n-800: #35322e;
+  --n-900: #1f1d1b;
+  --n-950: #131209;
+
+  /* The shell sits outside the inverting ramp on purpose.
+     Everything else flips between themes, but the frame is "the darkest thing
+     on screen" in both — inverting it would put a white border around a dark
+     page. Its text pairs with it and therefore stays light in both themes too. */
+  --shell: #131209;
+  --shell-ink: #ede9e0;
+
+  /* The stage: the dark card the app mock sits on inside the carousel.
+     Outside the inverting ramp for the same reason the shell is, but a
+     distinctly lighter dark than either the shell or the terminal, so the
+     stack reads page, then card, then window. The window stays the darkest
+     object on the page in both themes, which is the whole argument of this
+     direction. */
+  --stage: #35322e;
+  --stage-ink: #ede9e0;
+  --stage-ink-soft: #c2bdb2;
+  --stage-ink-muted: #a6a094;
+  --stage-rule: #4a463f;
+
+  /* Panels are plain white on paper. Not part of the inverting ramp: white is
+     a deliberate choice for the light theme, and its dark counterpart has to
+     be a dark panel rather than the inversion of white, which would be a
+     blazing sheet of it. */
+  --panel: #ffffff;
+
+  /* Accent. Blue because the product's own attention affordance is a blue
+     ring — on this site it keeps that single meaning and takes no other job.
+     500 is the ring itself; 700 carries text weight on paper. */
+  --azure-200: #cfe2ff;
+  --azure-300: #8fb8ff;
+  --azure-500: #0a84ff;
+  --azure-600: #0a74e0;
+  --azure-700: #0a5bb5;
+  --azure-900: #0b325e;
+
+
+
+  /* ─── Terminal chrome ─────────────────────────────────────────────────────
+     The app mock's own palette. Defined once, in :root only, and deliberately
+     NOT redefined for the dark theme: the product window is dark on paper and
+     dark on dark, so inverting it would turn the terminal white.
+
+     Named "term" rather than "shell" because --shell already means the page's
+     dark frame in this file, which is confusingly not a Unix shell.
+
+     The text ramp bottoms out at --t-600, which measures 4.74:1 on --t-050.
+     There is no lighter text value on purpose: nothing inside the window can
+     then fall under the floor, even though the mock is role="img" and the
+     rule arguably would not bind.
+
+     Two hues live inside the window and only two. Blue means a pane needs you,
+     which is the product's own meaning and the one this whole page reserves it
+     for. Green means git or process health: checks passed, port listening.
+     Anything else that wants a colour gets a glyph instead. */
+  --t-000: #0e0e0e;
+  --t-050: #141414;
+  --t-100: #1a1a1a;
+  --t-200: #222222;
+  --t-300: #2a2a2a;
+  --t-400: #3a3a3a;
+  --t-600: #909090;
+  --t-700: #a6a6a6;
+  --t-800: #c4c4c4;
+  --t-900: #f2f2f2;
+  --t-selected: #0a5bb5;
+  --t-selected-ink: #d8e6fa;
+  --t-signal: #5aa9ff;
+  --t-good: #4ec9a0;
+  --t-on-signal: #ffffff;
+
+  /* The only three sanctioned curves. Nothing else ships. */
+  --curve-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --curve-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --curve-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Inverted, and every background value here is from the sanctioned set:
+     #000000 #181818 #1F1F1F #272727 #313131 #131209 */
+  --n-000: #131209;
+  --n-050: #181818;
+  --n-100: #1f1f1f;
+  --n-200: #272727;
+  --n-300: #313131;
+  --n-400: #767676;
+  --n-500: #6b6b6b;
+  --n-600: #8a8a8a;
+  --n-700: #9b9b9b;
+  --n-800: #c6c6c6;
+  --n-900: #e8e8e8;
+  --n-950: #ffffff;
+
+  /* Darkest thing on screen, in this theme too. */
+  --shell: #000000;
+  --shell-ink: #e8e8e8;
+
+  /* Neutral rather than warm here: the dark theme has no paper to be warm
+     against. Still lighter than the terminal it holds. */
+  --stage: #2b2b2b;
+  --stage-ink: #e8e8e8;
+  --stage-ink-soft: #bdbdbd;
+  --stage-ink-muted: #9a9a9a;
+  --stage-rule: #3d3d3d;
+
+  --panel: #1f1f1f;
+
+
+  --azure-600: #0a84ff;
+  --azure-700: #8fb8ff;
+  --azure-200: #0b325e;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   TIER 2 — SEMANTICS
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme inline {
+  /* Surfaces. "shell" is the dark frame; "sheet" is the paper held inside it.
+     That inversion is the direction's entire structural argument.
+
+     Names are chosen so the utilities read as English at the call site:
+     bg-sheet, bg-shell, text-ink, text-ink-muted, border-rule. A token whose
+     utility reads bg-bg-sheet has been named twice. */
+  --color-shell: var(--shell);
+  --color-shell-ink: var(--shell-ink);
+  --color-stage: var(--stage);
+  --color-stage-ink: var(--stage-ink);
+  --color-stage-ink-soft: var(--stage-ink-soft);
+  --color-stage-ink-muted: var(--stage-ink-muted);
+  --color-stage-rule: var(--stage-rule);
+  --color-panel: var(--panel);
+  --color-sheet: var(--n-050);
+  --color-sheet-raised: var(--n-000);
+  --color-sheet-sunken: var(--n-100);
+  --color-hover: var(--n-200);
+
+  /* Text. "ink" on "sheet" — the vocabulary the direction is built from. */
+  --color-ink: var(--n-900);
+  --color-ink-soft: var(--n-700);
+  --color-ink-muted: var(--n-600);
+  --color-ink-inverse: var(--n-050);
+
+  /* Lines. Deliberately two weights: hairline for structure, strong for
+     anything a control depends on. */
+  --color-rule: var(--n-300);
+  --color-rule-strong: var(--n-400);
+
+  /* Accent, split by the ground it lands on — because the same blue cannot
+     clear every threshold on both paper and dark.
+
+       ring       the notification ring itself, #0A84FF in both themes. It only
+                  ever appears inside the terminal window, which stays dark in
+                  both themes, where it measures 4.5:1 and up.
+       signal-ui  accent as a non-text UI mark on the page ground. Needs 3:1,
+                  so on paper it steps one notch darker. Same hue, less
+                  lightness — contrast is fixed by moving lightness, not hue.
+       signal-text  accent carrying text weight. Needs 4.5:1. */
+  --color-ring: var(--azure-500);
+  --color-signal-ui: var(--azure-600);
+  --color-signal-text: var(--azure-700);
+  --color-signal-quiet: var(--azure-200);
+  --color-focus: var(--azure-700);
+
+
+  /* Terminal chrome. Same value in both themes, by design. */
+  --color-term: var(--t-050);
+  --color-term-rail: var(--t-000);
+  --color-term-raised: var(--t-100);
+  --color-term-sunken: var(--t-200);
+  --color-term-rule: var(--t-300);
+  --color-term-rule-strong: var(--t-400);
+  --color-term-ink: var(--t-800);
+  --color-term-ink-bright: var(--t-900);
+  --color-term-ink-soft: var(--t-700);
+  --color-term-ink-muted: var(--t-600);
+  --color-term-selected: var(--t-selected);
+  --color-term-selected-ink: var(--t-selected-ink);
+  --color-term-signal: var(--t-signal);
+  --color-term-good: var(--t-good);
+  --color-term-on-signal: var(--t-on-signal);
+
+  /* Type */
+  --font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Google Sans Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion. Overriding --ease-out is the highest-leverage line in this file:
+     Tailwind's built-in ease-out is cubic-bezier(0, 0, 0.2, 1), which is too
+     weak. Redefining it here means every `ease-out` anyone writes is the
+     correct curve, and the wrong one becomes unreachable rather than merely
+     discouraged. */
+  --ease-out: var(--curve-out);
+  --ease-in-out: var(--curve-in-out);
+  --ease-drawer: var(--curve-drawer);
+
+
+  /* Radius, named by role rather than size */
+  --radius-control: var(--radius-lg);
+  --radius-card: var(--radius-2xl);
+  --radius-sheet: var(--radius-3xl);
+  --radius-pill: calc(infinity * 1px);
+
+  /* Measures. 680px is the mandated hero cap; the tagline reuses it so the
+     two large-type moments share an edge. */
+  --container-measure: 42.5rem;
+  --container-prose: 65ch;
+  --container-page: 78rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   SPACING — the ladder, structurally enforced
+   `--spacing: initial` deletes Tailwind's dynamic scale, so p-5, gap-9, w-11
+   and friends stop compiling entirely. Off-ladder spacing becomes impossible
+   rather than merely linted. Names are lifted from the spec so the CSS and
+   the rule read identically.
+
+   Consequence worth knowing: w-*, h-*, size-*, inset-* and translate-* all
+   derive from this scale in Tailwind v4, so they take ladder names too —
+   translate-y-700 is 64px.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* The ladder is in rem, not px, so the page has a single scale knob: change
+     the root font size and type, spacing and containers move together. At a
+     16px root these resolve to exactly the mandated 0 2 4 8 12 16 24 32 40 48
+     64 80 96, so the ladder is preserved, not replaced. */
+  --spacing: initial;
+  --spacing-0: 0rem;
+  --spacing-25: 0.125rem;
+  --spacing-50: 0.25rem;
+  --spacing-75: 0.5rem;
+  --spacing-100: 0.75rem;
+  --spacing-200: 1rem;
+  --spacing-300: 1.5rem;
+  --spacing-400: 2rem;
+  --spacing-500: 2.5rem;
+  --spacing-600: 3rem;
+  --spacing-700: 4rem;
+  --spacing-800: 5rem;
+  --spacing-900: 6rem;
+
+  /* Named for what breaks, not for a device. Added alongside Tailwind's
+     defaults rather than replacing them, so nothing familiar disappears. */
+  --breakpoint-prose: 46rem;
+  --breakpoint-split: 64rem;
+  --breakpoint-wide: 90rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   MOTION — the notification ring
+   The one looping animation on the page, and it earns the exception because
+   the loop IS the product behaviour. Gated behind motion-safe at every call
+   site, so reduced motion gets a static ring that still reads as a state.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --animate-ring: ring 2600ms var(--curve-out) infinite;
+}
+
+@keyframes ring {
+  0%,
+  100% {
+    opacity: 0.4;
+    box-shadow: 0 0 0 0 rgb(10 132 255 / 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 18px 1px rgb(10 132 255 / 0.28);
+  }
+}

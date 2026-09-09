@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+@import '@cmux/tokens/tokens.css';
+
+/* Theme is carried by a data-theme attribute, not by prefers-color-scheme, so
+   the dark: variant has to follow the attribute. One mechanism, no drift. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@layer base {
+  html {
+    /* The scale knob. Everything downstream is in rem, so this lifts type,
+       spacing and container widths together rather than only the text. */
+    font-size: 118.75%; /* 19px */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-block-start: 96px;
+  }
+
+  body {
+    /* The shell. Paper sits on top of it, framed. */
+    background: var(--color-shell);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Custom cursor
+
+   Difference blending rather than a colour, because this page puts warm paper
+   and near black terminal windows on the same screen. An ink ring would be
+   invisible over the mocks and a white one invisible over the paper; a
+   difference blend inverts against whatever is beneath it, so neither case
+   needs special handling.
+
+   The system cursor is only hidden while the component is mounted, which it
+   is not under reduced motion or on a coarse pointer.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform, opacity;
+  /* Invisible until the loop drives it. Nothing shows if it never runs. */
+  opacity: 0;
+}
+
+.cursor-dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.cursor-ring {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+/* Belt and braces: if the component somehow mounted, the cursor still returns
+   the moment the reader asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: auto;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Theme view transition
+
+   The default snapshot cross-fades both roots, which fights a clip path wipe
+   and shows through as a grey wash mid sweep. Turning the built in animation
+   off leaves the clip as the only thing moving.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Panel carousel
+
+   The scrollbar is hidden because the dots and arrows already carry the
+   affordance, and a horizontal bar under a dark panel reads as a seam in the
+   card rather than as a control. The region stays keyboard focusable, so the
+   scrollbar is not the only way in.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.panel-track {
+  scrollbar-width: none;
+}
+
+.panel-track::-webkit-scrollbar {
+  display: none;
+}
