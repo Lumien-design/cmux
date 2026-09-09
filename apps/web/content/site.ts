@@ -1,0 +1,329 @@
+/**
+ * All page copy lives here, typed, so it can be reviewed as writing rather than
+ * hunted through JSX — and so the design-rules test can lint it.
+ *
+ * Two rules this file is written under, both from `landing-page-design`:
+ *   - No hyphens inside body copy. Rewrite the phrase instead.
+ *   - No invented numbers, customers, quotes or awards. Every fact below is
+ *     verifiable against the repo, the app, or the site.
+ */
+
+export const site = {
+  name: 'cmux',
+  url: 'https://cmux.com',
+  repo: 'https://github.com/manaflow-ai/cmux',
+  docs: 'https://cmux.com/docs',
+  download: 'https://github.com/manaflow-ai/cmux/releases/latest',
+  discord: 'https://discord.gg/xsgFEVrWCZ',
+  email: 'founders@manaflow.com',
+} as const;
+
+/** Verified against the GitHub API. Used only as a floor if the live fetch fails. */
+export const proofFallback = {
+  stars: 26849,
+  checkedOn: '2026-09-07',
+} as const;
+
+export const nav = [
+  { label: 'Attention', href: '#attention' },
+  { label: 'Organize', href: '#organize' },
+  { label: 'Program', href: '#program' },
+  { label: 'Open source', href: '#open-source' },
+] as const;
+
+/** The three groups the nav panel opens into. */
+export const navCards = [
+  {
+    label: 'What it does',
+    links: [
+      { label: 'Notification rings', href: '#attention' },
+      { label: 'Tabs and workspaces', href: '#organize' },
+      { label: 'Panes and browser', href: '#browser' },
+      { label: 'Remote workspaces', href: '#remote' },
+    ],
+  },
+  {
+    label: 'How it works',
+    links: [
+      { label: 'CLI and socket API', href: '#program' },
+      { label: 'Keyboard shortcuts', href: '#shortcuts' },
+      { label: 'Built on libghostty', href: '#foundation' },
+    ],
+  },
+  {
+    label: 'Get it',
+    links: [
+      { label: 'Download for Mac', href: site.download },
+      { label: 'Read the source', href: site.repo },
+      { label: 'Documentation', href: site.docs },
+      { label: 'Community', href: site.discord },
+    ],
+  },
+] as const;
+
+export const hero = {
+  // "The {category} for {audience}" — and it is the line the app itself uses.
+  headline: 'The open source terminal built for coding agents.',
+  sub: 'Run several at once and always know which one is waiting on you. Tabs carry the branch, the directory and the port. Native Swift, no Electron.',
+  primary: { label: 'Download for Mac', href: site.download },
+  secondary: { label: 'View source', href: site.repo },
+} as const;
+
+/** Named as text, not logos. No verified partnership exists, and a logo wall
+ *  without one is exactly the "borrowed credibility" the slop rules forbid. */
+export const agents = {
+  label: 'Runs the tools you already use',
+  items: ['Claude Code', 'Codex', 'Gemini CLI', 'OpenCode', 'Amp'],
+} as const;
+
+export const problem = {
+  heading: 'Running six agents is easy. Knowing which one needs you is not.',
+  body: 'An agent hits a question and waits. Nothing in the window changes, so you catch it on your next pass through the tabs, a minute later or ten. Every one of those minutes is an agent sitting idle while you had no way to know.',
+} as const;
+
+/** The mandated tagline reveal. Their own words, from the Zen of cmux. */
+export const tagline = {
+  lines: ['cmux is a primitive,', 'not a solution.'],
+  body: 'It is not prescriptive about how you hold your tools. It gives you rings, panes and a socket, then gets out of the way.',
+} as const;
+
+/**
+ * A panel point: the claim, and the lucide mark that stands in front of it.
+ *
+ * The icon is named rather than imported, so this file stays copy that can be
+ * read as writing. `pointIcons` in sections.tsx is the one place a name becomes
+ * a component.
+ */
+export type Point = {
+  text: string;
+  icon: string;
+};
+
+export type Capability = {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  body: string;
+  points: readonly Point[];
+  shot: string;
+  reverse?: boolean;
+};
+
+export const capabilities: readonly Capability[] = [
+  {
+    id: 'attention',
+    eyebrow: 'Attention',
+    heading: 'The pane that needs you lights up.',
+    body: 'When an agent wants input, its pane takes a blue ring and its tab lights up. You stop polling and start responding. Everything pending collects in one panel, and a single keystroke jumps you to the most recent unread.',
+    points: [
+      { text: 'Blue ring on the pane, matching light on the tab', icon: 'CircleDot' },
+      { text: 'Notification panel collects everything pending', icon: 'Bell' },
+      { text: 'Jump to latest unread on Command Shift U', icon: 'Command' },
+    ],
+    shot: 'notification-ring',
+  },
+  {
+    id: 'organize',
+    eyebrow: 'Organization',
+    heading: 'Tabs that carry their own context.',
+    body: 'A vertical sidebar holds every workspace, and each row shows the git branch, the pull request status, the working directory and any listening ports. You can read the state of six projects without entering one.',
+    points: [
+      { text: 'Git branch and pull request status per workspace', icon: 'GitBranch' },
+      { text: 'Working directory and listening ports, always visible', icon: 'FolderOpen' },
+      { text: 'Vertical and horizontal tabs, whichever fits the screen', icon: 'PanelsTopLeft' },
+    ],
+    shot: 'tabs-vertical',
+    reverse: true,
+  },
+  {
+    id: 'browser',
+    eyebrow: 'Panes',
+    heading: 'A browser that your agent can drive.',
+    body: 'Split a browser next to the terminal and hand it to the agent through a scriptable API, ported from Vercel’s agent browser. It can read the accessibility tree, click, fill forms and evaluate scripts, in a pane you are watching.',
+    points: [
+      { text: 'Horizontal and vertical splits', icon: 'Columns2' },
+      { text: 'Scriptable browser API in a pane beside the work', icon: 'Globe' },
+      { text: 'Import cookies and sessions from Chrome, Firefox, Arc and more', icon: 'Cookie' },
+    ],
+    shot: 'browser-pane',
+  },
+  {
+    id: 'remote',
+    eyebrow: 'Remote',
+    heading: 'Workspaces that live on another machine.',
+    body: 'Create a workspace over SSH and browser panes route through that host’s network, so a localhost URL on the remote box simply opens. Session layout survives a restart: windows, workspaces and panes come back as you left them.',
+    points: [
+      { text: 'Browser traffic routes through the remote host', icon: 'Network' },
+      { text: 'Claude Code Teams spawns teammates as native splits', icon: 'Users' },
+      { text: 'Window, workspace and pane layout restores on relaunch', icon: 'History' },
+    ],
+    shot: 'ssh-workspace',
+    reverse: true,
+  },
+] as const;
+
+/**
+ * The carousel that replaces five stacked feature sections.
+ *
+ * Order is the order you meet the app in: something needs you, you find it,
+ * you split a browser beside it, you do the same on another machine, then you
+ * automate the whole thing.
+ */
+export const panels = {
+  heading: 'One window, five things it does.',
+  body: 'The same window in five states. Scroll sideways, or use the arrows.',
+  /* Names the scroller for a screen reader. No full stop: the component
+     appends the keyboard hint to it. */
+  label: 'Five states of the cmux window',
+  order: ['attention', 'organize', 'browser', 'remote', 'program'],
+} as const;
+
+export const programmable = {
+  eyebrow: 'Programmability',
+  heading: 'Everything the app can do, a socket can do too.',
+  body: 'The CLI and the Unix socket API cover workspaces, panes, keystrokes, browser automation, notifications and sessions. Project specific actions go in a cmux.json and appear in the command palette.',
+  points: [
+    { text: 'Unix socket API covers everything the app can do', icon: 'Plug' },
+    { text: 'Custom commands from a cmux.json land in the palette', icon: 'FileJson' },
+    { text: 'Ring yourself from a script when a long job finishes', icon: 'BellRing' },
+  ],
+  cli: [
+    { cmd: 'cmux split --direction right', note: 'open a pane' },
+    { cmd: 'cmux send --pane 2 "npm test"', note: 'type into it' },
+    { cmd: 'cmux notify --pane 2 "tests green"', note: 'ring when it matters' },
+  ],
+  config: `{
+  "commands": [
+    {
+      "name": "Review the diff",
+      "run": "git diff | claude -p 'review this'"
+    }
+  ]
+}`,
+} as const;
+
+/**
+ * Real shortcuts, read off the app's own welcome screen. Not invented, and not
+ * a representative sample: this is the list cmux prints when you run it.
+ */
+export const shortcuts = {
+  heading: 'Your hands never leave the keyboard.',
+  body: 'cmux prints these on first run. Every one of them is rebindable with cmux shortcuts.',
+  groups: [
+    {
+      name: 'Workspaces',
+      items: [
+        { keys: ['cmd', 'n'], label: 'New workspace' },
+        { keys: ['cmd', 'p'], label: 'Go to workspace' },
+        { keys: ['cmd', 'shift', 'r'], label: 'Rename workspace' },
+        { keys: ['cmd', 't'], label: 'New tab' },
+      ],
+    },
+    {
+      name: 'Panes',
+      items: [
+        { keys: ['cmd', 'd'], label: 'Split right' },
+        { keys: ['cmd', 'shift', 'd'], label: 'Split down' },
+        { keys: ['cmd', 'shift', 'l'], label: 'New browser' },
+        { keys: ['cmd', 'shift', 'p'], label: 'Command palette' },
+      ],
+    },
+    {
+      name: 'Attention',
+      items: [
+        { keys: ['cmd', 'shift', 'u'], label: 'Jump to latest unread' },
+        { keys: ['alt', 'cmd', 'u'], label: 'Toggle unread' },
+        { keys: ['cmd', 'b'], label: 'Toggle left sidebar' },
+        { keys: ['cmd', 'alt', 'b'], label: 'Toggle right sidebar' },
+      ],
+    },
+  ],
+} as const;
+
+/** The palette mock. The first row is the command defined in the cmux.json above. */
+export const palette = {
+  query: 'rev',
+  rows: [
+    { title: 'Review the diff', meta: 'cmux.json', keys: ['enter'], custom: true },
+    { title: 'Reveal working directory in Finder', meta: 'Built in' },
+    { title: 'Revert pane to last checkpoint', meta: 'Built in' },
+  ],
+} as const;
+
+export const foundation = {
+  eyebrow: 'Foundation',
+  heading: 'Built on libghostty, the way apps are built on WebKit.',
+  body: 'Ghostty is a terminal. libghostty is the rendering engine underneath it, and cmux uses it as a library. You get its GPU accelerated rendering and its config file, inside an app that is a native Swift and AppKit build rather than a web view in a costume.',
+  facts: [
+    { k: 'Rendering', v: 'GPU accelerated via libghostty', icon: 'Cpu' },
+    { k: 'Application', v: 'Swift and AppKit, not Electron', icon: 'AppWindow' },
+    { k: 'Config', v: 'Reads your existing Ghostty config', icon: 'FileCog' },
+    { k: 'License', v: 'GPL 3.0 or later', icon: 'Scale' },
+  ],
+} as const;
+
+export const platforms = {
+  heading: 'Where it runs',
+  rows: [
+    { name: 'macOS', state: 'Stable', note: 'Universal build, updates in place' },
+    { name: 'macOS nightly', state: 'Nightly', note: 'Installs beside the stable app' },
+    { name: 'iOS companion', state: 'Beta', note: 'On TestFlight as cmux BETA' },
+  ],
+} as const;
+
+export const install = {
+  heading: 'Two ways in.',
+  brew: 'brew tap manaflow-ai/cmux && brew install --cask cmux',
+  dmg: 'Download the disk image and drag it to Applications. It updates itself from there.',
+} as const;
+
+export const openSource = {
+  heading: 'Free, and you can read all of it.',
+  body: 'cmux is GPL 3.0 or later, with commercial terms for organisations that cannot comply. The client is public and the issue tracker is where the roadmap actually happens.',
+} as const;
+
+export const faq = [
+  {
+    q: 'Does it work with the agent I already use?',
+    a: 'Yes. cmux runs any terminal based coding agent, including Claude Code, Codex, Gemini CLI, OpenCode and Amp. It does not wrap them or replace their interface.',
+  },
+  {
+    q: 'Is this a fork of Ghostty?',
+    a: 'No. Ghostty is a terminal application. cmux uses libghostty, its rendering engine, as a library, in the same way an app uses WebKit for web views. cmux is a separate application built on top of it.',
+  },
+  {
+    q: 'Will my Ghostty config carry over?',
+    a: 'cmux reads your existing config at ~/.config/ghostty/config, so themes, fonts and colours come with you.',
+  },
+  {
+    q: 'Is it really free?',
+    a: 'Yes. The client is open source under GPL 3.0 or later. Commercial terms exist for organisations that cannot comply with the GPL.',
+  },
+  {
+    q: 'Can I use it on a remote machine?',
+    a: 'Yes. SSH workspaces run against another host, and browser panes route through that host’s network, so a localhost address on the remote machine opens correctly.',
+  },
+  {
+    q: 'What happens to my layout when I quit?',
+    a: 'Session restore brings back your windows, workspaces and pane layout when you relaunch.',
+  },
+  {
+    q: 'Is there a version for Windows or Linux?',
+    a: 'Not today. cmux is a native macOS application written in Swift and AppKit. Other platforms are on the way and there is a waitlist.',
+  },
+  {
+    q: 'What about my phone?',
+    a: 'An iOS companion is in beta on TestFlight as cmux BETA. It syncs terminals to iPhone and iPad so you can answer a waiting agent away from your desk.',
+  },
+] as const;
+
+export const finalCta = {
+  heading: 'Stop checking. Start being told.',
+  body: 'Free, open source, and native to your Mac.',
+} as const;
+
+export const credit = {
+  text: 'Independent concept redesign, not affiliated with cmux.',
+  author: 'Colley Stapleton',
+  href: 'https://lumien.design',
+} as const;
