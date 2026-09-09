@@ -127,7 +127,15 @@ export function InteractiveCta({
         className,
       )}
     >
-      {/* The flood. Starts as a dot, becomes the whole button. */}
+      {/* The flood. Starts as a dot, then grows past the button on every side.
+
+          It used to stop at size-full, and a pill radius on a box the width of
+          the button clamps to half its height — far rounder than the control
+          radius the button is cut to. The flood's caps curved away before they
+          reached the corners, so four slivers of the dark face stayed behind on
+          hover. Overflowing instead of fitting puts the curve outside the clip
+          entirely, and the button's own overflow-hidden gives the fill exactly
+          the shape of the button. */}
       <span
         aria-hidden="true"
         className={cn(
@@ -135,9 +143,10 @@ export function InteractiveCta({
           'left-[18%] top-[45%] size-[8px] opacity-0',
           'transition-[left,top,width,height,opacity] duration-240 ease-out',
           'motion-reduce:transition-none',
-          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:left-0',
-          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:top-0',
-          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:size-full',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:-left-[50%]',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:-top-[150%]',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:w-[200%]',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:h-[400%]',
           '[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100',
         )}
       />
