@@ -77,8 +77,8 @@ export const agents = {
 } as const;
 
 export const problem = {
-  heading: 'Several agents. One screen. No idea which one stopped.',
-  body: 'An agent finishes, or hits a question, and then just sits there. You find out on your next pass through the tabs, which might be a minute later or ten. The work is parallel; the attention is not.',
+  heading: 'Running six agents is easy. Knowing which one needs you is not.',
+  body: 'An agent hits a question and waits. Nothing in the window changes, so you catch it on your next pass through the tabs, a minute later or ten. Every one of those minutes is an agent sitting idle while you had no way to know.',
 } as const;
 
 /** The mandated tagline reveal. Their own words, from the Zen of cmux. */

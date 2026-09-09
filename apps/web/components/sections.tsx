@@ -28,7 +28,7 @@ import { Reveal, CopyCommand } from '@/components/interactive';
 import { Kbd } from '@/components/kbd';
 import { ScrubbedTagline, InteractiveCta } from '@/components/magic-cta';
 import { LogoLoop } from '@/components/logo-loop';
-import { TestimonialWall } from '@/components/testimonial-wall';
+import { StaggerTestimonials } from '@/components/stagger-testimonials';
 import {
   agents,
   capabilities,
@@ -340,10 +340,10 @@ export function Testimonials() {
         </h2>
         <p className="mt-200 text-base text-ink-muted">{testimonialSection.note}</p>
       </div>
-      {/* Fixed height, as the component expects: the wall is a window onto a
-          plane, not a block that grows with its content. */}
+      {/* Fixed height, as the component expects: the deck is a window onto a
+          fan of cards, not a block that grows with its content. */}
       <div className="mt-500 h-[600px]">
-        <TestimonialWall />
+        <StaggerTestimonials />
       </div>
     </Section>
   );
