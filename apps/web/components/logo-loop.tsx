@@ -170,8 +170,8 @@ export function LogoLoop({
               // baseline with each other, and scaling breaks that line.
               'transition-[color,translate] duration-180 ease-out',
               'motion-reduce:transition-none',
-              '[@media(hover:hover)and(pointer:fine)]:group-hover/mark:-translate-y-25',
-              '[@media(hover:hover)and(pointer:fine)]:group-hover/mark:text-ink',
+              '[@media(hover:hover)_and_(pointer:fine)]:group-hover/mark:-translate-y-25',
+              '[@media(hover:hover)_and_(pointer:fine)]:group-hover/mark:text-ink',
             )}
           />
           <span className="sr-only">{label}</span>

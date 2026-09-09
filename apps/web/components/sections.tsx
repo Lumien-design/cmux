@@ -1,4 +1,26 @@
 import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import {
+  AppWindow,
+  Bell,
+  BellRing,
+  CircleDot,
+  Columns2,
+  Command,
+  Cookie,
+  Cpu,
+  FileCog,
+  FileJson,
+  FolderOpen,
+  GitBranch,
+  Globe,
+  History,
+  Network,
+  PanelsTopLeft,
+  Plug,
+  Scale,
+  Users,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { AppShell } from '@/components/app-shell';
 import { PanelCarousel } from '@/components/panel-carousel';
@@ -25,6 +47,7 @@ import {
   shortcuts,
   site,
   tagline,
+  type Point,
 } from '@/content/site';
 import { heroShell, panelShells } from '@/content/shell';
 import { testimonialSection } from '@/content/testimonials';
@@ -159,6 +182,33 @@ export function Tagline() {
 
 
 /**
+ * The one place a point's icon name becomes a component. Named imports rather
+ * than lucide's dynamic loader, so the bundle carries these nineteen marks and
+ * not the whole set, and a typo fails the build instead of the page.
+ */
+const pointIcons: Record<string, LucideIcon> = {
+  AppWindow,
+  Bell,
+  BellRing,
+  CircleDot,
+  Columns2,
+  Command,
+  Cookie,
+  Cpu,
+  FileCog,
+  FileJson,
+  FolderOpen,
+  GitBranch,
+  Globe,
+  History,
+  Network,
+  PanelsTopLeft,
+  Plug,
+  Scale,
+  Users,
+};
+
+/**
  * One panel: the claim on the left, the window in that state on the right.
  *
  * Dark in both themes, and a step lighter than the window it holds, so the
@@ -175,7 +225,7 @@ function Panel({
   id: string;
   eyebrow: string;
   heading: string;
-  points: readonly string[];
+  points: readonly Point[];
 }) {
   const state = panelShells[id];
   if (!state) return null;
@@ -192,18 +242,29 @@ function Panel({
             bullets in a column leave their markers hanging in the gutter, and
             three short claims side by side read as one line of evidence. */}
         <ul className="mt-300 grid w-full gap-200 border-t border-stage-rule pt-300 prose:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] prose:gap-300">
-          {points.map((pt) => (
-            <li
-              key={pt}
-              className="flex items-baseline justify-center gap-100 text-sm text-stage-ink-soft prose:flex-col prose:items-center prose:gap-100 prose:text-base"
-            >
-              <span
-                aria-hidden="true"
-                className="size-[5px] shrink-0 translate-y-[-2px] rounded-pill bg-ring prose:translate-y-0"
-              />
-              {pt}
-            </li>
-          ))}
+          {points.map((pt) => {
+            const Icon = pointIcons[pt.icon];
+            return (
+              <li
+                key={pt.text}
+                // items-start, not items-baseline: an SVG's baseline is its
+                // bottom edge, so a mark on a baseline row hangs below the
+                // text it labels. The em offset nudges it onto the cap line.
+                className="flex items-start justify-center gap-100 text-sm text-stage-ink-soft prose:flex-col prose:items-center prose:gap-100 prose:text-base"
+              >
+                {Icon ? (
+                  <Icon
+                    aria-hidden="true"
+                    strokeWidth={1.75}
+                    // Sized in em so the mark tracks the point's own type
+                    // rather than needing a second breakpoint of its own.
+                    className="size-[1.05em] shrink-0 translate-y-[0.14em] text-stage-ink-muted prose:translate-y-0"
+                  />
+                ) : null}
+                {pt.text}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -248,7 +309,7 @@ export function Panels() {
           id="foundation"
           eyebrow={foundation.eyebrow}
           heading={foundation.heading}
-          points={foundation.facts.map((f) => f.v)}
+          points={foundation.facts.map((f) => ({ text: f.v, icon: f.icon }))}
         />
       ),
     },

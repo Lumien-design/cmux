@@ -135,13 +135,13 @@ export function InteractiveCta({
           'left-[18%] top-[45%] size-[8px] opacity-0',
           'transition-[left,top,width,height,opacity] duration-240 ease-out',
           'motion-reduce:transition-none',
-          '[@media(hover:hover)and(pointer:fine)]:group-hover:left-0',
-          '[@media(hover:hover)and(pointer:fine)]:group-hover:top-0',
-          '[@media(hover:hover)and(pointer:fine)]:group-hover:size-full',
-          '[@media(hover:hover)and(pointer:fine)]:group-hover:opacity-100',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:left-0',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:top-0',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:size-full',
+          '[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100',
         )}
       />
-      <span className="inline-flex items-center gap-50 transition-[color] duration-240 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:text-ink">
+      <span className="inline-flex items-center gap-50 transition-[color] duration-240 ease-out [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-ink">
         {children}
         <ArrowRight
           size={15}
@@ -149,7 +149,7 @@ export function InteractiveCta({
           aria-hidden="true"
           className={cn(
             'transition-[translate] duration-240 ease-out',
-            '[@media(hover:hover)and(pointer:fine)]:group-hover:translate-x-25',
+            '[@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-25',
           )}
         />
       </span>

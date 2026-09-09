@@ -87,12 +87,24 @@ export const tagline = {
   body: 'It is not prescriptive about how you hold your tools. It gives you rings, panes and a socket, then gets out of the way.',
 } as const;
 
+/**
+ * A panel point: the claim, and the lucide mark that stands in front of it.
+ *
+ * The icon is named rather than imported, so this file stays copy that can be
+ * read as writing. `pointIcons` in sections.tsx is the one place a name becomes
+ * a component.
+ */
+export type Point = {
+  text: string;
+  icon: string;
+};
+
 export type Capability = {
   id: string;
   eyebrow: string;
   heading: string;
   body: string;
-  points: readonly string[];
+  points: readonly Point[];
   shot: string;
   reverse?: boolean;
 };
@@ -104,9 +116,9 @@ export const capabilities: readonly Capability[] = [
     heading: 'The pane that needs you lights up.',
     body: 'When an agent wants input, its pane takes a blue ring and its tab lights up. You stop polling and start responding. Everything pending collects in one panel, and a single keystroke jumps you to the most recent unread.',
     points: [
-      'Blue ring on the pane, matching light on the tab',
-      'Notification panel collects everything pending',
-      'Jump to latest unread on Command Shift U',
+      { text: 'Blue ring on the pane, matching light on the tab', icon: 'CircleDot' },
+      { text: 'Notification panel collects everything pending', icon: 'Bell' },
+      { text: 'Jump to latest unread on Command Shift U', icon: 'Command' },
     ],
     shot: 'notification-ring',
   },
@@ -116,9 +128,9 @@ export const capabilities: readonly Capability[] = [
     heading: 'Tabs that carry their own context.',
     body: 'A vertical sidebar holds every workspace, and each row shows the git branch, the pull request status, the working directory and any listening ports. You can read the state of six projects without entering one.',
     points: [
-      'Git branch and pull request status per workspace',
-      'Working directory and listening ports, always visible',
-      'Vertical and horizontal tabs, whichever fits the screen',
+      { text: 'Git branch and pull request status per workspace', icon: 'GitBranch' },
+      { text: 'Working directory and listening ports, always visible', icon: 'FolderOpen' },
+      { text: 'Vertical and horizontal tabs, whichever fits the screen', icon: 'PanelsTopLeft' },
     ],
     shot: 'tabs-vertical',
     reverse: true,
@@ -129,9 +141,9 @@ export const capabilities: readonly Capability[] = [
     heading: 'A browser that your agent can drive.',
     body: 'Split a browser next to the terminal and hand it to the agent through a scriptable API, ported from Vercel’s agent browser. It can read the accessibility tree, click, fill forms and evaluate scripts, in a pane you are watching.',
     points: [
-      'Horizontal and vertical splits',
-      'Scriptable browser API in a pane beside the work',
-      'Import cookies and sessions from Chrome, Firefox, Arc and more',
+      { text: 'Horizontal and vertical splits', icon: 'Columns2' },
+      { text: 'Scriptable browser API in a pane beside the work', icon: 'Globe' },
+      { text: 'Import cookies and sessions from Chrome, Firefox, Arc and more', icon: 'Cookie' },
     ],
     shot: 'browser-pane',
   },
@@ -141,9 +153,9 @@ export const capabilities: readonly Capability[] = [
     heading: 'Workspaces that live on another machine.',
     body: 'Create a workspace over SSH and browser panes route through that host’s network, so a localhost URL on the remote box simply opens. Session layout survives a restart: windows, workspaces and panes come back as you left them.',
     points: [
-      'Browser traffic routes through the remote host',
-      'Claude Code Teams spawns teammates as native splits',
-      'Window, workspace and pane layout restores on relaunch',
+      { text: 'Browser traffic routes through the remote host', icon: 'Network' },
+      { text: 'Claude Code Teams spawns teammates as native splits', icon: 'Users' },
+      { text: 'Window, workspace and pane layout restores on relaunch', icon: 'History' },
     ],
     shot: 'ssh-workspace',
     reverse: true,
@@ -171,9 +183,9 @@ export const programmable = {
   heading: 'Everything the app can do, a socket can do too.',
   body: 'The CLI and the Unix socket API cover workspaces, panes, keystrokes, browser automation, notifications and sessions. Project specific actions go in a cmux.json and appear in the command palette.',
   points: [
-    'Unix socket API covers everything the app can do',
-    'Custom commands from a cmux.json land in the palette',
-    'Ring yourself from a script when a long job finishes',
+    { text: 'Unix socket API covers everything the app can do', icon: 'Plug' },
+    { text: 'Custom commands from a cmux.json land in the palette', icon: 'FileJson' },
+    { text: 'Ring yourself from a script when a long job finishes', icon: 'BellRing' },
   ],
   cli: [
     { cmd: 'cmux split --direction right', note: 'open a pane' },
@@ -243,10 +255,10 @@ export const foundation = {
   heading: 'Built on libghostty, the way apps are built on WebKit.',
   body: 'Ghostty is a terminal. libghostty is the rendering engine underneath it, and cmux uses it as a library. You get its GPU accelerated rendering and its config file, inside an app that is a native Swift and AppKit build rather than a web view in a costume.',
   facts: [
-    { k: 'Rendering', v: 'GPU accelerated via libghostty' },
-    { k: 'Application', v: 'Swift and AppKit, not Electron' },
-    { k: 'Config', v: 'Reads your existing Ghostty config' },
-    { k: 'License', v: 'GPL 3.0 or later' },
+    { k: 'Rendering', v: 'GPU accelerated via libghostty', icon: 'Cpu' },
+    { k: 'Application', v: 'Swift and AppKit, not Electron', icon: 'AppWindow' },
+    { k: 'Config', v: 'Reads your existing Ghostty config', icon: 'FileCog' },
+    { k: 'License', v: 'GPL 3.0 or later', icon: 'Scale' },
   ],
 } as const;
 
