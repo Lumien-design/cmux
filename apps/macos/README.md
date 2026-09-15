@@ -61,7 +61,8 @@ filter or sort: ↑↓ move, ↵ switches, Esc closes.
 **Mouse.** Double-click a name to rename it in place: ↵ or clicking away keeps it,
 ⎋ reverts, and an empty name is refused. Rename is also in the context menu and
 the Workspaces menu. Click and drag anywhere in the list or rail to scroll; let go
-mid-flick and it coasts.
+mid-flick and it coasts. Double-click the empty space under the last row, or under
+the last pip in the rail, for a new workspace, as the + does.
 
 While collapsed, the rail has no names, so one shows beside the pip. Pointing
 at a pip shows its name for as long as the pointer stays; a keyboard landing

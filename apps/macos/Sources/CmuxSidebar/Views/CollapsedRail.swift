@@ -5,8 +5,12 @@ import SwiftUI
 /// and the same keyboard model as the list.
 struct CollapsedRail: View {
     @Bindable var store: SidebarStore
+    var onNewWorkspace: (() -> Void)?
     @FocusState private var isFocused: Bool
     @State private var isDragScrolling = false
+    /// The rail's visible height and its pips' height; the gap is empty space.
+    @State private var viewportHeight: CGFloat = 0
+    @State private var pipsHeight: CGFloat = 0
     @Environment(\.sidebarRenderMode) private var renderMode
 
     var body: some View {
@@ -57,7 +61,17 @@ struct CollapsedRail: View {
         if renderMode == .live {
             ScrollViewReader { proxy in
                 ScrollView {
-                    pipStack(rows)
+                    VStack(spacing: 0) {
+                        pipStack(rows)
+                            .onGeometryChange(for: CGFloat.self, of: { $0.size.height }) { pipsHeight = $0 }
+                        EmptySpace(
+                            height: max(viewportHeight - pipsHeight, 0),
+                            onDoubleClick: newWorkspaceFromEmptySpace
+                        )
+                    }
+                }
+                .onScrollGeometryChange(for: CGFloat.self, of: { $0.containerSize.height }) { _, height in
+                    viewportHeight = height
                 }
                 .scrollIndicators(.never)
                 .modifier(DragToScroll(isDragging: $isDragScrolling))
@@ -67,6 +81,16 @@ struct CollapsedRail: View {
             }
         } else {
             pipStack(rows)
+        }
+    }
+
+    /// The same double-click as the list's empty space, minus the drag's release.
+    private var newWorkspaceFromEmptySpace: (() -> Void)? {
+        guard let onNewWorkspace else { return nil }
+        return {
+            guard !isDragScrolling else { return }
+            onNewWorkspace()
+            isFocused = true
         }
     }
 

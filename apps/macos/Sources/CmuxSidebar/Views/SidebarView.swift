@@ -6,7 +6,8 @@ import SwiftUI
 ///
 /// Install `SidebarCommands` in the app's `.commands` for ⌘1–9, ⌥⇥, ⌘K, ⌘B,
 /// ⌘⌃P, ⌥⌘↑↓, and ⌥⌘1–3 / ⌃⌘1–3 for sort and density. ↑↓ ← → ↵ ⎋ and
-/// type-ahead are handled here, on the focused list.
+/// type-ahead are handled here, on the focused list. With `onNewWorkspace`
+/// set, a double-click on the empty space under the rows calls it too.
 public struct SidebarView: View {
     @Bindable private var store: SidebarStore
     private let onNewWorkspace: (() -> Void)?
@@ -22,7 +23,7 @@ public struct SidebarView: View {
     public var body: some View {
         ZStack(alignment: .topLeading) {
             if store.isCollapsed {
-                CollapsedRail(store: store)
+                CollapsedRail(store: store, onNewWorkspace: onNewWorkspace)
                     .transition(.opacity)
             } else {
                 ExpandedSidebar(store: store, onNewWorkspace: onNewWorkspace)
@@ -89,6 +90,9 @@ struct ExpandedSidebar: View {
     /// Each row's frame in triage, so a pick-up can plan the scoot.
     @State private var rowFrames: [Workspace.ID: CGRect] = [:]
     @State private var reorder: TriageReorder?
+    /// The list's visible height and its rows' height; the gap is empty space.
+    @State private var viewportHeight: CGFloat = 0
+    @State private var rowsHeight: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.sidebarRenderMode) private var renderMode
 
@@ -100,11 +104,14 @@ struct ExpandedSidebar: View {
             FilterField(store: store, focus: $focus)
             SortBar(store: store)
             if store.workspaces.isEmpty {
-                EmptyState(
-                    title: "No workspaces yet.",
-                    detail: Text("Open a folder with \(key("⌘O")), or run \(key("cmux .")) in any repo.")
-                )
-                Spacer(minLength: 0)
+                VStack(spacing: 0) {
+                    EmptyState(
+                        title: "No workspaces yet.",
+                        detail: Text("Open a folder with \(key("⌘O")), or run \(key("cmux .")) in any repo.")
+                    )
+                    Spacer(minLength: 0)
+                }
+                .newWorkspaceOnDoubleClick(newWorkspaceFromEmptySpace)
             } else if store.visibleWorkspaces.isEmpty {
                 EmptyState(
                     title: "Nothing matches “\(store.filter)”.",
@@ -161,19 +168,31 @@ struct ExpandedSidebar: View {
             if renderMode == .live {
                 ScrollViewReader { proxy in
                     ScrollView {
-                        if store.sortMode == .triage {
-                            // Not lazy: a pick-up needs every row's frame to plan the scoot.
-                            VStack(alignment: .leading, spacing: 1) {
-                                rows(sections, shortcuts: shortcuts)
+                        VStack(spacing: 0) {
+                            Group {
+                                if store.sortMode == .triage {
+                                    // Not lazy: a pick-up needs every row's frame to plan the scoot.
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        rows(sections, shortcuts: shortcuts)
+                                    }
+                                    .coordinateSpace(.named(Self.triageSpace))
+                                    .padding(.bottom, 6)
+                                } else {
+                                    LazyVStack(alignment: .leading, spacing: 1, pinnedViews: .sectionHeaders) {
+                                        rows(sections, shortcuts: shortcuts)
+                                    }
+                                    .padding(.bottom, 6)
+                                }
                             }
-                            .coordinateSpace(.named(Self.triageSpace))
-                            .padding(.bottom, 6)
-                        } else {
-                            LazyVStack(alignment: .leading, spacing: 1, pinnedViews: .sectionHeaders) {
-                                rows(sections, shortcuts: shortcuts)
-                            }
-                            .padding(.bottom, 6)
+                            .onGeometryChange(for: CGFloat.self, of: { $0.size.height }) { rowsHeight = $0 }
+                            EmptySpace(
+                                height: max(viewportHeight - rowsHeight, 0),
+                                onDoubleClick: newWorkspaceFromEmptySpace
+                            )
                         }
+                    }
+                    .onScrollGeometryChange(for: CGFloat.self, of: { $0.containerSize.height }) { _, height in
+                        viewportHeight = height
                     }
                     // A lifted row suspends the scroll rather than disabling it, so the
                     // gestures under the pointer aren't rebuilt mid-drag.
@@ -316,6 +335,17 @@ struct ExpandedSidebar: View {
         guard !isDragScrolling, reorder == nil else { return }
         store.select(id)
         focus = .list
+    }
+
+    /// What a double-click on empty space does: the +, unless the clicks belong
+    /// to a drag, a lifted row or a rename. `nil` when the host offers no +.
+    private var newWorkspaceFromEmptySpace: (() -> Void)? {
+        guard let onNewWorkspace else { return nil }
+        return {
+            guard !isDragScrolling, reorder == nil, store.renamingID == nil else { return }
+            onNewWorkspace()
+            if renderMode == .live { focus = .list }
+        }
     }
 }
 
