@@ -401,6 +401,11 @@ public final class SidebarStore {
         if !visibleWorkspaces.contains(where: { $0.id == id }) { filter = "" }
     }
 
+    /// Closes the list without switching anywhere — the ✕ in its header.
+    public func closeAttentionList() {
+        isAttentionListShown = false
+    }
+
     // MARK: - Triage
 
     /// Places a workspace just before another in your triage order. Placement

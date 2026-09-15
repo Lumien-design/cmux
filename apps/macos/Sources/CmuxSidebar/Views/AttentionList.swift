@@ -73,7 +73,18 @@ struct AttentionList: View {
         let rows = store.blockedWorkspaces
         let current = rows.first(where: { $0.id == highlighted })?.id ?? rows.first?.id
         VStack(alignment: .leading, spacing: 1) {
-            GroupHeader(title: "Needs you", count: rows.count)
+            // The ✕ sits level with the label: 4pt + half its 22pt target lands on
+            // the header's 9pt inset + half its 12pt line.
+            HStack(alignment: .top, spacing: 0) {
+                GroupHeader(title: "Needs you", count: rows.count)
+                IconButton(symbol: "xmark", label: "Close list", shortcutHint: "Esc") {
+                    var transaction = Transaction()
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) { store.closeAttentionList() }
+                }
+                .padding(.top, 4)
+                .padding(.trailing, 6)
+            }
             if rows.isEmpty {
                 Text("Nothing needs you right now.")
                     .font(SidebarFont.sans(11.5))

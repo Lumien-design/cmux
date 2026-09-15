@@ -134,6 +134,9 @@ struct ExpandedSidebar: View {
                 AttentionList(store: store)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Palette.border, lineWidth: 1))
+                    // One shadow for the whole panel; without the group each opaque
+                    // child casts its own onto the panel beside it.
+                    .compositingGroup()
                     .shadow(color: .black.opacity(0.5), radius: 14, y: 6)
                     .offset(x: 8, y: 38)
             }

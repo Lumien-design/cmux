@@ -255,6 +255,19 @@ struct SidebarStoreTests {
         #expect(!store.isAttentionListShown)
     }
 
+    @Test func closingTheListLeavesSelectionAndFilterAlone() {
+        let store = makeStore([
+            workspace("a"),
+            workspace("blocked", .needsInput(since: ago(5))),
+        ], selecting: "a")
+        store.filter = "a"
+        store.showAttentionList()
+        store.closeAttentionList()
+        #expect(!store.isAttentionListShown)
+        #expect(store.selectedID == "a")
+        #expect(store.filter == "a")
+    }
+
     // MARK: - Triage
 
     @Test func triageKeepsTheOpenedOrderWithNoGroups() {
