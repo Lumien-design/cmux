@@ -62,7 +62,9 @@ filter or sort: ↑↓ move, ↵ switches, Esc closes.
 ⎋ reverts, and an empty name is refused. Rename is also in the context menu and
 the Workspaces menu. Click and drag anywhere in the list or rail to scroll; let go
 mid-flick and it coasts. Double-click the empty space under the last row, or under
-the last pip in the rail, for a new workspace, as the + does.
+the last pip in the rail, for a new workspace, as the + does. Point at a row's
+clock and a ✕ takes its place; click it to close the workspace, and the row below
+takes its place on screen. Close is also in the context menu.
 
 While collapsed, the rail has no names, so one shows beside the pip. Pointing
 at a pip shows its name for as long as the pointer stays; a keyboard landing

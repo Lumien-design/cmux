@@ -12,6 +12,9 @@ struct WorkspaceRow: View {
     /// The ⌘-number keycap, passed only while ⌘ is held.
     let shortcut: Int?
     var isRenaming = false
+    /// The ✕ is standing in the clock's place; the clock keeps its slot so
+    /// nothing on the line shifts.
+    var showsClose = false
     var onRename: (String) -> Void = { _ in }
     var onCancelRename: () -> Void = {}
 
@@ -76,6 +79,7 @@ struct WorkspaceRow: View {
                 Keycap(label: "\(shortcut)", onSelected: isSelected)
             }
             StateClock(state: workspace.state, onSelected: isSelected)
+                .opacity(showsClose ? 0 : 1)
         }
         .frame(height: 16)
     }

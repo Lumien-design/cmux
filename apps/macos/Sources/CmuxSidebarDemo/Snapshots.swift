@@ -31,7 +31,8 @@ enum Snapshots {
             configure(store)
             // A width wider than the sidebar shows what spills past it, on the
             // window's content colour.
-            let view = SidebarView(store: store)
+            // A close handler, so the ✕ can draw; nothing else shows it.
+            let view = SidebarView(store: store, onCloseWorkspace: { _ in })
                 .frame(width: width, height: height, alignment: .leading)
                 .background(Color(white: 30 / 255))
                 .environment(\.sidebarRenderMode, .snapshot(now: now))
@@ -64,6 +65,10 @@ enum Snapshots {
         try shot("collapsed", .main, height: 470) { $0.setCollapsed(true) }
         try shot("focus-on-selected", .main, height: 300) { $0.moveFocus(by: 0) }
         try shot("rename", .main, height: 300) { $0.beginRename("fix-ssh") }
+        try shot("close-hover", .main, height: 300) { store in
+            store.hoveredID = "fix-ssh"
+            store.hoveredClockID = "fix-ssh" // pointer on its clock
+        }
         try shot("collapsed-hover", .main, width: 240, height: 470) { store in
             store.setCollapsed(true)
             store.hoveredID = "docs-api"

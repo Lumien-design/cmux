@@ -104,6 +104,9 @@ public final class SidebarStore {
     /// The focus ring only draws while this holds.
     public private(set) var isFocusVisible = false
     public var hoveredID: Workspace.ID?
+    /// The row whose clock the pointer is on or near; its ✕ shows in the
+    /// clock's place. Kept here beside `hoveredID` so a snapshot can set it.
+    public var hoveredClockID: Workspace.ID?
     public private(set) var expandedIDs: Set<Workspace.ID> = []
     /// Index keycaps are visible only while ⌘ is held.
     public var isCommandHeld = false
@@ -489,6 +492,7 @@ public final class SidebarStore {
         isCollapsed = collapsed
         // The pointer isn't over whatever it was over before the layout changed.
         hoveredID = nil
+        hoveredClockID = nil
         // The rail has nowhere to show a filter, so a live one would hide pips
         // silently, and no names to edit.
         if collapsed {
@@ -531,12 +535,40 @@ public final class SidebarStore {
         if shouldSelect { select(workspace.id) }
     }
 
+    /// Takes a workspace out, once the host has closed it. If it was on screen,
+    /// the row that takes its place goes on screen instead — the next one down,
+    /// else the one above — as closing a tab does.
+    public func remove(_ id: Workspace.ID) {
+        guard let removed = workspace(id) else { return }
+        let rows = visibleWorkspaces.map(\.id)
+        workspaces.removeAll { $0.id == id }
+        triageOrder.removeAll { $0 == id }
+        expandedIDs.remove(id)
+        currentPaneIDs[id] = nil
+        if hoveredID == id { hoveredID = nil }
+        if hoveredClockID == id { hoveredClockID = nil }
+        if renamingID == id { renamingID = nil }
+        if selectedID == id {
+            selectedID = nil
+            focusedID = nil
+            // A selection hidden by the filter has no neighbour; the top row stands in.
+            let neighbour = rows.firstIndex(of: id).flatMap { index in
+                rows.dropFirst(index + 1).first ?? rows[..<index].last
+            } ?? visibleWorkspaces.first?.id
+            if let neighbour { select(neighbour) }
+        } else if focusedID == id {
+            focusedID = selectedID
+        }
+        announce("Closed \(removed.name).")
+    }
+
     public func replaceAll(_ workspaces: [Workspace], selecting id: Workspace.ID? = nil) {
         self.workspaces = workspaces
         triageOrder = workspaces.map(\.id)
         selectedID = nil
         focusedID = nil
         hoveredID = nil
+        hoveredClockID = nil
         expandedIDs = []
         currentPaneIDs = [:]
         filter = ""

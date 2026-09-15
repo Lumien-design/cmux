@@ -293,6 +293,38 @@ struct SidebarStoreTests {
         #expect(transcript.messages == ["Density: Compact."])
     }
 
+    // MARK: - Closing
+
+    @Test func closingTheSelectedRowSelectsTheNextOneDown() {
+        let transcript = Transcript()
+        let store = makeStore(
+            [workspace("a"), workspace("b"), workspace("c")],
+            selecting: "b",
+            announce: { transcript.messages.append($0) }
+        )
+        store.remove("b")
+        #expect(order(store) == ["a", "c"])
+        #expect(store.selectedID == "c")
+        #expect(transcript.messages == ["Closed b."])
+    }
+
+    @Test func closingTheLastRowSelectsTheOneAbove() {
+        let store = makeStore([workspace("a"), workspace("b"), workspace("c")], selecting: "c")
+        store.remove("c")
+        #expect(store.selectedID == "b")
+    }
+
+    @Test func closingAnotherRowKeepsTheSelectionAndYourOrder() {
+        let store = makeStore([workspace("a"), workspace("b"), workspace("c")], selecting: "a")
+        store.sortMode = .triage
+        store.moveTriage("c", before: "a")
+        store.hoveredClockID = "b"
+        store.remove("b")
+        #expect(order(store) == ["c", "a"])
+        #expect(store.selectedID == "a")
+        #expect(store.hoveredClockID == nil)
+    }
+
     // MARK: - Triage
 
     @Test func triageKeepsTheOpenedOrderWithNoGroups() {

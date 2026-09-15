@@ -7,17 +7,25 @@ import SwiftUI
 /// Install `SidebarCommands` in the app's `.commands` for ⌘1–9, ⌥⇥, ⌘K, ⌘B,
 /// ⌘⌃P, ⌥⌘↑↓, and ⌥⌘1–3 / ⌃⌘1–3 for sort and density. ↑↓ ← → ↵ ⎋ and
 /// type-ahead are handled here, on the focused list. With `onNewWorkspace`
-/// set, a double-click on the empty space under the rows calls it too.
+/// set, a double-click on the empty space under the rows calls it too. With
+/// `onCloseWorkspace` set, a ✕ takes a row's clock's place while the pointer
+/// is on or near it; the host closes the workspace, then calls `remove`.
 public struct SidebarView: View {
     @Bindable private var store: SidebarStore
     private let onNewWorkspace: (() -> Void)?
+    private let onCloseWorkspace: ((Workspace.ID) -> Void)?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.sidebarRenderMode) private var renderMode
     @State private var modifierMonitor: Any?
 
-    public init(store: SidebarStore, onNewWorkspace: (() -> Void)? = nil) {
+    public init(
+        store: SidebarStore,
+        onNewWorkspace: (() -> Void)? = nil,
+        onCloseWorkspace: ((Workspace.ID) -> Void)? = nil
+    ) {
         _store = Bindable(store)
         self.onNewWorkspace = onNewWorkspace
+        self.onCloseWorkspace = onCloseWorkspace
     }
 
     public var body: some View {
@@ -26,7 +34,7 @@ public struct SidebarView: View {
                 CollapsedRail(store: store, onNewWorkspace: onNewWorkspace)
                     .transition(.opacity)
             } else {
-                ExpandedSidebar(store: store, onNewWorkspace: onNewWorkspace)
+                ExpandedSidebar(store: store, onNewWorkspace: onNewWorkspace, onCloseWorkspace: onCloseWorkspace)
                     .transition(.opacity)
             }
         }
@@ -85,6 +93,7 @@ enum SidebarFocus: Hashable {
 struct ExpandedSidebar: View {
     @Bindable var store: SidebarStore
     let onNewWorkspace: (() -> Void)?
+    let onCloseWorkspace: ((Workspace.ID) -> Void)?
     @FocusState private var focus: SidebarFocus?
     @State private var isDragScrolling = false
     /// Each row's frame in triage, so a pick-up can plan the scoot.
@@ -273,6 +282,8 @@ struct ExpandedSidebar: View {
         let isRenaming = workspace.id == store.renamingID
         // While renaming, clicks belong to the text field.
         let rowGestures: GestureMask = isRenaming ? .subviews : .all
+        // No ✕ on a name being edited or while a row is lifted.
+        let isClosable = onCloseWorkspace != nil && !isRenaming && reorder == nil
         WorkspaceRow(
             workspace: workspace,
             density: store.density,
@@ -281,9 +292,23 @@ struct ExpandedSidebar: View {
             showsFocusRing: showsRing(workspace.id) && !isRenaming,
             shortcut: store.isCommandHeld ? shortcut : nil,
             isRenaming: isRenaming,
+            showsClose: isClosable && store.hoveredClockID == workspace.id,
             onRename: { store.commitRename($0) },
             onCancelRename: { store.cancelRename() }
         )
+        // Double-click renames. The single click stays immediate because it runs
+        // alongside, rather than waiting to rule out a second click.
+        .gesture(TapGesture(count: 2).onEnded { store.beginRename(workspace.id) }, including: rowGestures)
+        .simultaneousGesture(TapGesture().onEnded { click(workspace.id) }, including: rowGestures)
+        // After the taps, so a click on the ✕ never also selects the row.
+        .modifier(CloseOnClockHover(
+            id: workspace.id,
+            name: workspace.name,
+            store: store,
+            isEnabled: isClosable,
+            onClose: { onCloseWorkspace?(workspace.id) }
+        ))
+        // After the ✕ too, so pointing at it keeps the row lit.
         .onHover { inside in
             // Hover isn't drawn while a row is lifted, so crossing rows mid-drag
             // shouldn't redraw the list either.
@@ -294,14 +319,14 @@ struct ExpandedSidebar: View {
                 store.hoveredID = nil
             }
         }
-        // Double-click renames. The single click stays immediate because it runs
-        // alongside, rather than waiting to rule out a second click.
-        .gesture(TapGesture(count: 2).onEnded { store.beginRename(workspace.id) }, including: rowGestures)
-        .simultaneousGesture(TapGesture().onEnded { click(workspace.id) }, including: rowGestures)
         .contextMenu {
             Button("Rename…") { store.beginRename(workspace.id) }
             Button(workspace.isPinned ? "Unpin" : "Pin Above the Sort") {
                 store.togglePin(workspace.id)
+            }
+            if let onCloseWorkspace {
+                Divider()
+                Button("Close") { onCloseWorkspace(workspace.id) }
             }
         }
         .accessibilityElement(children: isRenaming ? .contain : .ignore)
@@ -313,6 +338,10 @@ struct ExpandedSidebar: View {
             if store.sortMode == .triage {
                 Button("Move Up") { store.moveInTriage(workspace.id, by: -1) }
                 Button("Move Down") { store.moveInTriage(workspace.id, by: 1) }
+            }
+            // The ✕ is hidden inside the row's single element, so it's offered here.
+            if let onCloseWorkspace {
+                Button("Close") { onCloseWorkspace(workspace.id) }
             }
         }
     }

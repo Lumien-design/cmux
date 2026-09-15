@@ -76,7 +76,7 @@ struct DemoWindow: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            SidebarView(store: store, onNewWorkspace: addWorkspace)
+            SidebarView(store: store, onNewWorkspace: addWorkspace, onCloseWorkspace: store.remove)
                 .zIndex(1) // the rail's name flash overlaps the content
             TerminalPlaceholder(workspace: store.selected)
         }
