@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;600&amp;family=Google+Sans+Flex:opsz,wght@6..144,400..600&amp;display=swap">
+  <style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#0B0C0D;color:#D6D7D9;
+ font-family:'Google Sans Code',ui-monospace,SFMono-Regular,Menlo,monospace;
+ -webkit-font-smoothing:antialiased;font-variant-ligatures:none}
+a{color:#5AA9FF;text-decoration:none} a:hover{color:#8FC4FF}
+.rail{width:296px;background:#17181A;border-right:1px solid #2E3033;
+ display:flex;flex-direction:column;overflow:hidden}
+.tbar{display:flex;align-items:center;gap:6px;padding:10px 10px 6px 12px;color:#8A8B8D}
+.tbar .sp{flex:1}
+.tbtn{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;
+ justify-content:center;color:#8A8B8D}
+.tbtn.on{background:#2B2E33;color:#F2F2F2}
+.find{margin:2px 8px 6px;display:flex;align-items:center;gap:6px;height:26px;
+ padding:0 8px;border-radius:6px;background:#111213;border:1px solid #26282B;color:#8A8B8D;font-size:11.5px}
+.find .ph{color:#6E7073}
+.find kbd{margin-left:auto;font-size:9.5px;color:#6E7073;border:1px solid #2E3033;
+ border-radius:3px;padding:1px 4px;line-height:1}
+.sortbar{display:flex;align-items:center;gap:6px;padding:0 12px 8px;font-size:10.5px;color:#8A8B8D}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px;
+ background:#1F2124;color:#9A9B9D;font-size:10px;letter-spacing:.02em}
+.list{flex:1;display:flex;flex-direction:column;gap:1px;overflow:hidden;padding-bottom:6px}
+.ghead{display:flex;align-items:center;gap:6px;padding:9px 12px 4px;
+ font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:#76787B}
+.ghead .ln{flex:1;height:1px;background:#232528}
+.ghead .ct{color:#64666A}
+.row{position:relative;margin:0 6px;border-radius:6px;padding:6px 8px 6px 10px;
+ display:flex;flex-direction:column;gap:2px}
+.row .bar{position:absolute;left:0;top:5px;bottom:5px;width:2px;border-radius:2px;background:transparent}
+.row.sel{background:#2B2E33}
+.row.sel .bar{background:#E8E8E8}
+.row.hov{background:#202226}
+.row.kfoc{outline:2px solid #5AA9FF;outline-offset:1px}
+.l1{display:flex;align-items:center;gap:7px;min-width:0}
+.l2{display:flex;align-items:center;gap:6px;min-width:0;padding-left:15px}
+.nm{font-size:12.5px;line-height:16px;font-weight:500;color:#D6D7D9;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row.sel .nm{color:#F2F2F2}
+.grow{flex:1;min-width:4px}
+.el{font-size:10.5px;line-height:14px;color:#8A8B8D;font-variant-numeric:tabular-nums;flex:none}
+.el.sig{color:#5AA9FF}
+.el.bad{color:#F4796F}
+.idx{font-size:9px;line-height:1;color:#6E7073;border:1px solid #2E3033;border-radius:3px;
+ padding:2px 3px;flex:none}
+.mt{font-size:10.5px;line-height:14px;color:#8A8B8D;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis}
+.mt.n{flex:none}
+.ag{font-size:10px;line-height:14px;color:#9A9B9D;flex:none}
+.sepdot{color:#5A5C5F;flex:none;font-size:10px}
+.add{color:#4EC9A0;font-weight:500} .del{color:#F4796F;font-weight:500}
+.port{color:#4EC9A0;flex:none;font-size:10.5px}
+.pane{display:flex;align-items:center;gap:7px;margin:0 6px;padding:4px 8px 4px 26px;
+ border-radius:5px;font-size:11px;line-height:14px;color:#9A9B9D}
+.pane.cur{background:#232629;color:#D6D7D9}
+.foot{border-top:1px solid #202225;padding:7px 12px;display:flex;align-items:center;
+ gap:8px;font-size:10px;color:#76787B}
+.note{font-family:'Google Sans Flex',system-ui,sans-serif;color:#C9CBCE;font-size:12.5px;line-height:1.55}
+.note b{color:#fff;font-weight:600}
+.note .k{font-family:'Google Sans Code',ui-monospace,monospace;font-size:11.5px;color:#FFB454}
+.h{font-family:'Google Sans Flex',system-ui,sans-serif;font-weight:600;letter-spacing:-.01em}
+.lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#76787B;
+ font-family:'Google Sans Flex',system-ui,sans-serif;font-weight:500}
+.cal{position:absolute;display:flex;align-items:center;gap:8px}
+.calnum{width:17px;height:17px;border-radius:50%;background:#FFB454;color:#1A1204;
+ font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none;
+ font-family:'Google Sans Flex',system-ui,sans-serif}
+.fail{color:#F4796F} .ok{color:#4EC9A0}
+.card{background:#**;border:1px solid #232528;border-radius:10px}
+</style>
+</helmet>
+
+<div style="display:flex;gap:0;padding:28px 30px;background:#0B0C0D;min-height:1060px;align-items:flex-start">
+  <div style="position:relative;flex:none">
+    
+<div style="width:300px;height:1010px;background:#222324;display:flex;flex-direction:column;
+            font-size:11.5px;position:relative;flex:none">
+  <div style="display:flex;align-items:center;gap:9px;padding:14px 12px 10px;color:#B9BBBD">
+    <span style="display:flex;gap:6px">
+      <span style="width:11px;height:11px;border-radius:50%;background:#EC6765"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:#F2CA44"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:#65C466"></span>
+    </span>
+    <span style="width:16px"></span>
+    <svg width="11" height="11" viewBox="0 0 10 10" fill="none" style="flex:none;"><rect x="1.2" y="1.8" width="7.6" height="6.4" rx="1.2" stroke="currentColor" stroke-width="1"></rect><path d="M4 1.8v6.4" stroke="currentColor" stroke-width="1"></path></svg><svg width="11" height="11" viewBox="0 0 10 10" fill="none" style="flex:none;"><path d="M2.6 7h4.8M3.2 7V4.6a1.8 1.8 0 0 1 3.6 0V7M4.4 8.4h1.2" stroke="currentColor" stroke-width="1" stroke-linecap="round"></path></svg><svg width="11" height="11" viewBox="0 0 10 10" fill="none" style="flex:none;"><path d="M5 1.8v6.4M1.8 5h6.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg><svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="flex:none;"><path d="M2.4 3.6 5 6.6 7.6 3.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span style="flex:1"></span>
+  </div>
+  <div style="margin:6px 8px;padding:9px 11px 11px;border-radius:8px;background:#3F8FF7;
+              display:flex;flex-direction:column;gap:3px">
+    <div style="font-size:13px;font-weight:600;color:#fff;line-height:17px">Test</div>
+    <div style="color:#D9E9FD;line-height:16px">Claude is waiting for your input</div>
+    <div style="display:flex;align-items:center;gap:5px;color:#fff;line-height:16px"><svg width="11" height="11" viewBox="0 0 10 10" fill="none" style="flex:none;"><path d="M2.6 7h4.8M3.2 7V4.6a1.8 1.8 0 0 1 3.6 0V7M4.4 8.4h1.2" stroke="#fff" stroke-width="1.1" stroke-linecap="round"></path></svg>Needs input</div>
+    <div style="color:#CFE3FD;line-height:16px;margin-top:3px">develop</div>
+    <div style="color:#CFE3FD;line-height:16px">~/Repos/cmux/cmux-tui</div>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;align-items:center;gap:8px;padding:12px 14px">
+    <span style="width:17px;height:17px;border-radius:50%;background:#D1332E"></span>
+    <span style="width:15px;height:15px;border-radius:50%;border:1px solid #6E7073;
+                 color:#9A9B9D;font-size:10px;display:flex;align-items:center;justify-content:center">?</span>
+  </div>
+</div>
+    <span class="calnum" style="position:absolute;top:118px;left:268px;z-index:3">1</span><span class="calnum" style="position:absolute;top:92px;left:268px;z-index:3">2</span><span class="calnum" style="position:absolute;top:142px;left:268px;z-index:3">3</span><span class="calnum" style="position:absolute;top:190px;left:268px;z-index:3">4</span>
+    <span class="calnum" style="position:absolute;top:166px;left:268px;z-index:3">5</span><span class="calnum" style="position:absolute;top:68px;left:268px;z-index:3">6</span><span class="calnum" style="position:absolute;top:560px;left:268px;z-index:3">7</span><span class="calnum" style="position:absolute;top:300px;left:268px;z-index:3">8</span>
+  </div>
+  <div style="width:44px"></div>
+  <div style="width:470px;display:flex;flex-direction:column;gap:15px">
+    <div>
+      <div class="lbl" style="margin-bottom:5px">Audit</div>
+      <div class="h" style="font-size:21px;color:#fff">What the shipped sidebar gets wrong</div>
+      <div class="note" style="color:#85878A;margin-top:5px">Colours sampled from the screenshot; contrast computed against WCAG 2.1 relative luminance.</div>
+    </div>
+    <div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">1</span><div class="note" style="flex:1"><b>Every line on the selected row fails WCAG AA.</b><br><span style="color:#85878A">Measured from the screenshot: the fill is <span class="k">#3F8FF7</span>. White title on it is <b>3.24:1</b> — under the 4.5:1 floor for normal text. <span class="k">#D9E9FD</span> is <b>2.63:1</b>; the branch and path at <span class="k">#CFE3FD</span> are <b>2.48:1</b>. The marketing mock's darker <span class="k">--t-selected #0A5BB5</span> clears it at 6.61 / 5.23 — the shipped app is less accessible than its own mockup.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">2</span><div class="note" style="flex:1"><b>Selection and attention are the same channel.</b><br><span style="color:#85878A">The row is blue because it is selected. It is also the row that needs you. You cannot tell which meaning the blue carries, and the moment a second workspace starts waiting the encoding has nothing left to say it with.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">3</span><div class="note" style="flex:1"><b>The same fact is stated three times.</b><br><span style="color:#85878A">“Claude is waiting for your input”, the bell, and “Needs input” are one bit of information spending three lines. Meanwhile <i>how long</i> it has been waiting — the thing that actually orders your attention across N agents — is nowhere.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">4</span><div class="note" style="flex:1"><b>Five lines per workspace does not scale.</b><br><span style="color:#85878A">At ~92px a row, ten agents overflow a 1080p sidebar. cmux exists to run agents in parallel; the row is sized for one.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">5</span><div class="note" style="flex:1"><b>The row answers the wrong questions.</b><br><span style="color:#85878A">It spends its two widest lines on <span class="k">develop</span> and <span class="k">~/Repos/cmux/cmux-tui</span> — both already visible in the tab bar and title. Missing: which agent, elapsed, diff size, how many panes and how many of them are blocked.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">6</span><div class="note" style="flex:1"><b>The workspace has two panes. The sidebar says nothing.</b><br><span style="color:#85878A"><span class="k">* cmux</span> is blocked and <span class="k">◇ Ready (cmux-tui)</span> is idle. The unit of attention is the pane; the list is only modelling workspaces.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">7</span><div class="note" style="flex:1"><b>85% of the column is dead space.</b><br><span style="color:#85878A">No sort, no filter, no grouping, no keyboard index, no empty state doing any work.</span></div></div><div style="display:flex;gap:11px;align-items:flex-start"><span class="calnum">8</span><div class="note" style="flex:1"><b>The column has no edge.</b><br><span style="color:#85878A">Sidebar <span class="k">#222324</span> against terminal <span class="k">#1E1E1E</span> is <b>1.06:1</b> and there is no rule between them. The panel reads as a floating card on nothing.</span></div></div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
