@@ -65,8 +65,11 @@ struct TriageReorderable: ViewModifier {
     }
 
     private var pickUp: some Gesture {
+        // Measured in the list's space, not the row's: the row itself moves with
+        // `.offset`, so its own space would feed that movement back into the
+        // translation and the row would lag and stutter behind the pointer.
         LongPressGesture(minimumDuration: Self.holdToLift, maximumDistance: 4)
-            .sequenced(before: DragGesture(minimumDistance: 0))
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .named(coordinateSpace)))
             .onChanged { value in
                 guard case .second(true, let drag) = value else { return }
                 if reorder == nil { lift() }

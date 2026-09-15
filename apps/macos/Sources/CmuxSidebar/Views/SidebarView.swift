@@ -171,9 +171,12 @@ struct ExpandedSidebar: View {
                             .padding(.bottom, 6)
                         }
                     }
+                    // A lifted row suspends the scroll rather than disabling it, so the
+                    // gestures under the pointer aren't rebuilt mid-drag.
                     .modifier(DragToScroll(
                         isDragging: $isDragScrolling,
-                        isEnabled: store.renamingID == nil && reorder == nil
+                        isEnabled: store.renamingID == nil,
+                        isSuspended: reorder != nil
                     ))
                     .onChange(of: store.focusedID) { _, id in
                         if let id { proxy.scrollTo(id) }
@@ -259,6 +262,9 @@ struct ExpandedSidebar: View {
             onCancelRename: { store.cancelRename() }
         )
         .onHover { inside in
+            // Hover isn't drawn while a row is lifted, so crossing rows mid-drag
+            // shouldn't redraw the list either.
+            guard reorder == nil else { return }
             if inside {
                 store.hoveredID = workspace.id
             } else if store.hoveredID == workspace.id {

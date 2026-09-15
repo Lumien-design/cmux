@@ -23,6 +23,10 @@ enum DragScroll {
 struct DragToScroll: ViewModifier {
     @Binding var isDragging: Bool
     var isEnabled = true
+    /// While a row is lifted in triage it owns the pointer and the list holds
+    /// still. A flag, not the gesture mask: changing the mask mid-press rebuilds
+    /// the gestures under the pointer and can drop the drag that lifted the row.
+    var isSuspended = false
     @State private var position = ScrollPosition(edge: .top)
     @State private var geometry: ScrollGeometry?
     @State private var startOffset: CGFloat?
@@ -40,7 +44,7 @@ struct DragToScroll: ViewModifier {
     private var drag: some Gesture {
         DragGesture(minimumDistance: 4)
             .onChanged { value in
-                guard let geometry else { return }
+                guard !isSuspended, let geometry else { return }
                 let start = startOffset ?? geometry.contentOffset.y
                 if startOffset == nil {
                     startOffset = start
@@ -51,7 +55,7 @@ struct DragToScroll: ViewModifier {
             }
             .onEnded { value in
                 guard let start = startOffset else { return }
-                if let geometry, !reduceMotion {
+                if !isSuspended, let geometry, !reduceMotion {
                     let target = clamped(start - value.predictedEndTranslation.height, in: geometry)
                     withAnimation(.timingCurve(0.23, 1, 0.32, 1, duration: 0.45)) { // --curve-out
                         position.scrollTo(y: target)
