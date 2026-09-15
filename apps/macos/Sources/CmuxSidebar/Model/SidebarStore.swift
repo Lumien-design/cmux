@@ -406,6 +406,23 @@ public final class SidebarStore {
         isAttentionListShown = false
     }
 
+    // MARK: - Sort and density
+
+    /// ⌥⌘1–3. Says the new sort aloud, since the list reordering under the
+    /// cursor is otherwise silent to VoiceOver. Choosing the current one is quiet.
+    public func setSortMode(_ mode: SortMode) {
+        guard mode != sortMode else { return }
+        sortMode = mode
+        announce("Sort: \(mode.title).")
+    }
+
+    /// ⌃⌘1–3, announced for the same reason as the sort.
+    public func setDensity(_ density: Density) {
+        guard density != self.density else { return }
+        self.density = density
+        announce("Density: \(density.title).")
+    }
+
     // MARK: - Triage
 
     /// Places a workspace just before another in your triage order. Placement

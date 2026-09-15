@@ -15,7 +15,26 @@ public struct SidebarCommands: Commands {
                 store.toggleCollapsed()
             }
             .keyboardShortcut("b")
-            SortAndDensityPickers(store: store)
+            // Toggles rather than pickers, so each option carries its shortcut
+            // and the current one keeps its checkmark.
+            Menu("Sort") {
+                ForEach(Array(SortMode.allCases.enumerated()), id: \.element) { index, mode in
+                    Toggle(mode.title, isOn: Binding(
+                        get: { store.sortMode == mode },
+                        set: { if $0 { store.setSortMode(mode) } }
+                    ))
+                    .keyboardShortcut(Self.digit(index), modifiers: [.command, .option])
+                }
+            }
+            Menu("Density") {
+                ForEach(Array(Density.allCases.enumerated()), id: \.element) { index, density in
+                    Toggle(density.title, isOn: Binding(
+                        get: { store.density == density },
+                        set: { if $0 { store.setDensity(density) } }
+                    ))
+                    .keyboardShortcut(Self.digit(index), modifiers: [.command, .control])
+                }
+            }
             Divider()
         }
 
@@ -57,6 +76,11 @@ public struct SidebarCommands: Commands {
                 .keyboardShortcut("p", modifiers: [.command, .control])
                 .disabled((store.focusedID ?? store.selectedID) == nil)
         }
+    }
+
+    /// The Nth option's key: 1 for the first.
+    private static func digit(_ index: Int) -> KeyEquivalent {
+        KeyEquivalent(Character(String(index + 1)))
     }
 
     private var pinTitle: String {

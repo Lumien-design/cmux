@@ -268,6 +268,31 @@ struct SidebarStoreTests {
         #expect(store.filter == "a")
     }
 
+    // MARK: - Sort and density
+
+    @Test func choosingASortSaysWhichAndKeepsTheSelection() {
+        let transcript = Transcript()
+        let store = makeStore([
+            workspace("a"),
+            workspace("blocked", .needsInput(since: ago(5))),
+        ], selecting: "a", announce: { transcript.messages.append($0) })
+        store.setSortMode(.triage)
+        store.setSortMode(.triage)
+        #expect(store.sortMode == .triage)
+        #expect(order(store) == ["a", "blocked"])
+        #expect(store.selectedID == "a")
+        #expect(transcript.messages == ["Sort: Triage."])
+    }
+
+    @Test func choosingADensitySaysWhichOnce() {
+        let transcript = Transcript()
+        let store = makeStore([workspace("a")], announce: { transcript.messages.append($0) })
+        store.setDensity(.comfortable)
+        store.setDensity(.compact)
+        #expect(store.density == .compact)
+        #expect(transcript.messages == ["Density: Compact."])
+    }
+
     // MARK: - Triage
 
     @Test func triageKeepsTheOpenedOrderWithNoGroups() {

@@ -5,7 +5,8 @@ import SwiftUI
 /// The workspace sidebar: an attention-sorted list that collapses to a 44pt rail.
 ///
 /// Install `SidebarCommands` in the app's `.commands` for ⌘1–9, ⌥⇥, ⌘K, ⌘B,
-/// ⌘⌃P and ⌥⌘↑↓. ↑↓ ← → ↵ ⎋ and type-ahead are handled here, on the focused list.
+/// ⌘⌃P, ⌥⌘↑↓, and ⌥⌘1–3 / ⌃⌘1–3 for sort and density. ↑↓ ← → ↵ ⎋ and
+/// type-ahead are handled here, on the focused list.
 public struct SidebarView: View {
     @Bindable private var store: SidebarStore
     private let onNewWorkspace: (() -> Void)?
@@ -422,7 +423,7 @@ struct ViewOptionsMenu: View {
             .buttonStyle(IconButtonStyle())
             .menuIndicator(.hidden)
             .fixedSize()
-            .help("Sort and density")
+            .help("Sort and density  ⌥⌘1–3 · ⌃⌘1–3")
             .accessibilityLabel("Sort and density")
         } else {
             icon.foregroundStyle(Palette.meta).frame(width: 22, height: 22)
@@ -516,6 +517,7 @@ struct SortBar: View {
                 .buttonStyle(ChipButtonStyle())
                 .menuIndicator(.hidden)
                 .fixedSize()
+                .help("Sort  ⌥⌘1–3")
                 .accessibilityLabel("Sort: \(store.sortMode.title)")
             } else {
                 chipLabel.modifier(ChipChrome())

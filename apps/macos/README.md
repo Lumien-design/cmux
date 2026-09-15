@@ -43,6 +43,11 @@ so reordering, the rail pulse and the VoiceOver announcement can be checked.
 | ⌘B | Collapse to the 44pt rail. |
 | ⌘⌃P | Pin a workspace above the sort. |
 | ⌥⌘↑ / ⌥⌘↓ | In triage, move a workspace up or down. |
+| ⌥⌘1–3 | Sort: attention first, triage, by host. |
+| ⌃⌘1–3 | Density: compact, comfortable, expanded. |
+
+Both sets sit in **View › Sort** and **View › Density**, with the current choice
+checked, and a change is announced to VoiceOver.
 
 **Triage.** A sort option with no sorting: your order, no groups, and nothing
 moves or ages out on its own. Click and hold a row, then drag; the rows it passes
